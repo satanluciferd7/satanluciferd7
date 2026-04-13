@@ -30,21 +30,13 @@
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 
-## 📊 GitHub Stats
-
-![Bishal's GitHub Stats](https://github-readme-stats.vercel.app/api?username=satanluciferd7&show_icons=true&theme=radical&hide_border=true)
-
-![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=satanluciferd7&layout=compact&theme=radical&hide_border=true)
-
 ## 🔥 Featured Projects
 
 ### [Lord-DEX](https://github.com/satanluciferd7/Lord-DEX)
 A decentralized exchange / trading platform built with React, Node.js, and modern full-stack technologies.  
 Features include real-time trading interface concepts, wallet connection simulation, and secure transaction flows.
 
-**Live Demo**: *(Add your deployed link here once ready)*
-
-*(Currently improving the project with actual implementation — more updates coming soon!)*
+**Live Demo**:
 
 ### More Projects Coming Soon
 I'm actively working on:
@@ -57,7 +49,7 @@ Check out my repositories for more!
 ## 📫 Let's Connect
 
 - **LinkedIn**: [Bishal Chettri](https://www.linkedin.com/in/bishal-chettri-5a2143303/)
-- **Email**: your.email@example.com *(replace with your real email)*
+- **Email**: bishalchettri1313@gmail.com
 - **Location**: Bharatpur, Nepal
 
 ---
