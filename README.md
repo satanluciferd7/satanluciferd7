@@ -1,71 +1,54 @@
-# Hi, I'm Bishal Chettri 👋
+# Bishal Chettri
 
-**Full Stack Developer** from Bharatpur, Nepal | Building scalable and user-friendly web applications with React & Node.js
+**Full Stack Developer** — Bharatpur, Nepal
 
-![Profile Views](https://komarev.com/ghpvc/?username=satanluciferd7&color=00C853&style=flat-square&label=Profile+Views)
+Building scalable web applications with React & Node.js.  
+Open to opportunities in Nepal and remote roles.
 
 ---
 
-## 🚀 About Me
+## About
 
-- Passionate about clean, maintainable code and turning ideas into robust digital solutions.
-- Experienced in developing **full-stack web applications** using modern JavaScript ecosystem.
-- Currently open to **full-time opportunities, freelance projects, and collaborations** (Nepal & Remote).
-- Always learning and exploring new technologies.
+- Focused on clean, maintainable code and practical full-stack solutions.
+- Experienced with modern JavaScript ecosystem.
+- Currently available for full-time roles, freelance work, and collaborations.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-### Frontend
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+**Frontend**  
+React • JavaScript • Tailwind CSS • Next.js
 
-### Backend & Database
-![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
-![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+**Backend & Database**  
+Node.js • Express • MongoDB
 
-### Tools
-![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
-![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+**Tools**  
+Git • GitHub
 
-## 📊 GitHub Stats
+## Stats
 
-![Bishal's GitHub Stats](https://github-readme-stats.vercel.app/api?username=satanluciferd7&show_icons=true&theme=radical&hide_border=true)
+![GitHub Stats](https://github-readme-stats.vercel.app/api?username=satanluciferd7&show_icons=true&theme=radical&hide_border=true&bg_color=0d1117&text_color=c9d1d9&title_color=58a6ff)
 
-![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=satanluciferd7&layout=compact&theme=radical&hide_border=true)
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=satanluciferd7&layout=compact&theme=radical&hide_border=true&bg_color=0d1117&text_color=c9d1d9)
 
-## 🔥 Featured Projects
+## Featured Projects
 
 ### [Lord-DEX](https://github.com/satanluciferd7/Lord-DEX)
-A decentralized exchange / trading platform built with modern full-stack technologies.
+Decentralized exchange / trading platform built with React and Node.js.  
+Includes real-time interface concepts and wallet integration simulation.
 
-## 🔥 Featured Projects
+*(Project under active improvement — more details and screenshots coming soon)*
 
-### [Lord-DEX](https://github.com/satanluciferd7/Lord-DEX)
-Decentralized Exchange / Trading Platform built with React, Node.js, and modern full-stack JavaScript technologies.  
-Features include real-time trading interface, wallet integration, and secure transaction handling.
+Additional projects in progress:  
+- Personal Portfolio (Next.js + Tailwind)  
+- Task Management App with authentication  
+- RESTful APIs with MongoDB
 
-![Lord-DEX Dashboard](https://github.com/satanluciferd7/Lord-DEX/blob/main/screenshots/dashboard.png?raw=true)
-![Lord-DEX Trading Screen](https://github.com/satanluciferd7/Lord-DEX/blob/main/screenshots/trading.png?raw=true)
-
-*(Built as a personal project to practice full-stack development with React frontend and Node.js/Express backend.)*
-
-### More Projects Coming Soon...
-I'm currently working on:
-- Personal Portfolio Website (Next.js + Tailwind)
-- E-commerce API with MongoDB
-- Task Management App with authentication
-
-Feel free to check my repositories or reach out for collaboration!
-
-## 📫 Let's Connect
+## Connect
 
 - **LinkedIn**: [Bishal Chettri](https://www.linkedin.com/in/bishal-chettri-5a2143303/)
-- **Email**: bishalchettri1313@gmail.com
+- **Email**: [bishalchettri1313@gmail.com](mailto:bishalchettri1313@gmail.com)
 - **Location**: Bharatpur, Nepal
 
 ---
 
-*Open to work* | Last updated: April 2026
+Open to work | Last updated: April 2026
