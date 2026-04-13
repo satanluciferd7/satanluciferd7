@@ -1,54 +1,65 @@
-# Bishal Chettri
+# Hi, I'm Bishal Chettri 👋
 
-**Full Stack Developer** — Bharatpur, Nepal
+**Full Stack Developer** from Bharatpur, Nepal | Building scalable and user-friendly web applications with React & Node.js
 
-Building scalable web applications with React & Node.js.  
-Open to opportunities in Nepal and remote roles.
+![Profile Views](https://komarev.com/ghpvc/?username=satanluciferd7&color=00C853&style=flat-square&label=Profile+Views)
 
 ---
 
-## About
+## 🚀 About Me
 
-- Focused on clean, maintainable code and practical full-stack solutions.
-- Experienced with modern JavaScript ecosystem.
-- Currently available for full-time roles, freelance work, and collaborations.
+- Passionate about clean, maintainable code and turning ideas into robust digital solutions.
+- Experienced in developing **full-stack web applications** using modern JavaScript ecosystem.
+- Currently open to **full-time opportunities, freelance projects, and collaborations** (Nepal & Remote).
+- Always learning and exploring new technologies.
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-**Frontend**  
-React • JavaScript • Tailwind CSS • Next.js
+### Frontend
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
 
-**Backend & Database**  
-Node.js • Express • MongoDB
+### Backend & Database
+![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 
-**Tools**  
-Git • GitHub
+### Tools
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 
-## Stats
+## 📊 GitHub Stats
 
-![GitHub Stats](https://github-readme-stats.vercel.app/api?username=satanluciferd7&show_icons=true&theme=radical&hide_border=true&bg_color=0d1117&text_color=c9d1d9&title_color=58a6ff)
+![Bishal's GitHub Stats](https://github-readme-stats.vercel.app/api?username=satanluciferd7&show_icons=true&theme=radical&hide_border=true)
 
-![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=satanluciferd7&layout=compact&theme=radical&hide_border=true&bg_color=0d1117&text_color=c9d1d9)
+![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=satanluciferd7&layout=compact&theme=radical&hide_border=true)
 
-## Featured Projects
+## 🔥 Featured Projects
 
 ### [Lord-DEX](https://github.com/satanluciferd7/Lord-DEX)
-Decentralized exchange / trading platform built with React and Node.js.  
-Includes real-time interface concepts and wallet integration simulation.
+A decentralized exchange / trading platform built with React, Node.js, and modern full-stack technologies.  
+Features include real-time trading interface concepts, wallet connection simulation, and secure transaction flows.
 
-*(Project under active improvement — more details and screenshots coming soon)*
+**Live Demo**: *(Add your deployed link here once ready)*
 
-Additional projects in progress:  
-- Personal Portfolio (Next.js + Tailwind)  
-- Task Management App with authentication  
-- RESTful APIs with MongoDB
+*(Currently improving the project with actual implementation — more updates coming soon!)*
 
-## Connect
+### More Projects Coming Soon
+I'm actively working on:
+- Personal Portfolio Website (Next.js + Tailwind CSS)
+- Full-stack Task Management App with authentication
+- RESTful API projects with MongoDB
+
+Check out my repositories for more!
+
+## 📫 Let's Connect
 
 - **LinkedIn**: [Bishal Chettri](https://www.linkedin.com/in/bishal-chettri-5a2143303/)
-- **Email**: [bishalchettri1313@gmail.com](mailto:bishalchettri1313@gmail.com)
+- **Email**: your.email@example.com *(replace with your real email)*
 - **Location**: Bharatpur, Nepal
 
 ---
 
-Open to work | Last updated: April 2026
+*Open to work* | Last updated: April 2026
