@@ -47,9 +47,6 @@ A decentralized exchange / trading platform built with modern full-stack technol
 Decentralized Exchange / Trading Platform built with React, Node.js, and modern full-stack JavaScript technologies.  
 Features include real-time trading interface, wallet integration, and secure transaction handling.
 
-**Live Demo**: [Add your deployed link here, e.g., https://lord-dex.netlify.app]  
-**Screenshots**:
-
 ![Lord-DEX Dashboard](https://github.com/satanluciferd7/Lord-DEX/blob/main/screenshots/dashboard.png?raw=true)
 ![Lord-DEX Trading Screen](https://github.com/satanluciferd7/Lord-DEX/blob/main/screenshots/trading.png?raw=true)
 
