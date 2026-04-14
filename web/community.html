@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <meta http-equiv="X-Frame-Options" content="DENY"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:;"/>
+  <meta name="description" content="Nepal Portal Community - Share civic updates, ask the AI assistant, and earn badges."/>
+  <meta name="keywords" content="Nepal, community, civic, discussion, AI assistant"/>
+  <meta name="theme-color" content="#0066cc"/>
+  <title>Community Hub - Nepal Portal</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="styles-enhanced.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">                                       
+      <span class="flag">🇳🇵</span>                 
+      <span class="logo-text" data-en="Nepal Portal" data-ne="नेपाल पोर्टल">Nepal Portal</span>
+    </div>     
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#home" data-en="Home" data-ne="गृहपृष्ठ">Home</a></li>
+      <li class="nav-item dropdown">
+        <button class="dropdown-toggle" type="button" onclick="toggleNavDropdown(event, 'navDropdown')" data-en="Explore" data-ne="अन्वेषण">Explore <i class="fas fa-chevron-down"></i></button>
+        <ul class="dropdown-menu" id="navDropdown">
+          <li><a href="index.html#government" data-en="Government" data-ne="सरकार">Government</a></li>
+          <li><a href="services.html" data-en="Service Guide" data-ne="सेवा गाइड">Service Guide</a></li>
+          <li><a href="index.html#tourism" data-en="Tourism" data-ne="पर्यटन">Tourism</a></li>
+          <li><a href="index.html#cybersecurity" data-en="Cyber Security" data-ne="साइबर सुरक्षा">Cyber Security</a></li>
+          <li><a href="news.html" data-en="News" data-ne="समाचार">News</a></li>
+          <li><a href="problems.html" data-en="Problems" data-ne="समस्याहरू">Problems</a></li>
+        </ul>
+      </li>
+      <li><a href="community.html" data-en="Community" data-ne="समुदाय">Community</a></li>
+      <li><a href="index.html#contact" data-en="Contact" data-ne="सम्पर्क">Contact</a></li>
+    </ul>                                            
+    <div class="nav-actions">
+      <button class="nav-btn" id="darkModeToggle" onclick="toggleDarkMode()" title="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="nav-btn" id="notificationBtn" onclick="toggleNotifications()" title="Notifications">
+        <i class="fas fa-bell"></i>
+        <span id="notifBadge" style="position: absolute; top: -5px; right: -5px; background: #ff6b6b; color: #fff; width: 18px; height: 18px; border-radius: 50%; font-size: 0.7rem; display: none; align-items: center; justify-content: center;">0</span>
+      </button>
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btnEn" onclick="setLang('en')">EN</button>
+        <span>|</span>
+        <button class="lang-btn" id="btnNe" onclick="setLang('ne')">नेपाली</button>
+      </div>
+      <!-- Login btn (shown when logged out) -->
+      <button class="btn-login" id="navLoginBtn" onclick="openModal('loginModal')" data-en="Login" data-ne="लगइन">Login</button>
+      <!-- Profile icon (shown when logged in) -->
+      <div class="nav-profile" id="navProfile" style="display:none;position:relative;">
+        <button class="profile-icon-btn" id="profileIconBtn" onclick="toggleProfileDropdown()" title="My Profile">
+          <span id="navAvatarImg" style="display:none;width:36px;height:36px;border-radius:50%;object-fit:cover;overflow:hidden;"></span>
+          <span id="navAvatarInitial" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#004999);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.95rem;color:#fff;"></span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown" style="display:none;">
+          <div class="profile-dropdown-header">
+            <div id="dropName" style="font-weight:600;font-size:0.95rem;"></div>
+            <div id="dropLocation" style="font-size:0.78rem;color:var(--text-muted);"></div>
+          </div>
+          <a href="profile.html" class="profile-dropdown-item"><i class="fas fa-user-circle"></i> My Profile</a>
+          <a href="admin.html" class="profile-dropdown-item"><i class="fas fa-shield-alt"></i> Admin Panel</a>
+          <div class="profile-dropdown-item" onclick="logoutUser()" style="cursor:pointer;color:#ff6b6b;"><i class="fas fa-sign-out-alt"></i> Logout</div>
+        </div>
+      </div>
+      <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== COMMUNITY & AI SECTION ========== -->
+<section class="section hero-section" style="min-height: 100vh; display: flex; align-items: center;">
+  <div class="container" style="width: 100%;">
+    <div class="section-header">
+      <span class="section-tag" data-en="Gen Z Hub" data-ne="जन Z हब">Gen Z Hub</span>
+      <h1 style="font-size: 2.4rem; margin-bottom: 16px;" data-en="Community Feed & AI Help" data-ne="समुदाय फिड र AI सहायता">Community Feed & AI Help</h1>
+      <p data-en="Share quick civic updates, ask the AI service assistant, and earn community badges while staying connected to Nepal's digital services." data-ne="छिटो नागरिक अपडेटहरू साझा गर्नुहोस्, AI सेवा सहायकलाई सोध्नुहोस्, र नेपालका डिजिटल सेवाहरूमा जडान रहँदा सामुदायिक ब्याज कमाउनुहोस्।">Share quick civic updates, ask the AI service assistant, and earn community badges while staying connected to Nepal's digital services.</p>
+    </div>
+    <div class="genz-grid">
+      <div class="genz-card feed-card">
+        <div class="feed-header">
+          <h3 data-en="Community Board" data-ne="समुदाय बोर्ड">Community Board</h3>
+          <button id="createPostBtn" class="btn-login" onclick="submitSocialPost()" style="display:none;" data-en="Post Update" data-ne="अपडेट पोष्ट गर्नुहोस्">Post Update</button>
+        </div>
+        <div class="feed-composer">
+          <textarea id="postText" placeholder="Share a quick update or ask a civic question..." data-en-placeholder="Share a quick update or ask a civic question..." data-ne-placeholder="छिटो अपडेट साझा गर्नुहोस् वा नागरिक प्रश्न सोध्नुहोस्..."></textarea>
+          <div class="composer-actions">
+            <button class="btn-login" onclick="submitSocialPost()" data-en="Post" data-ne="पोष्ट गर्नुहोस्">Post</button>
+            <span id="postHint" class="post-hint" data-en="Login to post & earn points" data-ne="पोष्ट गर्न र अंक कमाउन लगइन गर्नुहोस्">Login to post & earn points</span>
+          </div>
+        </div>
+        <div class="feed-list" id="socialFeedList"></div>
+      </div>
+      <div class="genz-card assistant-card">
+        <h3 data-en="AI Service Assistant" data-ne="AI सेवा सहायक">AI Service Assistant</h3>
+        <p data-en="Ask questions about passports, citizenship, health insurance, scholarships, and driving licenses." data-ne="पासपोर्ट, नागरिकता, स्वास्थ्य बीमा, छात्रवृत्ति, र ड्राइभिङ लाइसेन्स बारे प्रश्न सोध्नुहोस्।">Ask questions about passports, citizenship, health insurance, scholarships, and driving licenses.</p>
+        <div class="assistant-widget">
+          <input id="assistantQuery" type="text" placeholder="Ask the AI assistant about Nepal services..." data-en-placeholder="Ask the AI assistant about Nepal services..." data-ne-placeholder="नेपाल सेवाहरू बारे AI सहायकलाई सोध्नुहोस्..." />
+          <button class="btn-login" onclick="askAssistant()" data-en="Ask AI" data-ne="AI लाई सोध्नुहोस्">Ask AI</button>
+        </div>
+        <div class="assistant-suggestions" id="assistantSuggestions"></div>
+        <div class="assistant-response" id="assistantResponse" data-en="AI response will appear here." data-ne="AI प्रतिक्रिया यहाँ देखा पर्नेछ।">AI response will appear here.</div>
+        <div class="assistant-highlights">
+          <div class="highlight-card">
+            <strong data-en="Quick Shorts" data-ne="छिटो छोटो">Quick Shorts</strong>
+            <div id="shortsList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="badge-panel">
+      <h3 data-en="Your Rewards" data-ne="तपाईंका पुरस्कार">Your Rewards</h3>
+      <div class="badge-cards" id="userBadges"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Login Modal (copy from index.html) -->
+<div class="modal-overlay" id="loginModal" onclick="closeModalOutside(event, 'loginModal')">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+    <div class="modal-tabs">
+      <button class="tab-btn active" id="tabLogin" onclick="switchTab('login')" data-en="Login" data-ne="लगइन">Login</button>
+      <button class="tab-btn" id="tabRegister" onclick="switchTab('register')" data-en="Register" data-ne="दर्ता गर्नुहोस्">Register</button>
+    </div>
+    <form id="loginForm" onsubmit="submitLogin(event)">
+      <div class="form-group">
+        <label data-en="Email" data-ne="इमेल">Email</label>
+        <input type="email" id="loginEmail" required placeholder="Enter your email" data-en-placeholder="Enter your email"/>
+      </div>
+      <div class="form-group password-group">
+        <label data-en="Password" data-ne="पासवर्ड">Password</label>
+        <input type="password" id="loginPassword" required placeholder="Enter your password" data-en-placeholder="Enter your password"/>
+        <button type="button" class="toggle-pass" onclick="togglePassword('loginPassword')"><i class="fas fa-eye"></i></button>
+      </div>
+      <button type="submit" class="btn-submit" data-en="Login" data-ne="लगइन">Login</button>
+    </form>
+    <form id="registerForm" class="hidden" onsubmit="submitRegister(event)">
+      <div class="form-group">
+        <label data-en="Full Name" data-ne="पूरा नाम">Full Name</label>
+        <input type="text" id="regName" required placeholder="Enter your name" data-en-placeholder="Enter your name"/>
+      </div>
+      <div class="form-group">
+        <label data-en="Email" data-ne="इमेल">Email</label>
+        <input type="email" id="regEmail" required placeholder="Enter your email" data-en-placeholder="Enter your email"/>
+      </div>
+      <div class="form-group">
+        <label data-en="Phone Number" data-ne="फोन नम्बर">Phone Number</label>
+        <input type="tel" id="regPhone" required placeholder="10-digit phone (98XXXXXXXX)" data-en-placeholder="10-digit phone (98XXXXXXXX)"/>
+        <button type="button" class="btn-small" onclick="sendOTP()" id="sendOtpBtn" data-en="Send OTP" data-ne="OTP पठाउनुहोस्">Send OTP</button>
+      </div>
+      <div id="otpGroup" style="display:none;">
+        <div class="form-group">
+          <label data-en="OTP" data-ne="OTP">OTP</label>
+          <input type="text" id="regOtp" placeholder="6-digit code" data-en-placeholder="6-digit code"/>
+          <button type="button" class="btn-small" onclick="verifyOTP()" data-en="Verify" data-ne="पुष्टि गर्नुहोस्">Verify</button>
+        </div>
+        <div id="otpStatus" style="font-size:0.85rem;margin-top:6px;"></div>
+      </div>
+      <div class="form-group">
+        <label data-en="City/Location" data-ne="शहर/स्थान">City/Location</label>
+        <select id="regLocation" required>
+          <option value="">Select city...</option>
+          <option>Kathmandu</option><option>Pokhara</option><option>Chitwan</option><option>Bhaktapur</option><option>Nagarkot</option><option>Janakpur</option><option>Biratnagar</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label data-en="Age" data-ne="उमेर">Age</label>
+        <input type="number" id="regAge" required min="13" placeholder="13+"/>
+      </div>
+      <div class="form-group">
+        <label data-en="Gender" data-ne="लिङ्ग">Gender</label>
+        <select id="regGender" required>
+          <option value="">Select gender...</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other / Prefer not to say</option>
+        </select>
+      </div>
+      <div class="form-group password-group">
+        <label data-en="Password" data-ne="पासवर्ड">Password</label>
+        <input type="password" id="regPassword" required placeholder="Min 8 chars, include numbers & symbols" maxlength="128" autocomplete="new-password" oninput="checkPasswordStrength(this.value)"/>
+        <button type="button" class="toggle-pass" onclick="togglePassword('regPassword')"><i class="fas fa-eye"></i></button>
+        <div class="password-strength" id="strengthBar">
+          <div class="strength-fill" id="strengthFill"></div>
+        </div>
+        <span class="strength-text" id="strengthText"></span>
+      </div>
+      <div class="form-group">
+        <label data-en="Confirm Password" data-ne="पासवर्ड पुष्टि गर्नुहोस्">Confirm Password</label>
+        <input type="password" id="regConfirm" required placeholder="Confirm your password" maxlength="128" autocomplete="new-password"/>
+      </div>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="agreeTerms" required/>
+          <span data-en="I agree to the Terms & Privacy Policy" data-ne="म सर्तहरू र गोपनीयता नीतिसँग सहमत छु">I agree to the Terms & Privacy Policy</span>
+        </label>
+      </div>
+      <button type="submit" class="btn-submit" data-en="Create Account" data-ne="खाता बनाउनुहोस्">Create Account</button>
+    </form>
+  </div>
+</div>
+
+<script src="utils.js"></script>
+<script src="roles.js"></script>
+<script src="features.js"></script>
+<script src="profiles.js"></script>
+<script src="follow.js"></script>
+<script src="bookmarks.js"></script>
+<script src="messaging.js"></script>
+<script src="notifications.js"></script>
+<script src="engagement.js"></script>
+<script src="search.js"></script>
+<script src="imageupload.js"></script>
+<script src="leaderboards.js"></script>
+<script src="events.js"></script>
+<script src="analytics.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

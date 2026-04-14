@@ -1,0 +1,2646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <meta http-equiv="X-Frame-Options" content="DENY"/>
+  <title>Search Results — Nepal Portal AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#0a0f1e;
+      --bg2:#0d1526;
+      --card:#111827;
+      --card2:#161f30;
+      --border:rgba(255,255,255,0.07);
+      --accent:#3b82f6;
+      --accent2:#06b6d4;
+      --red:#dc2626;
+      --green:#16a34a;
+      --gold:#f59e0b;
+      --text:#e2e8f0;
+      --muted:#94a3b8;
+      --radius:14px;
+    }
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Poppins',sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar{
+      position:sticky;top:0;z-index:100;
+      background:rgba(10,15,30,0.92);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--border);
+      padding:14px 24px;
+      display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    }
+    .topbar-logo{
+      font-size:1.1rem;font-weight:700;
+      background:linear-gradient(135deg,#3b82f6,#06b6d4);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;
+      white-space:nowrap;
+      text-decoration:none;
+    }
+    .top-search{
+      flex:1;min-width:200px;max-width:640px;
+      display:flex;align-items:center;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:50px;
+      padding:8px 18px;
+      gap:10px;
+      transition:border .2s;
+    }
+    .top-search:focus-within{border-color:var(--accent)}
+    .top-search input{
+      flex:1;background:none;border:none;outline:none;
+      color:var(--text);font-family:inherit;font-size:.95rem;
+    }
+    .top-search input::placeholder{color:var(--muted)}
+    .top-search button{
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      border:none;border-radius:50px;
+      padding:6px 18px;color:#fff;font-size:.85rem;
+      cursor:pointer;font-family:inherit;font-weight:600;
+      transition:opacity .2s;
+    }
+    .top-search button:hover{opacity:.85}
+
+    /* ── MAIN LAYOUT ── */
+    .main{
+      max-width:900px;margin:0 auto;
+      padding:32px 20px 60px;
+    }
+
+    /* ── QUERY HEADER ── */
+    .query-header{
+      margin-bottom:28px;
+    }
+    .query-label{
+      font-size:.8rem;color:var(--muted);letter-spacing:.04em;
+      text-transform:uppercase;margin-bottom:6px;
+    }
+    .query-title{
+      font-size:1.9rem;font-weight:700;line-height:1.2;
+      background:linear-gradient(135deg,#e2e8f0,#94a3b8);
+      -webkit-background-clip:text;background-clip:text;
+      -webkit-text-fill-color:transparent;color:transparent;
+    }
+    .query-meta{
+      display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;
+    }
+    .query-meta span{
+      display:inline-flex;align-items:center;gap:5px;
+      font-size:.78rem;color:var(--muted);
+      background:var(--card);padding:4px 12px;border-radius:20px;
+      border:1px solid var(--border);
+    }
+
+    /* ── AI ANSWER CARD ── */
+    .ai-card{
+      background:linear-gradient(135deg,rgba(59,130,246,.08),rgba(6,182,212,.05));
+      border:1px solid rgba(59,130,246,.25);
+      border-radius:var(--radius);
+      padding:28px;
+      margin-bottom:28px;
+      position:relative;
+      overflow:hidden;
+    }
+    .ai-card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:3px;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+    }
+    .ai-badge{
+      display:inline-flex;align-items:center;gap:7px;
+      background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(6,182,212,.1));
+      border:1px solid rgba(59,130,246,.3);
+      border-radius:20px;padding:4px 14px;
+      font-size:.78rem;font-weight:600;color:var(--accent2);
+      margin-bottom:16px;
+    }
+    .ai-badge i{animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .ai-answer{
+      font-size:.97rem;line-height:1.85;color:var(--text);
+    }
+    .ai-answer p{margin-bottom:14px}
+    .ai-answer p:last-child{margin-bottom:0}
+    .ai-answer strong{color:#93c5fd}
+    .ai-answer .highlight{
+      background:rgba(59,130,246,.12);
+      border-left:3px solid var(--accent);
+      padding:12px 16px;border-radius:0 8px 8px 0;
+      margin:14px 0;font-size:.92rem;
+    }
+    .ai-answer ul{
+      list-style:none;padding:0;margin:12px 0;
+    }
+    .ai-answer ul li{
+      padding:6px 0 6px 22px;position:relative;
+      border-bottom:1px solid var(--border);
+      font-size:.9rem;
+    }
+    .ai-answer ul li::before{
+      content:'▸';position:absolute;left:0;color:var(--accent2);
+    }
+    .ai-answer ul li:last-child{border-bottom:none}
+
+    /* ── SECTION CARDS ── */
+    .section-title{
+      font-size:1rem;font-weight:600;color:var(--muted);
+      text-transform:uppercase;letter-spacing:.06em;
+      margin-bottom:14px;display:flex;align-items:center;gap:8px;
+    }
+    .section-title::after{
+      content:'';flex:1;height:1px;background:var(--border);
+    }
+
+    .result-cards{
+      display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+      gap:14px;margin-bottom:30px;
+    }
+    .result-card{
+      background:var(--card);border:1px solid var(--border);
+      border-radius:var(--radius);padding:18px;
+      transition:border-color .2s,transform .2s,box-shadow .2s;
+      cursor:pointer;
+    }
+    .result-card:hover{
+      border-color:rgba(59,130,246,.4);
+      transform:translateY(-2px);
+      box-shadow:0 8px 32px rgba(0,0,0,.4);
+    }
+    .result-card-icon{
+      font-size:1.6rem;margin-bottom:10px;
+    }
+    .result-card h4{font-size:.95rem;font-weight:600;margin-bottom:6px}
+    .result-card p{font-size:.82rem;color:var(--muted);line-height:1.6}
+    .result-card .tag{
+      display:inline-block;margin-top:10px;
+      font-size:.72rem;padding:3px 10px;border-radius:20px;
+      font-weight:500;
+    }
+    .tag-gov{background:rgba(59,130,246,.15);color:#93c5fd}
+    .tag-tourism{background:rgba(16,185,129,.15);color:#6ee7b7}
+    .tag-cyber{background:rgba(239,68,68,.15);color:#fca5a5}
+    .tag-edu{background:rgba(245,158,11,.15);color:#fcd34d}
+    .tag-gen{background:rgba(139,92,246,.15);color:#c4b5fd}
+
+    /* ── TIPS BOX ── */
+    .tips-box{
+      background:var(--card2);border:1px solid var(--border);
+      border-radius:var(--radius);padding:22px;margin-bottom:28px;
+    }
+    .tips-box h4{
+      font-size:.95rem;font-weight:600;
+      display:flex;align-items:center;gap:8px;margin-bottom:14px;
+    }
+    .tip-item{
+      display:flex;align-items:flex-start;gap:10px;
+      padding:10px 0;border-bottom:1px solid var(--border);
+      font-size:.87rem;color:var(--text);
+    }
+    .tip-item:last-child{border-bottom:none;padding-bottom:0}
+    .tip-item i{color:var(--accent2);margin-top:2px;flex-shrink:0}
+
+    /* ── NO RESULT ── */
+    .no-result{
+      text-align:center;padding:60px 20px;
+      color:var(--muted);
+    }
+    .no-result .emoji{font-size:3rem;margin-bottom:16px}
+    .no-result p{font-size:1rem}
+
+    /* ── RELATED SEARCHES ── */
+    .related{
+      display:flex;flex-wrap:wrap;gap:10px;margin-bottom:30px;
+    }
+    .related-chip{
+      background:var(--card);border:1px solid var(--border);
+      border-radius:50px;padding:7px 16px;
+      font-size:.82rem;color:var(--muted);
+      cursor:pointer;transition:all .2s;
+      display:flex;align-items:center;gap:6px;
+    }
+    .related-chip:hover{
+      background:var(--card2);border-color:rgba(59,130,246,.4);color:var(--text);
+    }
+
+    /* ── BACK BTN ── */
+    .back-btn{
+      display:inline-flex;align-items:center;gap:8px;
+      background:var(--card);border:1px solid var(--border);
+      border-radius:50px;padding:8px 18px;
+      font-size:.85rem;color:var(--muted);
+      text-decoration:none;cursor:pointer;
+      transition:all .2s;margin-bottom:28px;
+    }
+    .back-btn:hover{border-color:var(--accent);color:var(--text)}
+
+    /* ── FOOTER ── */
+    .search-footer{
+      text-align:center;padding:20px;
+      font-size:.78rem;color:var(--muted);
+      border-top:1px solid var(--border);
+    }
+
+    /* ── LOADING ── */
+    .loading{
+      display:flex;flex-direction:column;align-items:center;
+      padding:80px 20px;gap:16px;
+    }
+    .spinner{
+      width:44px;height:44px;
+      border:3px solid var(--border);
+      border-top-color:var(--accent);
+      border-radius:50%;
+      animation:spin 0.8s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:600px){
+      .query-title{font-size:1.4rem}
+      .topbar{padding:10px 14px}
+      .main{padding:20px 14px 50px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="topbar-logo" href="index.html">🇳🇵 Nepal Portal</a>
+  <div class="top-search">
+    <i class="fas fa-search" style="color:var(--muted);font-size:.85rem"></i>
+    <input type="text" id="topSearch" placeholder="Search anything about Nepal..." autocomplete="off"/>
+    <button onclick="reSearch()">Search</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main" id="mainContent">
+  <div class="loading" id="loadingState">
+    <div class="spinner"></div>
+    <p style="color:var(--muted);font-size:.9rem">AI is generating your answer...</p>
+  </div>
+</div>
+
+<div class="search-footer">
+  🇳🇵 Nepal Portal AI Search &nbsp;|&nbsp; Powered by built-in Nepal knowledge base &nbsp;|&nbsp;
+  <a href="index.html" style="color:var(--accent);text-decoration:none">Return to Portal</a>
+</div>
+
+<script>
+'use strict';
+
+/* =========================================================
+   NEPAL AI KNOWLEDGE BASE — COMPREHENSIVE WIKIPEDIA-STYLE
+   Detailed information for Tourism, Government Services,
+   Cybersecurity, Education, Health, and General Nepal topics
+   ========================================================= */
+
+const KB = {
+  /* ═══════════════════════════════════════════════════════
+     TOURISM SECTION — DETAILED DESTINATIONS
+     ═══════════════════════════════════════════════════════ */
+  'mount everest': {
+    icon: '🏔️', tag: 'tag-tourism', category: 'Tourism',
+    title: 'Mount Everest — The Roof of the World (Complete Guide)',
+    answer: `
+      <p><strong>Mount Everest</strong> (Nepali: सगरमाथा, Sagarmatha; Tibetan: ཇོ་མོ་གླང་མ, Chomolungma) is Earth's highest mountain above sea level, located in the <strong>Mahalangur Himal</strong> sub-range of the Himalayas. The international border between Nepal (Solukhumbu District) and China (Tibet Autonomous Region) runs across the summit.</p>
+      
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📊 Key Statistics</h3>
+      <ul>
+        <li><strong>Elevation:</strong> 8,848.86 meters (29,031.7 feet) — as certified by Nepal and China in 2020</li>
+        <li><strong>Coordinates:</strong> 27°59′17″N 86°55′31″E</li>
+        <li><strong>Prominence:</strong> 8,848.86 m (ranked 1st in the world)</li>
+        <li><strong>Parent mountain:</strong> Himalayas ( subrange: Mahalangur Himal)</li>
+        <li><strong>Isolation:</strong> 16,300 km (to Mauna Loa)</li>
+        <li><strong>First ascent:</strong> May 29, 1953 — Sir Edmund Hillary (NZ) and Tenzing Norgay Sherpa (NP)</li>
+        <li><strong>Total ascents:</strong> Over 6,000 as of 2024</li>
+        <li><strong>Fatality rate:</strong> Approximately 1.5% for climbers attempting the summit</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🏔️ Geology and Formation</h3>
+      <p>Mount Everest is composed of three rock formations: the <strong>Yellow Band</strong> (metamorphic rock), the <strong>Changabang Formation</strong> (granite), and the <strong>North Col Formation</strong> (limestone). The mountain is still growing approximately 4mm per year due to the ongoing collision of the Indian and Eurasian tectonic plates.</p>
+      
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🥾 Everest Base Camp Trek — Complete Guide</h3>
+      <p>The Everest Base Camp (EBC) Trek is one of the world's most iconic adventures, attracting over 40,000 trekkers annually. Here's everything you need to know:</p>
+      
+      <p><strong>Route Overview:</strong></p>
+      <ul>
+        <li><strong>Duration:</strong> 12–16 days round trip (Kathmandu to Kathmandu)</li>
+        <li><strong>Distance:</strong> Approximately 130 km (80 miles) round trip</li>
+        <li><strong>Starting point:</strong> Lukla (2,860m) — 30-minute flight from Kathmandu</li>
+        <li><strong>Maximum altitude:</strong> 5,364m (EBC) — highest point of the trek</li>
+        <li><strong>Difficulty:</strong> Moderate to challenging — requires good fitness</li>
+      </ul>
+
+      <p><strong>Day-by-Day Itinerary (Classic Route):</strong></p>
+      <ul>
+        <li><strong>Day 1:</strong> Fly Kathmandu → Lukla (2,840m), trek to Phakding (2,610m) — 3-4 hours</li>
+        <li><strong>Day 2:</strong> Phakding → Namche Bazaar (3,440m) — 5-6 hours</li>
+        <li><strong>Day 3:</strong> Acclimatization day at Namche Bazaar — hike to Everest View Hotel (3,880m)</li>
+        <li><strong>Day 4:</strong> Namche Bazaar → Tengboche (3,860m) — 5-6 hours (visit Tengboche Monastery)</li>
+        <li><strong>Day 5:</strong> Tengboche → Dingboche (4,410m) — 5-6 hours</li>
+        <li><strong>Day 6:</strong> Acclimatization at Dingboche — hike to Nagarjun Hill (5,100m)</li>
+        <li><strong>Day 7:</strong> Dingboche → Lobuche (4,910m) — 4-5 hours</li>
+        <li><strong>Day 8:</strong> Lobuche → Gorakshep (5,164m) → EBC (5,364m) → Pheriche — 7-8 hours</li>
+        <li><strong>Day 9:</strong> Pheriche → Namche Bazaar — 6-7 hours</li>
+        <li><strong>Day 10:</strong> Namche Bazaar → Lukla — 6-7 hours</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">💰 Cost Breakdown (Budget to Luxury)</h3>
+      <ul>
+        <li><strong>Permits (TIMS + Sagarmatha National Park):</strong> NPR 3,000-4,000 (approx. USD $25-35)</li>
+        <li><strong>Lukla flights (round trip):</strong> USD $350-450 (can be delayed due to weather)</li>
+        <li><strong>Accommodation (tea houses):</strong> NPR 500-2,000/night (USD $4-15)</li>
+        <li><strong>Food:</strong> NPR 800-2,500/day (USD $6-20) — dal bhat is cheapest and most filling</li>
+        <li><strong>Guide & Porter:</strong> USD $25-40/day for guide, USD $20-30/day for porter</li>
+        <li><strong>Total Budget:</strong> USD $1,000-2,000 (basic) | USD $3,000-5,000 (comfortable) | USD $10,000+ (luxury)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📋 Required Permits</h3>
+      <ul>
+        <li><strong>Sagarmatha National Park Entry Permit:</strong> NPR 3,000 for foreigners, NPR 150 for SAARC nationals</li>
+        <li><strong>TIMS (Trekkers' Information Management System):</strong> NPR 2,000 (NPC/TAAN registered) or NPR 1,000 (independent)</li>
+        <li><strong>Khumbu Pasang Lhamu Rural Municipality Permit:</strong> NPR 2,000 (recent addition)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🌡️ Climate and Weather</h3>
+      <ul>
+        <li><strong>Spring (March-May):</strong> Best time — stable weather, rhododendron blooms, temperatures -12°C to -5°C at EBC</li>
+        <li><strong>Summer/Monsoon (June-August):</strong> Heavy rain, landslides, few trekkers, clouds block views</li>
+        <li><strong>Autumn (September-November):</strong> Second best time — clear skies, warm days, temperatures -15°C to -8°C at EBC</li>
+        <li><strong>Winter (December-February):</strong> Snow, very cold, fewer trekkers, -20°C to -10°C at EBC</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">⚠️ Health and Safety</h3>
+      <p><strong>Altitude Sickness (AMS) — CRITICAL INFORMATION:</strong></p>
+      <ul>
+        <li>Caused by rapid ascent without proper acclimatization</li>
+        <li>Symptoms: Headache, nausea, fatigue, dizziness, loss of appetite</li>
+        <li><strong>Mild AMS:</strong> Rest at current altitude, don't ascend further</li>
+        <li><strong>Severe AMS:</strong> Descend immediately — could be fatal if ignored</li>
+        <li><strong>HACE (High Altitude Cerebral Edema):</strong> Confusion, stumbling, aggressive behavior — EMERGENCY</li>
+        <li><strong>HAPE (High Altitude Pulmonary Edema):</strong> Coughing, shortness of breath — EMERGENCY</li>
+        <li><strong>Golden rule:</strong> "Climb high, sleep low" — ascend max 500m per day above 3,000m</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🚁 Lukla Airport — The World's Most Dangerous</h3>
+      <p>Tenzing-Hillary Airport (Lukla) is considered one of the world's most dangerous airports due to:</p>
+      <ul>
+        <li>Short runway (527m / 1,729 ft) with steep drop-off at both ends</li>
+        <li>No instrumental landing — only visual approaches</li>
+        <li>Frequent weather delays (can be stuck for days)</li>
+        <li>Single daily flights during peak season</li>
+        <li>Helicopter evacuation available but expensive (USD $3,000-5,000 to Kathmandu)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🏕️ Alternative Routes</h3>
+      <ul>
+        <li><strong>Gokyo Lakes Trek:</strong> 14-18 days — scenic route via turquoise glacial lakes (Gokyo Ri: 5,357m)</li>
+        <li><strong>Three Passes Trek:</strong> 18-22 days — crosses Renjo La (5,360m), Cho La (5,420m), Kongma La (5,535m)</li>
+        <li><strong>Everest via Jiri:</strong> 21+ days — classic approach before Lukla airport existed</li>
+        <li><strong>Instant EBC Heli Trek:</strong> 8-10 days — fly in/out by helicopter (USD $1,500-2,500 extra)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">👥 Sherpa Culture</h3>
+      <p>The Sherpa people are indigenous to the Khumbu region, originally migrating from Tibet 400+ years ago. They are renowned as elite mountaineers. Key cultural sites include:</p>
+      <ul>
+        <li><strong>Namche Bazaar:</strong> Main Sherpa hub, acclimatization town with internet cafes, bakeries, gear shops</li>
+        <li><strong>Tengboche Monastery:</strong> Largest Buddhist monastery in Khumbu (3,867m), founded 1916</li>
+        <li><strong>Khumjung Monastery:</strong> Houses a supposed Yeti scalp (Sahora Khiphu)</li>
+        <li><strong>Everest Summit Success Rate:</strong> Sherpas summit at 3x the rate of international climbers</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🏆 Summit Attempts and Records</h3>
+      <ul>
+        <li><strong>First ascent:</strong> 1953 — Sir Edmund Hillary & Tenzing Norgay Sherpa</li>
+        <li><strong>First ascent without oxygen:</strong> 1978 — Reinhold Messner & Peter Habeler</li>
+        <li><strong>First Nepali woman summit:</strong> 1993 — Pasang Lhamu Sherpa</li>
+        <li><strong>First winter ascent:</strong> 1980 — Polish expedition</li>
+        <li><strong>Most summits by individual:</strong> Kami Rita Sherpa — 29 times (as of 2024)</li>
+        <li><strong>Youngest summit:</strong> 13 years old — Jordan Romero (USA)</li>
+        <li><strong>Oldest summit:</strong> 80 years old — Yuichiro Miura (Japan)</li>
+        <li><strong>Fastest ascent (no oxygen):</strong> 8h 10min — Kílian Jornet Burgada (2023)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🎒 Packing List Essentials</h3>
+      <ul>
+        <li><strong>Clothing:</strong> Down jacket (-20°C rated), thermal layers, waterproof jacket, hiking pants, gloves (thin + thick), beanie, buff/neck gaiter, sunglasses (UV400)</li>
+        <li><strong>Footwear:</strong> Waterproof hiking boots (broken in!), trekking socks (multiple pairs), flip-flops for tea houses</li>
+        <li><strong>Gear:</strong> Sleeping bag (-15°C rated), headlamp, trekking poles, water bottles/thermos</li>
+        <li><strong>Health:</strong> Diamox (altitude), personal medications, first aid kit, sunscreen (SPF 50+), lip balm</li>
+        <li><strong>Documents:</strong> Passport, permits, travel insurance (with helicopter evacuation coverage), copies</li>
+        <li><strong>Electronics:</strong> Power bank (20,000mAh+), adapter (Type D/M for Nepal), camera</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🏥 Medical Facilities Along the Trail</h3>
+      <ul>
+        <li><strong>Namche Bazaar:</strong> Khunde Hospital (basic), internet/international calls available</li>
+        <li><strong>Pheriche:</strong> Himalayan Rescue Association (HRA) clinic — altitude sickness treatment</li>
+        <li><strong>Emergency evacuation:</strong> Helicopter to Kathmandu — costs USD $3,000-10,000, requires insurance</li>
+        <li><strong>Travel insurance:</strong> Mandatory — must cover helicopter rescue above 3,000m</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '📏', title: 'Elevation', desc: '8,848.86m — World\'s Highest Peak', tag: 'tag-tourism' },
+      { icon: '🗓️', title: 'Best Season', desc: 'March-May & September-November', tag: 'tag-tourism' },
+      { icon: '💰', title: 'Trek Budget', desc: 'USD $1,000-2,000 (basic trek)', tag: 'tag-tourism' },
+      { icon: '🥾', title: 'EBC Trek', desc: '12-16 days round trip', tag: 'tag-tourism' },
+      { icon: '⚠️', title: 'Altitude Risk', desc: 'AMS above 3,500m — acclimatize!', tag: 'tag-tourism' },
+      { icon: '🚁', title: 'Lukla Flight', desc: '30 min from Kathmandu, often delayed', tag: 'tag-tourism' },
+    ],
+    tips: [
+      { icon: 'fa-id-card', text: 'Book Lukla flights early — they sell out fast during peak season' },
+      { icon: 'fa-shield-halved', text: 'Get travel insurance WITH helicopter evacuation coverage — it\'s non-negotiable' },
+      { icon: 'fa-pills', text: 'Start Diamox 24 hours before ascending above 3,500m — consult your doctor first' },
+      { icon: 'fa-bed', text: 'Book tea houses months ahead during October/November — they fill up quickly' },
+      { icon: 'fa-wallet', text: 'Bring enough NPR cash — ATMs in Namche run out of money during peak season' },
+      { icon: 'fa-socks', text: 'Pack wool socks — cotton socks cause blisters at high altitude' },
+    ],
+    related: ['Everest Base Camp Trek','Gokyo Lakes Trek','Annapurna Circuit','Nepal Trekking Guide','Lukla Airport','Sherpa Culture','Altitude Sickness'],
+  },
+
+  'pokhara': {
+    icon: '🌊', tag: 'tag-tourism', category: 'Tourism',
+    title: 'Pokhara — Complete Guide to Nepal\'s City of Lakes',
+    answer: `
+      <p><strong>Pokhara</strong> (Nepali: पोखरा) is Nepal's second-largest city (after Kathmandu) and the undisputed tourism capital of Nepal. Known as the "<strong>Jewel of the Himalayas</strong>", it sits at an elevation of <strong>822 meters (2,697 ft)</strong> on the shores of Phewa Lake, with a population of approximately <strong>500,000 people</strong>.</p>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📍 Location and Geography</h3>
+      <ul>
+        <li><strong>District:</strong> Kaski</li>
+        <li><strong>Province:</strong> Gandaki Province</li>
+        <li><strong>Coordinates:</strong> 28.2669° N, 83.9686° E</li>
+        <li><strong>Altitude:</strong> 822m (2,697 ft)</li>
+        <li><strong>Distance from Kathmandu:</strong> 200 km (124 miles) by road, 25 minutes by air</li>
+        <li><strong>Climate:</strong> Subtropical — mild winters, hot summers, monsoon from June-September</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🏔️ Himalayan Views from Pokhara</h3>
+      <p>Pokhara offers arguably the most spectacular mountain views in Nepal, with 8 peaks over 7,000m visible from the city:</p>
+      <ul>
+        <li><strong>Macchapuchhre (Fishtail):</strong> 6,993m — iconic fishtail shape, sacred mountain (never summited)</li>
+        <li><strong>Annapurna I:</strong> 8,091m — 10th highest in the world</li>
+        <li><strong>Annapurna II:</strong> 7,937m</li>
+        <li><strong>Annapurna III:</strong> 7,555m</li>
+        <li><strong>Dhaulagiri:</strong> 8,167m — visible from Sarangkot</li>
+        <li><strong>Manaslu:</strong> 8,163m</li>
+        <li><strong>Hiunchuli:</strong> 6,441m</li>
+        <li><strong>Gangapurna:</strong> 7,455m</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🌊 Lakes of Pokhara</h3>
+      <p>Pokhara is famous for its series of beautiful lakes, part of the Pokhara Valley:</p>
+      <ul>
+        <li><strong>Phewa Lake (फेवा ताल):</strong> 
+          <ul>
+            <li>Second-largest lake in Nepal (5.23 km²)</li>
+            <li>Depth: Maximum 24m, average 6.7m</li>
+            <li>Famous for the <strong>Tal Barahi Temple</strong> (Varahi Temple) on an island in the middle</li>
+            <li>Activities: Boating (NPR 400-800/hour), kayaking, paddle boating</li>
+            <li>Lakeside (Baazpur) area: main tourist hub with restaurants, bars, shops</li>
+          </ul>
+        </li>
+        <li><strong>Begnas Lake (बेगनास ताल):</strong> 
+          <ul>
+            <li>Third-largest lake, quieter than Phewa</li>
+            <li>Area: 3.73 km², depth: 10-14m</li>
+            <li>Good for kayaking and fishing ( permits required)</li>
+            <li>Rural, peaceful — fewer tourists</li>
+          </ul>
+        </li>
+        <li><strong>Rupa Lake (रुपा ताल):</strong> 
+          <ul>
+            <li>Smallest of the three main lakes (1.35 km²)</li>
+            <li>Good for bird watching — migratory birds in winter</li>
+          </ul>
+        </li>
+        <li><strong>Fewa, Dipang, Kundahar:</strong> Smaller lakes with less tourist activity</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🛕 Top Attractions</h3>
+      <ul>
+        <li><strong>Sarangkot (साराँकोट):</strong>
+          <ul>
+            <li>Hill station at 1,592m, 11 km northwest of Pokhara</li>
+            <li><strong>BEST sunrise viewpoint</strong> in Nepal — panoramic views of Annapurna, Dhaulagiri, Machchapuchhre</li>
+            <li>Also famous for <strong>paragliding take-off point</strong></li>
+            <li>Access: Taxi (NPR 800-1,500) or motorbike rental</li>
+            <li>Tip: Arrive 30-45 minutes before sunrise (5:30 AM in winter)</li>
+          </ul>
+        </li>
+        <li><strong>Tal Barahi Temple (टल बराही मन्दिर):</strong>
+          <ul>
+            <li>Hindu temple on a small island in Phewa Lake</li>
+            <li>Devoted to goddess Varahi (boar-faced form of Devi)</li>
+            <li>Access: Rowboat from Lakeside (NPR 500-1,000 round trip)</li>
+            <li>Best viewed at sunset when temple glows golden</li>
+          </ul>
+        </li>
+        <li><strong>Davis Falls (देवी झरना) & Gupteshwor Cave:</strong>
+          <ul>
+            <li>Unique waterfall that disappears into a cave</li>
+            <li>45m drop, water flows underground for 500m</li>
+            <li>Named after a Swiss tourist who died here in 1961</li>
+            <li>Connected to Gupteshwor Cave (holy Shiva cave) — 30-minute walk</li>
+            <li>Entry: NPR 100 (foreigners), NPR 60 (SAARC), NPR 25 (Nepali)</li>
+          </ul>
+        </li>
+        <li><strong>World Peace Pagoda (विश्व शांति स्तूप):</strong>
+          <ul>
+            <li>Large Buddhist stupa on a hilltop overlooking Phewa Lake</li>
+            <li>Built by Japanese Buddhist monks in 1998</li>
+            <li>Stunning 360° views from the top</li>
+            <li>Hike from Davis Falls area (30-45 minutes) or drive to base</li>
+            <li>Excellent sunset viewpoint</li>
+          </ul>
+        </li>
+        <li><strong>Pokhara Mountain Museum:</strong>
+          <ul>
+            <li>History of mountain climbing, local culture, geology</li>
+            <li>Entry: NPR 300 (foreigners)</li>
+          </ul>
+        </li>
+        <li><strong>Bindhyabasini Temple:</strong>
+          <ul>
+            <li>Oldest temple in Pokhara, on a hilltop</li>
+            <li>Hindu goddess Kali temple with mountain views</li>
+            <li>Especially crowded during Dashain festival</li>
+          </ul>
+        </li>
+        <li><strong>Mahendra Cave:</strong>
+          <ul>
+            <li>Limestone cave 15 km from Pokhara</li>
+            <li>Natural formations, underground stream</li>
+            <li>Less developed for tourism — bring a flashlight</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🪂 Adventure Activities</h3>
+      <ul>
+        <li><strong>Paragliding:</strong>
+          <ul>
+            <li>One of the <strong>best paragliding destinations</strong> in the world</li>
+            <li>Take-off from Sarangkot, land at Phewa Lakeshore</li>
+            <li>Duration: 25-35 minutes tandem flight</li>
+            <li>Cost: USD $80-150 per person</li>
+            <li>Best months: October-December, February-May</li>
+          </ul>
+        </li>
+        <li><strong>Ultra-light Aircraft:</strong>
+          <ul>
+            <li>Scenic flights over the Himalayas</li>
+            <li>30-60 minute flights from Pokhara Airport</li>
+            <li>Cost: USD $150-350 depending on duration</li>
+          </ul>
+        </li>
+        <li><strong>White Water Rafting:</strong>
+          <ul>
+            <li>Seti River: Class 2-3 rapids, suitable for beginners (half-day)</li>
+            <li>Kali Gandaki River: Class 3-4, more challenging (full-day)</li>
+            <li>Cost: NPR 3,000-8,000 depending on operator</li>
+          </ul>
+        </li>
+        <li><strong>Zip-lining:</strong>
+          <ul>
+            <li>One of the longest zip-lines in Nepal (600m)</li>
+            <li>Over the river valley with mountain views</li>
+            <li>Cost: USD $50-80</li>
+          </ul>
+        </li>
+        <li><strong>Bungee Jumping:</strong>
+          <ul>
+            <li>Located near the airport, 70m jump</li>
+            <li>Cost: USD $80-100</li>
+          </ul>
+        </li>
+        <li><strong>Kayaking/Canoeing:</strong>
+          <ul>
+            <li>Phewa Lake: Relaxed paddling, island temple visit</li>
+            <li>Begnas/Rupa Lakes: Quieter, nature-focused</li>
+            <li>Rentals: NPR 500-1,500/hour</li>
+          </ul>
+        </li>
+        <li><strong>Mountain Biking:</strong>
+          <ul>
+            <li>Scenic trails around the lakes and to nearby villages</li>
+            <li>Bike rental: NPR 800-2,000/day</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🥾 Trekking Gateway</h3>
+      <p>Pokhara is the starting point for Nepal's most famous treks:</p>
+      <ul>
+        <li><strong>Annapurna Circuit Trek:</strong> 15-20 days, 160-230 km</li>
+        <li><strong>Annapurna Base Camp (ABC):</strong> 7-12 days, 110 km</li>
+        <li><strong>Poon Hill Trek:</strong> 4-5 days (beginner-friendly)</li>
+        <li><strong>Mardi Himal Trek:</strong> 5-8 days (newer, less crowded)</li>
+        <li><strong>Ghorepani-Poon Hill:</strong> 5-7 days</li>
+        <li><strong>Mustang Trek:</strong> Starts from Jomsom (1-hour flight from Pokhara)</li>
+        <li><strong>Upper Mustang:</strong> Restricted area, requires special permit (USD $500/day)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🍽️ Food and Nightlife</h3>
+      <ul>
+        <li><strong>Lakeside (Baazpur):</strong> Main tourist area with hundreds of restaurants</li>
+        <li><strong>Cuisines:</strong> Nepali (dal bhat), Tibetan (thukpa, momos), Italian, Israeli, Indian, Chinese, Western</li>
+        <li><strong>Average meal cost:</strong> NPR 300-800 at restaurants</li>
+        <li><strong>Nightlife:</strong> Bars, pubs, live music on Lakeside road</li>
+        <li><strong>Irish Pub, trekking bars, rooftop bars</strong> with mountain views</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">💰 Budget Guide</h3>
+      <ul>
+        <li><strong>Budget:</strong> NPR 1,500-2,500/day (hostels, dal bhat, local transport)</li>
+        <li><strong>Mid-range:</strong> NPR 3,000-5,000/day (hotels, restaurants, activities)</li>
+        <li><strong>Luxury:</strong> NPR 8,000-15,000+/day (resorts, fine dining)</li>
+        <li><strong>Accommodation:</strong> NPR 300-2,000 (budget), NPR 2,000-8,000 (mid), NPR 8,000+ (luxury)</li>
+        <li><strong>ATM:</strong> Available on Lakeside — accept international cards</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🚗 How to Get There</h3>
+      <ul>
+        <li><strong>By Air:</strong> 
+          <ul>
+            <li>Kathmandu → Pokhara: 25 minutes</li>
+            <li>Multiple daily flights (Buddha Air, Yeti Airlines, Tara Air)</li>
+            <li>Cost: USD $80-150 one way</li>
+            <li>Flights often delayed due to weather — have buffer days</li>
+          </ul>
+        </li>
+        <li><strong>By Road:</strong>
+          <ul>
+            <li>Tourist Bus: NPR 800-1,500, 7-8 hours (scenic, recommended)</li>
+            <li>Local Bus: NPR 400-600, 8-10 hours (less comfortable)</li>
+            <li>Private Jeep/Taxi: NPR 8,000-15,000, 6-7 hours</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📅 Best Time to Visit</h3>
+      <ul>
+        <li><strong>October-November:</strong> BEST — Clear skies, perfect mountain views, post-monsoon</li>
+        <li><strong>March-May:</strong> SECOND BEST — Spring, rhododendron blooms, warmer</li>
+        <li><strong>December-February:</strong> Winter — Cold nights, clear skies, fewer tourists</li>
+        <li><strong>June-September:</strong> Monsoon — Heavy rain, landslides possible, views obscured by clouds</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '🏖️', title: 'Phewa Lake', desc: 'Nepal\'s 2nd largest lake (5.23 km²)', tag: 'tag-tourism' },
+      { icon: '🗻', title: 'Mountain Views', desc: '8 peaks above 7,000m visible', tag: 'tag-tourism' },
+      { icon: '🪂', title: 'Paragliding', desc: 'World-class, 25-35 min tandem flights', tag: 'tag-tourism' },
+      { icon: '🌅', title: 'Sarangkot', desc: 'Best sunrise view in Nepal', tag: 'tag-tourism' },
+      { icon: '🏕️', title: 'Trek Gateway', desc: 'Start point for Annapurna & Mardi', tag: 'tag-tourism' },
+      { icon: '🌡️', title: 'Best Time', desc: 'Oct-Nov & Mar-May for views', tag: 'tag-tourism' },
+    ],
+    tips: [
+      { icon: 'fa-moon', text: 'Wake up at 4:30 AM for Sarangkot sunrise — the golden light on Annapurna is magical' },
+      { icon: 'fa-ship', text: 'Take a rowboat to Tal Barahi Temple — NPR 500-800, allow 2 hours round trip' },
+      { icon: 'fa-umbrella', text: 'Avoid monsoon (June-August) — clouds block mountain views and trails are muddy' },
+      { icon: 'fa-plane', text: 'Book flights early — Pokhara-Kathmandu flights fill up fast, especially October/November' },
+      { icon: 'fa-hiking', text: 'Hire a local guide for Poon Hill or Mardi Himal treks — they know the best viewpoints' },
+      { icon: 'fa-utensils', text: 'Eat dal bhat at lakeside restaurants — NPR 250-500, unlimited refills!' },
+    ],
+    related: ['Annapurna Circuit','Poon Hill Trek','Mardi Himal Trek','Sarangkot Sunrise','Lakeside Pokhara','Paragliding Nepal'],
+  },
+
+  'kathmandu': {
+    icon: '🛕', tag: 'tag-tourism', category: 'Tourism',
+    title: 'Kathmandu Valley — Complete Guide to Nepal\'s Cultural Heart',
+    answer: `
+      <p><strong>Kathmandu</strong> (Nepali: काठमाडौं) is the capital and largest city of Nepal, serving as the political, cultural, and economic center of the country. The <strong>Kathmandu Valley</strong> (a bowl-shaped valley) contains three major cities: Kathmandu, Patan (Lalitpur), and Bhaktapur, all within a 20km radius.</p>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📊 Key Statistics</h3>
+      <ul>
+        <li><strong>Population:</strong> Kathmandu city: 1.5 million | Valley: 3+ million</li>
+        <li><strong>Elevation:</strong> 1,400 meters (4,593 ft)</li>
+        <li><strong>Coordinates:</strong> 27.7172° N, 85.3240° E</li>
+        <li><strong>Timezone:</strong> UTC+5:45 (Nepal Time — unique 45-minute offset)</li>
+        <li><strong>Province:</strong> Bagmati Province</li>
+        <li><strong>Climate:</strong> Subtropical highland — mild, pleasant temperatures year-round</li>
+        <li><strong>UNESCO Sites:</strong> 7 World Heritage Sites within 15 km radius</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🏛️ The 7 UNESCO World Heritage Sites</h3>
+      
+      <p><strong>1. Kathmandu Durbar Square (काठमाडौं दरबार क्षेत्र)</strong></p>
+      <ul>
+        <li><strong>Built:</strong> 12th-18th centuries by Malla kings</li>
+        <li><strong>Highlighting:</strong> Hanuman Dhoka Palace, Kumari Ghar (Living Goddess temple), Kasthamandap (wooden temple giving Kathmandu its name)</li>
+        <li><strong>Must-see:</strong> Kumari Bahal (home of the living goddess Kumari), Taleju Temple, Kal Bhairav statue</li>
+        <li><strong>Note:</strong> Partially damaged in 2015 earthquake, restoration ongoing</li>
+      </ul>
+
+      <p><strong>2. Pashupatinath Temple (पशुपतिनाथ)</strong></p>
+      <ul>
+        <li><strong>Established:</strong> 5th century CE</li>
+        <li><strong>Significance:</strong> One of the 4 sacred Hindu pilgrimage sites (Char Dhams), dedicated to Lord Shiva</li>
+        <li><strong>Features:</strong> Pagoda-style temple (rebuilt 17th century), 492 temples, ghats on Bagmati River</li>
+        <li><strong>Unique:</strong> Hindu cremation rituals visible on river ghats, sadhus (holy men) gather here</li>
+        <li><strong>Rules:</strong> Non-Hindus cannot enter the main temple — observe from outside</li>
+        <li><strong>Entry:</strong> NPR 1,000 (foreigners), free for Nepalis</li>
+      </ul>
+
+      <p><strong>3. Boudhanath Stupa (बौद्धनाथ)</strong></p>
+      <ul>
+        <li><strong>Built:</strong> 5th-6th century CE</li>
+        <li><strong>Significance:</strong> Largest spherical stupa in Nepal, sacred Buddhist site, center for Tibetan Buddhism</li>
+        <li><strong>Dimensions:</strong> 36m height, 100m diameter base</li>
+        <li><strong>Features:</strong> 108 images of Buddha, prayer wheels, omniscient eyes looking in 4 directions</li>
+        <li><strong>Atmosphere:</strong> Monks circumambulating, Tibetan prayer flags, incense, shops selling Buddhist items</li>
+        <li><strong>Best time:</strong> Dawn or dusk — mesmerizing when monks light butter lamps</li>
+        <li><strong>Entry:</strong> NPR 400 (foreigners)</li>
+      </ul>
+
+      <p><strong>4. Swayambhunath (स्वयम्भू)</strong></p>
+      <ul>
+        <li><strong>Established:</strong> 3rd century BCE (possibly oldest Buddhist shrine in Nepal)</li>
+        <li><strong>Also known as:</strong> "Monkey Temple" (due to large monkey population)</li>
+        <li><strong>Features:</strong> White dome with golden spire, 365 steps to the top, 200+ resident monkeys</li>
+        <li><strong>Views:</strong> 360° panoramic view of Kathmandu Valley from the top</li>
+        <li><strong>Unique:</strong> Combination of Hindu and Buddhist elements — deity figures from both religions</li>
+        <li><strong>Entry:</strong> NPR 200 (foreigners)</li>
+      </ul>
+
+      <p><strong>5. Patan (Lalitpur) Durbar Square</strong></p>
+      <ul>
+        <li><strong>Location:</strong> Patan city, 12 km southeast of Kathmandu</li>
+        <li><strong>Built:</strong> 3rd-18th centuries</li>
+        <li><strong>Significance:</strong> Showcase of Newari architecture — finest wooden carving in the world</li>
+        <li><strong>Highlights:</strong> Krishna Temple (15th century, stone-carved), Mul Chowk (central courtyard), Golden Temple</li>
+        <li><strong>UNESCO Status:</strong> UNESCO World Heritage Site since 1979</li>
+        <li><strong>Local specialty:</strong> Patan is famous for handcrafts, metalwork, and traditional pottery</li>
+      </ul>
+
+      <p><strong>6. Bhaktapur Durbar Square (भक्तपुर)</strong></p>
+      <ul>
+        <li><strong>Location:</strong> Bhaktapur city, 14 km east of Kathmandu</li>
+        <li><strong>Founded:</strong> 12th century, capital of the Malla Kingdom of Bhaktapur</li>
+        <li><strong>Features:</strong> 99 courtyards (Chaukathannapul), medieval atmosphere preserved</li>
+        <li><strong>Highlights:</strong> 55-Window Palace, Nyatapola Temple (5-story pagoda, tallest in Nepal), Golden Gate</li>
+        <li><strong>Local crafts:</strong> pottery (Bhaktapur clay pots), wood carving, thangka painting</li>
+        <li><strong>Traditional:</strong> Famous for juju dhau (king curd) — best yogurt in Nepal</li>
+        <li><strong>Entry:</strong> NPR 1,500 (foreigners), valid for multiple sites in Bhaktapur</li>
+      </ul>
+
+      <p><strong>7. Changu Narayan Temple (चाँगुनारायण)</strong></p>
+      <ul>
+        <li><strong>Location:</strong> Bhaktapur district, 22 km northeast of Kathmandu</li>
+        <li><strong>Established:</strong> 4th century CE — oldest temple in Nepal</li>
+        <li><strong>Significance:</strong> UNESCO site, dedicated to Lord Vishnu</li>
+        <li><strong>Features:</strong> Two-story pagoda, ancient stone inscriptions, intricate carvings</li>
+        <li><strong>Unique:</strong> Contains the famous "Vishnu on Garuda" statue and oldest known stone inscription in Nepal (464 CE)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🏙️ Districts and Neighborhoods</h3>
+      <ul>
+        <li><strong>Thamel:</strong> Main tourist hub — hotels, restaurants, trekking shops, bars, bookshops</li>
+        <li><strong>Freak Street (Jyatha):</strong> Historic hippie area from 1960s-70s, budget guesthouses</li>
+        <li><strong>Durbar Marg:</strong> Upscale shopping street, boutiques, restaurants</li>
+        <li><strong>New Road:</strong> Commercial center, markets, shops</li>
+        <li><strong>Asan:</strong> Traditional bazaar, spice markets, famous for Asan Jatra festival</li>
+        <li><strong>Jhamel (Lazimpat):</strong> Foreign embassy area, upscale restaurants</li>
+        <li><strong>Patan:</strong> Craft center, art galleries, metalwork, quieter than Kathmandu</li>
+        <li><strong>Boudha:</strong> Tibetan Buddhist area, monasteries, meditation centers</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🍽️ Newari Cuisine — Must Try Dishes</h3>
+      <ul>
+        <li><strong>Dal Bhat:</strong> Rice (bhat) with lentil soup (dal) — Nepal's national dish, unlimited refills</li>
+        <li><strong>Momo:</strong> Steamed dumplings — originally from Tibet, now Nepal's favorite snack</li>
+        <li><strong>Yomari:</strong> Sweet dumpling filled with coconut and sugar — festival food</li>
+        <li><strong>Bara:</strong> Lentil patty — savory, often served with egg</li>
+        <li><strong>Chatamari:</strong> Newari "pizza" — rice flour base with toppings</li>
+        <li><strong>Choila:</strong> Spiced grilled buffalo meat — spicy!</li>
+        <li><strong>Aloo Tama:</strong> Potato and bamboo shoot curry — tangy and delicious</li>
+        <li><strong>Juju Dhau:</strong> Bhaktapur's famous creamy yogurt — sold in clay pots</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🛍️ Shopping</h3>
+      <ul>
+        <li><strong>Thamel:</strong> Pashmina, trekking gear, Buddha statues, thangkas, handicrafts</li>
+        <li><strong>Asan Market:</strong> Spices, spices, kitchenware, traditional items</li>
+        <li><strong>Patan:</strong> Handmade jewelry, metal crafts, wood carvings</li>
+        <li><strong>Bhaktapur:</strong> Pottery, handmade paper, traditional items</li>
+        <li><strong>Tips:</strong> Bargaining expected at tourist shops (start at 50% of asking price)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🛬 Getting There</h3>
+      <ul>
+        <li><strong>Tribhuvan International Airport (TIA):</strong> Nepal's only international airport
+          <ul>
+            <li>Located 6 km from city center</li>
+            <li>Arrival process: Visa on arrival (most nationalities), customs, taxi to city</li>
+            <li>Taxi to Thamel: NPR 500-1,000 (negotiate or use ride apps)</li>
+          </ul>
+        </li>
+        <li><strong>Overland from India:</strong>
+          <ul>
+            <li>Raxaul (India) → Birgunj → Kathmandu</li>
+            <li>Sunauli (India) → Bhairahawa → Kathmandu</li>
+            <li>Bus services available from major Indian cities</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🌡️ Best Time to Visit</h3>
+      <ul>
+        <li><strong>October-November:</strong> BEST — Clear skies, festivals (Dashain, Tihar), pleasant weather</li>
+        <li><strong>March-May:</strong> SECOND BEST — Spring flowers, warmer days</li>
+        <li><strong>December-February:</strong> Winter — Cold nights (0°C), clear days, fewer tourists</li>
+        <li><strong>June-September:</strong> Monsoon — Heavy rain, floods possible, but cheapest accommodation</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🎭 Important Festivals</h3>
+      <ul>
+        <li><strong>Dashain (October):</strong> Biggest festival — 15 days, family reunions, tika, kite flying</li>
+        <li><strong>Tihar (November):</strong> Festival of lights — honoring crows, dogs, cows, Laxmi goddess</li>
+        <li><strong>Holi (March):</strong> Festival of colors — messy fun!</li>
+        <li><strong>Indra Jatra (September):</strong> Street festival with living goddess Kumari paraded</li>
+        <li><strong>Bisket Jatra (April):</strong> Nepali New Year — chariot festival in Bhaktapur</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '🏛️', title: '7 UNESCO Sites', desc: 'Highest density of heritage sites globally', tag: 'tag-tourism' },
+      { icon: '🕉️', title: 'Pashupatinath', desc: 'Sacred Hindu temple, 5th century CE', tag: 'tag-tourism' },
+      { icon: '☸️', title: 'Boudhanath', desc: 'Largest Buddhist stupa in Nepal', tag: 'tag-tourism' },
+      { icon: '🐒', title: 'Swayambhunath', desc: 'Monkey Temple, 360° valley views', tag: 'tag-tourism' },
+      { icon: '🍽️', title: 'Newari Food', desc: 'Dal Bhat, Momo, Yomari, Chatamari', tag: 'tag-tourism' },
+      { icon: '🎭', title: 'Festivals', desc: 'Dashain, Tihar, Indra Jatra', tag: 'tag-tourism' },
+    ],
+    tips: [
+      { icon: 'fa-shoe-prints', text: 'Remove shoes before entering ANY temple — even small shrines' },
+      { icon: 'fa-camera', text: 'Visit heritage sites early morning — fewer tourists and better photos' },
+      { icon: 'fa-hand-holding-heart', text: 'Never touch locals on the head — it\'s considered sacred' },
+      { icon: 'fa-handshake', text: 'Namaste (pressing palms together) is the proper greeting — not handshake' },
+      { icon: 'fa-clock', text: 'Expect power cuts (load shedding) — carry a power bank' },
+      { icon: 'fa-map', text: 'Use local map apps — Google Maps works well in Kathmandu' },
+    ],
+    related: ['Pashupatinath Temple','Boudhanath Stupa','Swayambhunath','Bhaktapur Durbar Square','Thamel Shopping','Newari Cuisine','Kathmandu Visa'],
+  },
+
+  'chitwan': {
+    icon: '🦏', tag: 'tag-tourism', category: 'Tourism',
+    title: 'Chitwan National Park — Complete Guide to Nepal\'s Wildlife Paradise',
+    answer: `
+      <p><strong>Chitwan National Park</strong> (Nepali: चितवन राष्ट्रिय निकुञ्ज) is Nepal's first and most famous national park, designated as a <strong>UNESCO World Heritage Site</strong> since 1984. Located in the subtropical lowlands of the Inner Terai, it represents one of the most significant ecosystems in Asia, protecting a unique combination of wetlands, grasslands, and sal forest.</p>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📊 Key Statistics</h3>
+      <ul>
+        <li><strong>Area:</strong> 952.63 km² (368 km² added in 2024 expansion)</li>
+        <li><strong>Established:</strong> 1973 (initially as Royal Chitwan National Park)</li>
+        <li><strong>UNESCO Status:</strong> World Heritage Site since 1984</li>
+        <li><strong>Location:</strong> Chitwan District, Narayani Province | Coordinates: 27°33′N 84°24′E</li>
+        <li><strong>Distance from Kathmandu:</strong> 148 km by road (5-6 hours) or 20 minutes by air</li>
+        <li><strong>Climate:</strong> Subtropical — hot summers (35°C+), mild winters (15°C)</li>
+        <li><strong>Main Tourist Hub:</strong> Sauraha (village at park's edge)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🦏 Wildlife — The Big Three</h3>
+      
+      <p><strong>Greater One-Horned Indian Rhinoceros (Rhinoceros unicornis):</strong></p>
+      <ul>
+        <li><strong>Population in Chitwan:</strong> Over 750 individuals</li>
+        <li><strong>Global significance:</strong> 95% of the world's one-horned rhinos live in Nepal and Assam, India</li>
+        <li><strong>Weight:</strong> 1,800-2,200 kg | Height: 1.7-1.86m at shoulder</li>
+        <li><strong>Behavior:</strong> Solitary, primarily nocturnal, excellent swimmers</li>
+        <li><strong>Best spotting:</strong> Early morning jeep safari in grasslands</li>
+        <li><strong>Threats:</strong> Poaching for horns (used in traditional medicine, falsely believed to cure ailments)</li>
+        <li><strong>Conservation success:</strong> Population grew from 95 in 1970 to 750+ today — major conservation victory</li>
+      </ul>
+
+      <p><strong>Bengal Tiger (Panthera tigris tigris):</strong></p>
+      <ul>
+        <li><strong>Population in Chitwan:</strong> 93-125 individuals (latest census 2022)</li>
+        <li><strong>Global population:</strong> ~4,500 in the wild</li>
+        <li><strong>Density:</strong> One of the highest tiger densities in the world</li>
+        <li><strong>Weight:</strong> Males 180-260 kg, Females 100-160 kg</li>
+        <li><strong>Behavior:</strong> Solitary, excellent swimmers, hunts at night</li>
+        <li><strong>Tiger tracking:</strong> Specialized safaris with trained naturalists — success rate 50-70%</li>
+        <li><strong>Chitwan Tiger Census:</strong> Camera traps and pugmarks used for counting</li>
+      </ul>
+
+      <p><strong>Asian Elephant:</strong></p>
+      <ul>
+        <li><strong>Wild elephants:</strong> 20-30 resident herd in the park</li>
+        <li><strong>Dwarf elephants:</strong> Smaller than African elephants, adapted to forests</li>
+        <li><strong>Conflict:</strong> Human-elephant conflict at park boundaries — elephants raid crops</li>
+        <li><strong>Best viewing:</strong> Elephant safaris go where jeeps cannot — closer wildlife encounters</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🐾 Other Wildlife</h3>
+      <ul>
+        <li><strong>Mammals (68 species):</strong> 
+          <ul>
+            <li>Sloth Bear (Melursus ursinus) — nocturnal, ant-eating</li>
+            <li>Leopard — elusive, spotted in forests</li>
+            <li>Wild Dog (Dhole) — pack hunters, rare</li>
+            <li>Bengal Fox, Golden Jackal, Rhesus Macaque, Hanuman Langur</li>
+            <li>Gaur (Wild Buffalo) — world's largest bovine</li>
+            <li>Sambar Deer, Spotted Deer (Chital), Hog Deer, Barking Deer</li>
+            <li>Pangolin (endangered), Indian Python</li>
+          </ul>
+        </li>
+        <li><strong>Reptiles:</strong>
+          <ul>
+            <li><strong>Gharial Crocodile:</strong> Fish-eating, distinctive long snout — 100+ in Rapti River</li>
+            <li><strong>Mugger Crocodile:</strong> Larger, more aggressive, found in Narayani River</li>
+            <li>Indian Flapshell Turtle, Monitor Lizard</li>
+          </ul>
+        </li>
+        <li><strong>Birds (540+ species):</strong>
+          <ul>
+            <li>Bengal Florican (endemic, Nepal's national bird)</li>
+            <li>Great Hornbill — large, colorful, forest dweller</li>
+            <li>Peregrine Falcon, Osprey, Crested Serpent Eagle</li>
+            <li>Lesser Adjutant Stork, Asian Openbill</li>
+            <li>Kingfishers, Ibisbill, Blossom-headed Parakeet</li>
+            <li>Best birding: October-March (winter migrants from Himalayas)</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🛶 Activities and Safaris</h3>
+
+      <p><strong>1. Jeep Safari (Best Overall):</strong></p>
+      <ul>
+        <li>Duration: Half-day (morning 6-11 AM or afternoon 3-7 PM)</li>
+        <li>Coverage: Largest area, chance to see rhinos, deer, tigers from distance</li>
+        <li>Cost: NPR 3,000-6,000 per person (through lodge)</li>
+        <li>Tip: Morning safaris have higher wildlife activity</li>
+      </ul>
+
+      <p><strong>2. Elephant Safari:</strong></p>
+      <ul>
+        <li>Duration: 1-3 hours</li>
+        <li>Unique: Elephants push through thick grass where jeeps can't go — closer rhino sightings</li>
+        <li>Controversy: Animal welfare concerns — ethical alternatives available</li>
+        <li>Cost: NPR 2,500-5,000 per person</li>
+        <li>Tip: Choose eco-friendly camps that treat elephants well</li>
+      </ul>
+
+      <p><strong>3. Canoe/Kanu Ride:</strong></p>
+      <ul>
+        <li>Duration: 1-2 hours on Rapti River</li>
+        <li>Wildlife: Gharial crocodiles, Mugger crocodiles, turtles, water birds</li>
+        <li>Relaxing: Drift silently past lounging rhinos on riverbanks</li>
+        <li>Cost: NPR 1,000-2,000</li>
+      </ul>
+
+      <p><strong>4. Jungle Walk (Walking Safari):</strong></p>
+      <ul>
+        <li>Duration: 2-4 hours with armed guard and trained naturalist</li>
+        <li>Restrictions: Only in designated areas, not during monsoon</li>
+        <li>Experience: Intimate forest experience, bird watching, plant identification</li>
+        <li>Cost: NPR 2,000-4,000</li>
+      </ul>
+
+      <p><strong>5. Bird Watching:</strong></p>
+      <ul>
+        <li>Best areas: Wetlands, lakes, riverbanks</li>
+        <li>Guided tours: NPR 1,500-3,000 half-day</li>
+        <li>Equipment: Binoculars essential, field guide helpful</li>
+        <li>Season: October-March (winter migrants)</li>
+      </ul>
+
+      <p><strong>6. Tharu Cultural Show:</strong></p>
+      <ul>
+        <li>Evening performances: Traditional Tharu dance, stick dance, fire dance</li>
+        <li>Cost: NPR 500-1,000</li>
+        <li>Available at most lodges in Sauraha</li>
+      </ul>
+
+      <p><strong>7. Ox-Bow Lake Visit:</strong></p>
+      <ul>
+        <li>Nature walk to photograph scenic lake and waterbirds</li>
+        <li>Sunset views over the lake</li>
+        <li>Part of most package tours</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🎫 Entry Fees and Permits</h3>
+      <ul>
+        <li><strong>Park Entry (per day):</strong>
+          <ul>
+            <li>Nepalese: NPR 100</li>
+            <li>SAARC nationals: NPR 1,000</li>
+            <li>Foreigners: NPR 3,000</li>
+          </ul>
+        </li>
+        <li><strong>Tiger conservation fee (foreigners):</strong> NPR 2,000 per day</li>
+        <li><strong>Total cost for foreigners:</strong> ~NPR 5,000-6,000 per day entry + activities</li>
+        <li><strong>Park office:</strong> Kasara (main entrance), Sauraha (tourist entrance)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🏕️ Sauraha — Tourist Base</h3>
+      <ul>
+        <li><strong>Location:</strong> Village at park's eastern boundary</li>
+        <li><strong>Accommodation:</strong> Budget to luxury — NPR 500-15,000/night</li>
+        <li><strong>Restaurants:</strong> Tharu cuisine, Indian, Chinese, Western</li>
+        <li><strong>Services:</strong> Tour operators, guides, equipment rental</li>
+        <li><strong>ATM:</strong> Available but sometimes runs out of cash</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">👥 Tharu People — Indigenous Culture</h3>
+      <ul>
+        <li><strong>Population:</strong> ~500,000 Tharu people in Chitwan area</li>
+        <li><strong>Culture:</strong> Traditionally forest and river people, distinct language and customs</li>
+        <li><strong>Sticky dance:</strong> Famous performance involving fire and bamboo sticks</li>
+        <li><strong>Village visits:</strong> Organized tours to traditional Tharu homes (NPR 500-1,500)</li>
+        <li><strong>Tip:</strong> Ask permission before photographing people</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📅 Best Time to Visit</h3>
+      <ul>
+        <li><strong>October-November:</strong> BEST — Post-monsoon, lush vegetation, good wildlife viewing</li>
+        <li><strong>December-February:</strong> Winter — Cooler weather, excellent for bird watching</li>
+        <li><strong>March-May:</strong> Summer — Hot (35°C+), but good for tiger sightings</li>
+        <li><strong>June-September:</strong> Monsoon — Park partially open, heavy vegetation makes wildlife harder to spot, but green and beautiful</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🚗 How to Get There</h3>
+      <ul>
+        <li><strong>From Kathmandu by Road:</strong>
+          <ul>
+            <li>Tourist bus: NPR 800-1,500, 5-6 hours (depart from Tourist Bus Park, Sorakhutte)</li>
+            <li>Local bus: NPR 400-600, 6-8 hours</li>
+            <li>Private jeep/taxi: NPR 8,000-15,000, 5 hours</li>
+          </ul>
+        </li>
+        <li><strong>From Kathmandu by Air:</strong>
+          <ul>
+            <li>Flight to Bharatpur Airport (20 minutes)</li>
+            <li>Cost: USD $100-150</li>
+            <li>Weather-dependent — often delayed</li>
+            <li>Then 30-minute taxi to Sauraha</li>
+          </ul>
+        </li>
+        <li><strong>From Pokhara:</strong>
+          <ul>
+            <li>Bus: 4-5 hours</li>
+            <li>Direct tourist buses available</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">💰 Budget Guide</h3>
+      <ul>
+        <li><strong>Entry fee:</strong> NPR 5,000-6,000/day (foreigners)</li>
+        <li><strong>Safari activities:</strong> NPR 2,500-8,000 per activity</li>
+        <li><strong>Accommodation:</strong> NPR 500-3,000 (budget), NPR 3,000-8,000 (mid), NPR 8,000+ (luxury)</li>
+        <li><strong>Full package:</strong> 2 nights/3 days all-inclusive: USD $150-400 depending on luxury level</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">⚠️ Safety Tips</h3>
+      <ul>
+        <li>Always stay with your guide — never wander alone in the jungle</li>
+        <li>Don't wear bright colors — earth tones are better</li>
+        <li>Be quiet during safaris — noise scares wildlife</li>
+        <li>Keep safe distance from rhinos — they can charge at 35 km/h</li>
+        <li>Tigers are rarely seen — don't expect a sighting</li>
+        <li>Bring insect repellent — mosquitoes and leeches during monsoon</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '🦏', title: 'Rhino Population', desc: '750+ — world\'s largest population', tag: 'tag-tourism' },
+      { icon: '🐯', title: 'Bengal Tigers', desc: '93-125 — one of highest densities', tag: 'tag-tourism' },
+      { icon: '🦅', title: 'Bird Species', desc: '540+ species, excellent birding', tag: 'tag-tourism' },
+      { icon: '🛶', title: 'Canoe Rides', desc: 'Gharial crocodiles from Rapti River', tag: 'tag-tourism' },
+      { icon: '🎭', title: 'Tharu Culture', desc: 'Indigenous dance, village tours', tag: 'tag-tourism' },
+      { icon: '🏕️', title: 'Sauraha Hub', desc: 'Main tourist base at park edge', tag: 'tag-tourism' },
+    ],
+    tips: [
+      { icon: 'fa-binoculars', text: 'Early morning jeep safaris (6 AM) have the best wildlife spotting chances' },
+      { icon: 'fa-sun', text: 'October-November is peak season — book accommodation months in advance' },
+      { icon: 'fa-camera', text: 'Bring 200mm+ lens for wildlife photography — or rent cameras in Sauraha' },
+      { icon: 'fa-shoe-prints', text: 'Wear sturdy closed-toe shoes for jungle walks — leeches in monsoon season' },
+      { icon: 'fa-bug', text: 'Apply insect repellent — mosquitoes and ticks present year-round' },
+      { icon: 'fa-hand-fist', text: 'Keep safe distance from rhinos — they can charge without warning!' },
+    ],
+    related: ['Bardia National Park','Tharu Culture','Nepal Wildlife Safari','Rapti River','One-Horned Rhino','Bengal Tiger Nepal'],
+  },
+
+  'annapurna': {
+    icon: '⛰️', tag: 'tag-tourism', category: 'Tourism',
+    title: 'Annapurna Region — Nepal\'s Most Popular Trekking Destination',
+    answer: `
+      <p>The <strong>Annapurna region</strong> is the most visited trekking destination in Nepal, attracting over
+      60% of all trekkers. The Annapurna massif contains <strong>13 peaks above 7,000m</strong>, including
+      <strong>Annapurna I (8,091m)</strong>, the 10th highest mountain in the world.</p>
+      <div class="highlight">📍 Location: Gandaki Province | Starting point: Pokhara city</div>
+      <p><strong>Major Trekking Routes:</strong></p>
+      <ul>
+        <li>Annapurna Circuit Trek — 15–20 days, 160–230 km, crosses Thorong La Pass (5,416m)</li>
+        <li>Annapurna Base Camp (ABC) Trek — 7–12 days, 110 km, reaches 4,130m</li>
+        <li>Poon Hill Trek — 4–5 days, easy, perfect for beginners</li>
+        <li>Mardi Himal Trek — 5–8 days, less crowded alternative</li>
+        <li>Ghorepani-Poon Hill — 5 days, famous sunrise over Dhaulagiri</li>
+      </ul>
+      <p>The <strong>Annapurna Conservation Area (ACAP)</strong> covers 7,629 km² and is the largest protected area in Nepal,
+      home to diverse flora and fauna including snow leopard, red panda, and over 100 species of mammals.</p>
+    `,
+    cards: [
+      { icon: '🔄', title: 'Circuit Trek', desc: '15–20 days, world-famous mountain loop', tag: 'tag-tourism' },
+      { icon: '🏕️', title: 'Base Camp', desc: 'ABC Trek: 7–12 days to 4,130m altitude', tag: 'tag-tourism' },
+      { icon: '🌄', title: 'Poon Hill', desc: '4–5 days, perfect for beginners, epic sunrise', tag: 'tag-tourism' },
+      { icon: '🐼', title: 'Red Panda', desc: 'Annapurna Conservation Area wildlife', tag: 'tag-tourism' },
+    ],
+    tips: [
+      { icon: 'fa-id-card', text: 'Required permits: TIMS Card (NPR 2,000) + ACAP Entry Permit (NPR 3,000)' },
+      { icon: 'fa-calendar', text: 'Best seasons: March–May (rhododendrons bloom) and September–November' },
+      { icon: 'fa-mountain', text: 'Thorong La Pass (5,416m) on circuit trek — start early (3–4 AM) to avoid afternoon snow' },
+      { icon: 'fa-home', text: 'Tea houses (guesthouses) are available along all routes, no tent needed' },
+    ],
+    related: ['Pokhara','Poon Hill trek','Thorong La Pass','Nepal trekking permits','Mustang'],
+  },
+
+  'lumbini': {
+    icon: '🕌', tag: 'tag-tourism', category: 'Tourism',
+    title: 'Lumbini — Birthplace of Lord Buddha',
+    answer: `
+      <p><strong>Lumbini</strong> is one of the most sacred places in the world — the <strong>birthplace of Siddhartha Gautama</strong>
+      (Lord Buddha), born around <strong>563 BCE</strong>. It is a <strong>UNESCO World Heritage Site</strong> since 1997
+      and receives pilgrims and tourists from across the globe, especially from Buddhist countries like Japan, China, South Korea,
+      Sri Lanka, Thailand, and Myanmar.</p>
+      <div class="highlight">📍 Location: Rupandehi District, Lumbini Province | Distance from Kathmandu: ~315 km (7–8 hrs by road)</div>
+      <p>The <strong>Maya Devi Temple</strong> marks the exact spot where Buddha was born, with an ancient stone marker
+      and the sacred Puskarni pond where his mother bathed before giving birth.</p>
+      <p><strong>Lumbini Sacred Garden contains:</strong></p>
+      <ul>
+        <li>Maya Devi Temple — Sacred birth spot, 3rd century BCE foundations excavated</li>
+        <li>Ashoka Pillar (249 BCE) — Erected by Emperor Ashoka proving this is the birthplace</li>
+        <li>50+ International monasteries built by Buddhist nations</li>
+        <li>World Peace Flame — Symbol of global harmony</li>
+        <li>Lumbini Museum and Research Institute</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '☸️', title: 'Buddha\'s Birthplace', desc: 'Born ~563 BCE, UNESCO World Heritage', tag: 'tag-tourism' },
+      { icon: '🏛️', title: 'Maya Devi Temple', desc: '3rd century BCE foundations, sacred pool', tag: 'tag-tourism' },
+      { icon: '🗿', title: 'Ashoka Pillar', desc: '249 BCE inscription by Emperor Ashoka', tag: 'tag-tourism' },
+      { icon: '🌍', title: '50+ Monasteries', desc: 'Built by Buddhist nations worldwide', tag: 'tag-tourism' },
+    ],
+    tips: [
+      { icon: 'fa-plane', text: 'Fly to Bhairahawa (Gautam Buddha International Airport) or take bus from Kathmandu' },
+      { icon: 'fa-bicycle', text: 'Rent a bicycle inside Lumbini — the sacred garden is large, cycling is the best way' },
+      { icon: 'fa-clock', text: 'Visit early morning for spiritual atmosphere and photography without crowds' },
+      { icon: 'fa-shirt', text: 'Dress respectfully — cover shoulders and knees when entering sacred areas' },
+    ],
+    related: ['Buddhism Nepal','Ashoka Pillar','Maya Devi Temple','Nepal pilgrimage','Kapilvastu'],
+  },
+
+  /* ═══════════════════════════════════════════════════════
+     GOVERNMENT SERVICES SECTION — DETAILED GUIDES
+     ═══════════════════════════════════════════════════════ */
+  'passport': {
+    icon: '📘', tag: 'tag-gov', category: 'Government',
+    title: 'Nepal Passport — Complete Application Guide',
+    answer: `
+      <p>A <strong>Nepalese passport</strong> (राहदानी) is an official travel document issued by the <strong>Department of Passports (DoP)</strong> under the Ministry of Foreign Affairs. It certifies the holder's identity and Nepali nationality for international travel. Nepal currently issues both <strong>Machine Readable Passports (MRP)</strong> and is transitioning to <strong>e-Passports (biometric)</strong>.</p>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📋 Types of Passports</h3>
+      <ul>
+        <li><strong>Ordinary Passport (Green cover):</strong> For general citizens, valid for 5 or 10 years</li>
+        <li><strong>Official Passport (Blue cover):</strong> For government officials traveling on official duty</li>
+        <li><strong>Diplomatic Passport (Red cover):</strong> For diplomats and high-ranking government officials</li>
+        <li><strong>e-Passport (Biometric):</strong> New generation with embedded electronic chip — enhanced security</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📍 Department of Passports</h3>
+      <ul>
+        <li><strong>Head Office:</strong> Narayanhiti, Kathmandu (near Royal Palace Museum)</li>
+        <li><strong>Branch Office:</strong> Putalisadak, Kathmandu</li>
+        <li><strong>Official Website:</strong> www.dop.gov.np</li>
+        <li><strong>Helpline:</strong> 01-4412301, 01-4412302</li>
+        <li><strong>Email:</strong> info@dop.gov.np</li>
+        <li><strong>Office Hours:</strong> Sunday-Friday, 10:00 AM - 4:00 PM (except public holidays)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📝 Required Documents for New Passport</h3>
+      
+      <p><strong>For Adults (18+):</strong></p>
+      <ul>
+        <li><strong>Citizenship Certificate:</strong> Original + 2 photocopies (both sides)</li>
+        <li><strong>Birth Certificate:</strong> Original + 2 photocopies</li>
+        <li><strong>Passport-size Photos:</strong> 2 photos (35mm x 45mm, white background, no glasses, no smiling for official photo)</li>
+        <li><strong>Previous Passport:</strong> If renewing (original + photocopy of first page)</li>
+        <li><strong>Proof of Address:</strong> Utility bill, house ownership document, or rental agreement</li>
+        <li><strong>For Married Women:</strong> Marriage registration certificate (if using husband's surname)</li>
+      </ul>
+
+      <p><strong>For Minors (under 18):</strong></p>
+      <ul>
+        <li>Parent's/Guardian's Citizenship Certificate (original + 2 photocopies)</li>
+        <li>Child's Birth Certificate (original + 2 copies)</li>
+        <li>Passport-size Photos: 2 photos</li>
+        <li>Marriage Certificate of parents (if applicable)</li>
+        <li>Consent letter from non-applying parent (if single parent applying)</li>
+        <li>Parent must be present at time of application</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">💰 Fees and Processing Time</h3>
+      
+      <p><strong>Ordinary Passport Fees:</strong></p>
+      <ul>
+        <li><strong>32-page, 5-year validity:</strong> NPR 5,000</li>
+        <li><strong>64-page, 5-year validity:</strong> NPR 7,000</li>
+        <li><strong>32-page, 10-year validity:</strong> NPR 10,000</li>
+        <li><strong>64-page, 10-year validity:</strong> NPR 12,000</li>
+        <li><strong>Express Service (3 working days):</strong> Additional NPR 5,000</li>
+        <li><strong>Super Express (24 hours):</strong> Additional NPR 10,000</li>
+      </ul>
+
+      <p><strong>Processing Timeline:</strong></p>
+      <ul>
+        <li><strong>Normal Processing:</strong> 35 working days</li>
+        <li><strong>Express Service:</strong> 3 working days</li>
+        <li><strong>Super Express:</strong> 24 hours (same day)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📱 Online Application Process</h3>
+      <ol>
+        <li>Visit <strong>dop.gov.np</strong> and click "Online Application"</li>
+        <li>Create account or log in with existing credentials</li>
+        <li>Fill out the online application form</li>
+        <li>Upload passport-size photo (specifications provided)</li>
+        <li>Select appointment date and time</li>
+        <li>Pay fee online via eSewa, Khalti, or bank transfer</li>
+        <li>Visit Department of Passports on appointment date with original documents</li>
+        <li>Biometric data collection (fingerprints, photograph)</li>
+        <li>Receive acknowledgment slip with tracking number</li>
+        <li>Collect passport when ready (or opt for home delivery)</li>
+      </ol>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🔄 Renewal Process</h3>
+      <ul>
+        <li>Same process as new application</li>
+        <li>Bring current passport (will be cancelled upon collection)</li>
+        <li>Can apply up to 1 year before expiry</li>
+        <li>If passport expired: police clearance certificate may be required</li>
+        <li>Name change requires additional documentation</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📄 e-Passport (Biometric) — New System</h3>
+      <ul>
+        <li><strong>Features:</strong> Embedded RFID chip with biometric data (fingerprints, facial recognition)</li>
+        <li><strong>Security:</strong> Much harder to forge than MRP passports</li>
+        <li><strong>Rollout:</strong> Phased introduction from 2023, fully operational gradually</li>
+        <li><strong>Eligibility:</strong> Available at Kathmandu head office initially</li>
+        <li><strong>Fee:</strong> Similar to MRP passport</li>
+        <li><strong>Benefits:</strong> Visa-free travel to more countries, faster immigration processing</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">⚠️ Important Tips</h3>
+      <ul>
+        <li>Apply at least <strong>2 months before planned travel</strong></li>
+        <li>Passport must have <strong>6 months validity</strong> for most international destinations</li>
+        <li>Check visa requirements for your destination country</li>
+        <li>Sign the passport immediately upon receipt</li>
+        <li>Keep passport safe — report loss/theft immediately to police and DoP</li>
+        <li>Your passport serial number should match all visa applications</li>
+        <li>Do not fold, wet, or expose passport to extreme temperatures</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🌍 Lost or Stolen Passport</h3>
+      <ul>
+        <li>File police report immediately</li>
+        <li>Report to Department of Passports</li>
+        <li>Apply for new passport with police clearance certificate</li>
+        <li>Contact embassy if abroad for emergency travel document</li>
+        <li>Consider registering with embassy when traveling abroad</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '📄', title: '32-page, 5yr', desc: 'NPR 5,000 — standard option', tag: 'tag-gov' },
+      { icon: '📔', title: '64-page, 5yr', desc: 'NPR 7,000 — more pages', tag: 'tag-gov' },
+      { icon: '⚡', title: 'Express Service', desc: '3 days, +NPR 5,000', tag: 'tag-gov' },
+      { icon: '📱', title: 'e-Passport', desc: 'Biometric — enhanced security', tag: 'tag-gov' },
+      { icon: '🌐', title: 'Online Apply', desc: 'Book at dop.gov.np', tag: 'tag-gov' },
+      { icon: '📍', title: 'Location', desc: 'Narayanhiti, Kathmandu', tag: 'tag-gov' },
+    ],
+    tips: [
+      { icon: 'fa-calendar', text: 'Book online appointment at dop.gov.np — saves hours of waiting in line' },
+      { icon: 'fa-copy', text: 'Bring 2-3 copies of ALL documents — they always ask for more than expected' },
+      { icon: 'fa-clock', text: 'Apply 2+ months before travel — normal processing is 35 working days' },
+      { icon: 'fa-passport', text: 'Ensure 6 months passport validity before booking international flights' },
+      { icon: 'fa-id-card', text: 'Your citizenship certificate serial number should match across all documents' },
+      { icon: 'fa-money-bill', text: 'Bring exact cash or have eSewa/Khalti ready — they don\'t always have change' },
+    ],
+    related: ['Nepal Visa on Arrival','Citizenship Certificate Nepal','Nepal Travel Documents','Foreign Employment Nepal','Embassy Nepal'],
+  },
+
+  'citizenship': {
+    icon: '🪪', tag: 'tag-gov', category: 'Government',
+    title: 'Nepal Citizenship Certificate — Complete Guide',
+    answer: `
+      <p>The <strong>Nepal Citizenship Certificate</strong> (नागरिकता प्रमाणपत्र, Nagarikta Praman Patra) is the most important identity document for Nepali citizens. Issued by the <strong>Chief District Office (CDO)</strong>, it is required for obtaining passports, opening bank accounts, registering property, voting, and virtually all official transactions.</p>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📋 Types of Nepal Citizenship</h3>
+      <ul>
+        <li><strong>By Descent (वंशीय):</strong> Person born to a Nepali father OR mother who is a citizen of Nepal</li>
+        <li><strong>By Birth (जन्मको):</strong> Born in Nepal to parents who are not citizens (conditions apply — introduced by 2015 constitution)</li>
+        <li><strong>By Naturalization (प्राकृतिक):</strong> Foreign nationals married to Nepali citizens (must live in Nepal for 15 years, know Nepali language/history)</li>
+        <li><strong>By Incorporation (विलय):</strong> Persons who were citizens before the current constitution</li>
+        <li><strong>Honorable (सम्मानित):</strong> Granted by Government to persons with special contributions to Nepal</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📍 Where to Apply</h3>
+      <ul>
+        <li><strong>Primary:</strong> Chief District Office (CDO) in your home district</li>
+        <li><strong>Alternative:</strong> CDO in any district with valid domicile certificate from your home district</li>
+        <li><strong>All 77 districts</strong> have CDO offices</li>
+        <li><strong>Office Hours:</strong> Sunday-Friday, 10:00 AM - 5:00 PM</li>
+        <li><strong>Public Holidays:</strong> Closed on Nepali public holidays</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📝 Required Documents (By Descent)</h3>
+      <ul>
+        <li><strong>Father OR Mother's Citizenship Certificate:</strong> Original + photocopy</li>
+        <li><strong>Birth Certificate:</strong> From Ward Office or hospital (original + copy)</li>
+        <li><strong>Ward Recommendation Letter:</strong> From your local Ward Office (वडा सिफारिस)</li>
+        <li><strong>Marriage Certificate:</strong> If parents are married (original + copy)</li>
+        <li><strong>Passport-size Photos:</strong> 3-4 photos</li>
+        <li><strong>Citizenship of Applicant's Children:</strong> If you have children, their citizenship documents</li>
+        <li><strong>For Married Women:</strong> Marriage registration certificate + husband's citizenship + consent letter</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📝 Required Documents (By Birth — Post-2015)</h3>
+      <ul>
+        <li><strong>Birth Certificate:</strong> Hospital or Ward Office issued</li>
+        <li><strong>Parents' Documents:</strong> Birth place proof, residential proof in Nepal</li>
+        <li><strong>Affidavit:</strong> Stating parents are Nepali citizens</li>
+        <li><strong>Ward Recommendation:</strong> Confirming birth in Nepal</li>
+        <li><strong>Note:</strong> The 2015 constitution allows citizenship by birth if both parents are citizens</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">💰 Fees</h3>
+      <ul>
+        <li><strong>New Citizenship (By Descent):</strong> FREE</li>
+        <li><strong>New Citizenship (Naturalization):</strong> NPR 1,000-5,000 (depending on type)</li>
+        <li><strong>Duplicate Certificate:</strong> NPR 500</li>
+        <li><strong>Citizenship Certificate Correction:</strong> NPR 200-500</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">⏱️ Processing Time</h3>
+      <ul>
+        <li><strong>By Descent:</strong> Same day to 3 working days</li>
+        <li><strong>By Birth:</strong> 1-2 weeks</li>
+        <li><strong>By Naturalization:</strong> 6-12 months (long process)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📄 Step-by-Step Process</h3>
+      <ol>
+        <li>Visit Ward Office to get <strong>Ward Recommendation Letter</strong></li>
+        <li>Gather all required documents</li>
+        <li>Visit <strong>CDO Office</strong> in your district</li>
+        <li>Submit application with all documents</li>
+        <li>Pay any applicable fees</li>
+        <li>Biometric verification (photo, fingerprint)</li>
+        <li>Wait for verification and approval</li>
+        <li>Collect citizenship certificate</li>
+      </ol>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📱 Digital/National Identity Card</h3>
+      <ul>
+        <li><strong>Nepal is transitioning</strong> to digital biometric IDs</li>
+        <li><strong>Digital ID:</strong> Will integrate citizenship data with biometric features</li>
+        <li><strong>Integration:</strong> Banks, hospitals, government offices, SIM registration</li>
+        <li><strong>Rollout:</strong> Starting from Kathmandu/Lalitpur (May 2026), expanding nationwide</li>
+        <li><strong>Application:</strong> Same CDO offices, may require iris scan and fingerprints</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">⚠️ Important Notes</h3>
+      <ul>
+        <li><strong>Your name spelling</strong> on citizenship MUST match all other documents (passport, academic certificates)</li>
+        <li>Citizenship is <strong>not required</strong> for children under 16</li>
+        <li>Lost citizenship requires <strong>police report</strong> before duplicate can be issued</li>
+        <li>Foreign nationals cannot own land in Nepal without giving up foreign citizenship</li>
+        <li>Citizenship by descent can be obtained from <strong>either parent</strong> (2015 constitution change)</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '🏛️', title: 'Apply At', desc: 'CDO office in all 77 districts', tag: 'tag-gov' },
+      { icon: '👨‍👩‍👧', title: 'By Descent', desc: 'Either parent\'s citizenship qualifies', tag: 'tag-gov' },
+      { icon: '🆓', title: 'Free Service', desc: 'No fee for by-descent application', tag: 'tag-gov' },
+      { icon: '📄', title: 'Documents', desc: 'Birth cert, parent\'s citizenship, ward letter', tag: 'tag-gov' },
+      { icon: '⏱️', title: 'Processing', desc: 'Same day to 3 days (by descent)', tag: 'tag-gov' },
+      { icon: '📱', title: 'Digital ID', desc: 'Biometric rollout from May 2026', tag: 'tag-gov' },
+    ],
+    tips: [
+      { icon: 'fa-file-alt', text: 'Get your Ward Letter first — it\'s mandatory before CDO visit' },
+      { icon: 'fa-pen', text: 'Be VERY careful with name spelling — this will appear on your passport forever' },
+      { icon: 'fa-id-card', text: 'For married women: Your maiden name vs married name affects all documents — decide carefully' },
+      { icon: 'fa-copy', text: 'Make 3-4 photocopies of every document before visiting CDO' },
+      { icon: 'fa-clock', text: 'Arrive at CDO early (before 11 AM) — they stop accepting applications by 3 PM' },
+      { icon: 'fa-calendar', text: 'Monday and Thursday are busiest — visit on Tuesday/Wednesday if possible' },
+    ],
+    related: ['Passport Nepal','National Identity Card','Ward Office Nepal','Birth Certificate','Voter ID Nepal'],
+  },
+
+  'driving license': {
+    icon: '🚗', tag: 'tag-gov', category: 'Government',
+    title: 'Nepal Driving License — Complete Guide',
+    answer: `
+      <p>A <strong>Driving License (सवारी चालक अनुमतिपत्र)</strong> in Nepal is issued by the <strong>Department of Transport Management (DOTM)</strong> under the Ministry of Physical Infrastructure and Transport. It is mandatory for operating any motor vehicle on Nepal's roads.</p>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📋 License Categories</h3>
+      <ul>
+        <li><strong>Category A:</strong> Two-wheeler motorcycles (up to 150cc)</li>
+        <li><strong>Category A1:</strong> Heavy motorcycles (above 150cc)</li>
+        <li><strong>Category B:</strong> Light motor vehicles (cars, jeeps, vans up to 3,500 kg)</li>
+        <li><strong>Category C:</strong> Heavy vehicles (trucks, buses above 3,500 kg)</li>
+        <li><strong>Category P:</strong> Public transport (buses, tempos for commercial passenger service)</li>
+        <li><strong>Category T:</strong> Tractors and other agricultural vehicles</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📍 Where to Apply</h3>
+      <ul>
+        <li><strong>Department of Transport Management (DOTM):</strong> Min Bhawan, Kathmandu (head office)</li>
+        <li><strong>Regional Transport Management Offices:</strong> Major cities (Pokhara, Chitwan, Birgunj, etc.)</li>
+        <li><strong>District Transport Offices:</strong> All 77 districts</li>
+        <li><strong>Online:</strong> Apply online at transoprt management portal (limited services)</li>
+        <li><strong>Helpline:</strong> 01-4532288</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📝 Requirements</h3>
+      
+      <p><strong>For Learner's License:</strong></p>
+      <ul>
+        <li><strong>Age:</strong> 18+ for motorcycle (Category A), 21+ for car (Category B)</li>
+        <li><strong>Citizenship Certificate:</strong> Original + photocopy</li>
+        <li><strong>Passport-size Photos:</strong> 3 photos</li>
+        <li><strong>Application Form:</strong> Available at DOTM office</li>
+        <li><strong>Fee:</strong> NPR 500-1,000</li>
+      </ul>
+
+      <p><strong>For Permanent License:</strong></p>
+      <ul>
+        <li><strong>Learner's License:</strong> Must hold for minimum 1 month</li>
+        <li><strong>Training Certificate:</strong> From DOTM-approved driving school (recommended)</li>
+        <li><strong>Written Test:</strong> Traffic rules, road signs, basic mechanics</li>
+        <li><strong>Practical Test:</strong> Driving test on designated route</li>
+        <li><strong>Medical Certificate:</strong> Basic health check (vision, hearing)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📚 Written Test Syllabus</h3>
+      <ul>
+        <li><strong>Traffic Rules:</strong> Road signs, traffic signals, speed limits, right of way</li>
+        <li><strong>Road Safety:</strong> Seat belts, helmets, drunk driving laws</li>
+        <li><strong>Vehicle Maintenance:</strong> Basic checks, tire pressure, oil levels</li>
+        <li><strong>Traffic Acts:</strong> Nepal Transport Act provisions</li>
+        <li><strong>Passing marks:</strong> 60% (12 out of 20 questions)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🚗 Practical Test</h3>
+      <ul>
+        <li><strong>For Motorcycle:</strong> Figure-8 course, hill start, obstacle avoidance</li>
+        <li><strong>For Car:</strong> Parallel parking, 3-point turn, hill start, road driving</li>
+        <li><strong>Duration:</strong> 10-15 minutes</li>
+        <li><strong>Vehicle:</strong> Bring your own or use test vehicle (fee applicable)</li>
+        <li><strong>Examiner:</strong> DOTM official evaluates your driving</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">💰 Fees</h3>
+      <ul>
+        <li><strong>Learner's License:</strong> NPR 500</li>
+        <li><strong>Permanent License (new):</strong> NPR 1,500-3,000</li>
+        <li><strong>Renewal:</strong> NPR 1,000</li>
+        <li><strong>International Driving Permit (IDP):</strong> NPR 1,500-2,000</li>
+        <li><strong>Driving Test Fee:</strong> NPR 500-1,000</li>
+        <li><strong>License Card:</strong> Included in above fees</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">⏱️ Processing Time</h3>
+      <ul>
+        <li><strong>Learner's License:</strong> Same day</li>
+        <li><strong>Permanent License:</strong> 1-2 weeks after passing tests</li>
+        <li><strong>Smart Card License:</strong> May take longer due to printing</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📄 License Validity and Renewal</h3>
+      <ul>
+        <li><strong>Validity:</strong> 5 years (can be extended for additional 5 years)</li>
+        <li><strong>Renewal:</strong> Before expiry or within 1 year after expiry</li>
+        <li><strong>Late renewal penalty:</strong> Fee increases after expiry</li>
+        <li><strong>Medical required:</strong> For renewal after age 50</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🏍️ Motorcycle License Specifics</h3>
+      <ul>
+        <li><strong>Mandatory helmet:</strong> Both rider and pillion must wear helmets</li>
+        <li><strong>Category A:</strong> For motorcycles up to 150cc</li>
+        <li><strong>Category A1:</strong> For motorcycles above 150cc (sport bikes, heavy bikes)</li>
+        <li><strong>No license fine:</strong> NPR 500-2,000 for riding without license</li>
+        <li><strong>Police checkpoint:</strong> License often checked in Kathmandu and major cities</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🌍 International Driving Permit (IDP)</h3>
+      <ul>
+        <li><strong>Issued by:</strong> Department of Transport Management, Kathmandu</li>
+        <li><strong>Validity:</strong> 1 year from issue date</li>
+        <li><strong>Requirement:</strong> Must have valid Nepal driving license first</li>
+        <li><strong>Documents:</strong> Nepal license, passport, photos, application form</li>
+        <li><strong>Use:</strong> Allows driving in countries that recognize IDP</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">⚠️ Important Rules</h3>
+      <ul>
+        <li><strong>Always carry license</strong> when driving — police checkpoints are common</li>
+        <li><strong>Age restrictions:</strong> 18 for motorcycle, 21 for car (private), higher for commercial</li>
+        <li><strong>Traffic fines:</strong> License can be confiscated for serious violations</li>
+        <li><strong>Points system:</strong> Being implemented for traffic violations</li>
+        <li><strong>Fake license penalty:</strong> Criminal charges, vehicle confiscation</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '🏍️', title: 'Category A', desc: 'Two-wheeler up to 150cc', tag: 'tag-gov' },
+      { icon: '🚙', title: 'Category B', desc: 'Cars, jeeps, light vehicles', tag: 'tag-gov' },
+      { icon: '📚', title: 'Written Test', desc: 'Traffic rules, 60% passing', tag: 'tag-gov' },
+      { icon: '🚗', title: 'Road Test', desc: 'Practical driving assessment', tag: 'tag-gov' },
+      { icon: '💰', title: 'New License', desc: 'NPR 1,500-3,000 total', tag: 'tag-gov' },
+      { icon: '🌍', title: 'International', desc: 'IDP available at DOTM', tag: 'tag-gov' },
+    ],
+    tips: [
+      { icon: 'fa-school', text: 'Join a driving school first — they teach road rules and help with test preparation' },
+      { icon: 'fa-book', text: 'Study traffic signs and road markings — 40% of written test' },
+      { icon: 'fa-car', text: 'Practice parallel parking extensively — it\'s the hardest part of the road test' },
+      { icon: 'fa-id-card', text: 'Always carry your license while driving — fines are NPR 500-2,000 without it' },
+      { icon: 'fa-calendar', text: 'Book your test date online at DOTM to avoid long queues' },
+      { icon: 'fa-sync', text: 'Renew your license before it expires — late renewal costs double the fee' },
+    ],
+    related: ['DOTM Nepal','Traffic Rules Nepal','Vehicle Registration Nepal','Road Safety Nepal','Transport Nepal'],
+  },
+
+  'tax': {
+    icon: '💰', tag: 'tag-gov', category: 'Government',
+    title: 'Nepal Tax & PAN Registration — Complete Guide',
+    answer: `
+      <p>The <strong>Permanent Account Number (PAN)</strong> (स्थायी लेखा नम्बर) is a unique 9-digit tax identification number issued by the <strong>Inland Revenue Department (IRD)</strong> of Nepal. It is mandatory for businesses, high-earning individuals, and anyone making significant financial transactions.</p>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📍 Inland Revenue Department</h3>
+      <ul>
+        <li><strong>Head Office:</strong> Lazimpat, Kathmandu</li>
+        <li><strong>Regional Offices:</strong> All provincial capitals</li>
+        <li><strong>Official Website:</strong> ird.gov.np</li>
+        <li><strong>Tax Helpline:</strong> 01-4415802, 01-4419914</li>
+        <li><strong>Email:</strong> info@ird.gov.np</li>
+        <li><strong>Office Hours:</strong> Sunday-Friday, 10:00 AM - 5:00 PM</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📋 Who Must Have PAN</h3>
+      <ul>
+        <li><strong>All businesses:</strong> Companies, partnerships, shops, restaurants, etc.</li>
+        <li><strong>Employees:</strong> Annual income above NPR 500,000</li>
+        <li><strong>Property transactions:</strong> Buying or selling land, houses</li>
+        <li><strong>Bank accounts:</strong> Business bank accounts require PAN</li>
+        <li><strong>Vehicle importers:</strong> Importers of vehicles and goods</li>
+        <li><strong>Professionals:</strong> Doctors, lawyers, engineers earning above threshold</li>
+        <li><strong>Rental income:</strong> Property owners with rental income above NPR 150,000/year</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📝 PAN Application Process</h3>
+      <p><strong>Online Application:</strong></p>
+      <ol>
+        <li>Visit <strong>ird.gov.np</strong></li>
+        <li>Click on "Online Services" → "PAN Registration"</li>
+        <li>Fill application form (personal/business details)</li>
+        <li>Upload required documents (scanned copies)</li>
+        <li>Submit application</li>
+        <li>Receive PAN number within <strong>24 hours</strong> (via email)</li>
+        <li>Collect PAN certificate from IRD office or download from portal</li>
+      </ol>
+
+      <p><strong>Required Documents (Individuals):</strong></p>
+      <ul>
+        <li>Citizenship Certificate (original + copy)</li>
+        <li>PAN Application Form (form available at IRD or online)</li>
+        <li>Passport-size photos (2)</li>
+        <li>For employees: Appointment letter, employer confirmation</li>
+      </ul>
+
+      <p><strong>Required Documents (Businesses):</strong></p>
+      <ul>
+        <li>Company Registration Certificate (VAT registration if applicable)</li>
+        <li>Owner/Partner Citizenship Certificates</li>
+        <li>Business address proof</li>
+        <li>PAN form</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">💰 PAN Fees</h3>
+      <ul>
+        <li><strong>Individual PAN:</strong> FREE</li>
+        <li><strong>Business PAN:</strong> FREE</li>
+        <li><strong>Duplicate PAN Certificate:</strong> NPR 100</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📊 Income Tax Rates (FY 2023/24)</h3>
+      <p><strong>For Individuals:</strong></p>
+      <ul>
+        <li><strong>NPR 0 - 500,000:</strong> 1% (Social Security Tax)</li>
+        <li><strong>NPR 500,001 - 700,000:</strong> 10% (NPR 5,000 + 20% of amount over 500,000)</li>
+        <li><strong>NPR 700,001 - 1,000,000:</strong> 20% (NPR 45,000 + 30% of amount over 700,000)</li>
+        <li><strong>NPR 1,000,001 - 2,000,000:</strong> 30% (NPR 135,000 + 36% of amount over 1,000,000)</li>
+        <li><strong>Above NPR 2,000,000:</strong> 36% (NPR 435,000 + 39% of amount over 2,000,000)</li>
+      </ul>
+
+      <p><strong>For Companies/Businesses:</strong></p>
+      <ul>
+        <li><strong>Regular companies:</strong> 25% of net profit</li>
+        <li><strong>Banks and financial institutions:</strong> 30%</li>
+        <li><strong>Insurance companies:</strong> 30%</li>
+        <li><strong>Mobile service providers:</strong> 30%</li>
+        <li><strong>General merchants and suppliers:</strong> 20%</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📑 Tax Filing Process</h3>
+      <ul>
+        <li><strong>Fiscal Year:</strong> Mid-July to mid-July (Shrawan to Ashadh)</li>
+        <li><strong>Annual Return:</strong> Submit by mid-Poush (December-January)</li>
+        <li><strong>Interim Return:</strong> For VAT-registered businesses (quarterly)</li>
+        <li><strong>TDS Returns:</strong> Monthly if employer/payer deducts tax at source</li>
+        <li><strong>Online Filing:</strong> ird.gov.np → Online Services → Tax Return</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📊 VAT (Value Added Tax)</h3>
+      <ul>
+        <li><strong>VAT Rate:</strong> 13%</li>
+        <li><strong>Registration Threshold:</strong> Annual turnover above NPR 5,000,000</li>
+        <li><strong>Voluntary Registration:</strong> Businesses can register below threshold</li>
+        <li><strong>VAT Returns:</strong> Quarterly (4 times per year)</li>
+        <li><strong>VAT on Imports:</strong> 13% on customs-declared value</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">⚠️ Penalties</h3>
+      <ul>
+        <li><strong>Late filing:</strong> NPR 100 per day + 10% annual interest on tax due</li>
+        <li><strong>Under-reporting:</strong> 25% penalty on unpaid tax</li>
+        <li><strong>No PAN:</strong> Cannot open business bank account, may face fines</li>
+        <li><strong>Tax evasion:</strong> Criminal charges possible for serious cases</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '🌐', title: 'Online Apply', desc: 'Apply at ird.gov.np — 24hr turnaround', tag: 'tag-gov' },
+      { icon: '📊', title: 'VAT Rate', desc: '13% for registered businesses', tag: 'tag-gov' },
+      { icon: '📅', title: 'Tax Filing', desc: 'Due mid-Poush (Dec-Jan)', tag: 'tag-gov' },
+      { icon: '🏦', title: 'TDS System', desc: 'Tax deducted at source from salary', tag: 'tag-gov' },
+      { icon: '💰', title: 'Income Tax', desc: '1% to 39% (progressive)', tag: 'tag-gov' },
+      { icon: '📄', title: 'PAN Number', desc: '9-digit unique identifier', tag: 'tag-gov' },
+    ],
+    tips: [
+      { icon: 'fa-laptop', text: 'Register for online services at ird.gov.np — file returns from home' },
+      { icon: 'fa-calculator', text: 'Use a CA (Chartered Accountant) for business tax filing — saves money long-term' },
+      { icon: 'fa-calendar', text: 'Mark tax filing deadlines on calendar — late fees add up fast' },
+      { icon: 'fa-receipt', text: 'Keep all expense receipts — legitimate deductions reduce your tax liability' },
+      { icon: 'fa-building', text: 'If annual turnover exceeds NPR 5M, you MUST register for VAT within 30 days' },
+      { icon: 'fa-file-invoice', text: 'Issue proper invoices/bills — VAT-registered businesses must charge VAT on sales' },
+    ],
+    related: ['PAN Registration Nepal','IRD Nepal','Business Registration Nepal','VAT Nepal','Company Registration Nepal','Tax Return Nepal'],
+  },
+
+  'health insurance': {
+    icon: '🏥', tag: 'tag-gov', category: 'Government',
+    title: 'Nepal Health Services & Insurance — Complete Guide',
+    answer: `
+      <p>Nepal's healthcare system consists of government-run facilities, private hospitals, and community health services. The <strong>National Health Insurance Program (NHIP)</strong>, also known as <strong>Swasthya Bima</strong>, provides affordable health coverage to Nepali citizens. Understanding healthcare options is crucial for both residents and visitors.</p>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🏥 Healthcare System Structure</h3>
+      <ul>
+        <li><strong>Primary Level:</strong> Health Posts (विरामी पोस्ट) in villages, Basic Health Service Centers</li>
+        <li><strong>Secondary Level:</strong> Primary Health Care Centers (PHCC), District Hospitals</li>
+        <li><strong>Tertiary Level:</strong> Provincial/Zonal Hospitals, Specialty Centers</li>
+        <li><strong>Top Level:</strong> Tertiary Hospitals in Kathmandu (Teaching, Bir, Patan)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🏨 Major Hospitals in Kathmandu</h3>
+      <ul>
+        <li><strong>TU Teaching Hospital (TUTH):</strong>
+          <ul>
+            <li>Maharajgunj, Kathmandu</li>
+            <li>Most comprehensive public hospital</li>
+            <li>All specialties, teaching hospital</li>
+            <li>Cost: Subsidized government rates</li>
+          </ul>
+        </li>
+        <li><strong>Bir Hospital (National Trauma Center):</strong>
+          <ul>
+            <li>Maharajgunj, Kathmandu</li>
+            <li>Emergency and trauma specialist</li>
+            <li>Government-run, affordable</li>
+          </ul>
+        </li>
+        <li><strong>Patan Hospital:</strong>
+          <ul>
+            <li>Patan, Lalitpur</li>
+            <li>Quality care, moderate prices</li>
+            <li>Good for general and specialty care</li>
+          </ul>
+        </li>
+        <li><strong>Nobel Medical Teaching Hospital:</strong>
+          <ul>
+            <li>Biratnagar (Eastern Nepal)</li>
+            <li>Multi-specialty private hospital</li>
+          </ul>
+        </li>
+        <li><strong>Medicity Hospital:</strong>
+          <ul>
+            <li>Baneshwor, Kathmandu</li>
+            <li>Private, modern facilities</li>
+          </ul>
+        </li>
+        <li><strong>Grande International Hospital:</strong>
+          <ul>
+            <li>Dharmapath, Kathmandu</li>
+            <li>Premium private hospital</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">💳 National Health Insurance Program (NHIP/Swasthya Bima)</h3>
+      <ul>
+        <li><strong>Launched:</strong> 2015 (pilot), expanded nationwide</li>
+        <li><strong>Operated by:</strong> Social Health Security Development Committee</li>
+        <li><strong>Coverage:</strong> Up to NPR 100,000 per family per year</li>
+        <li><strong>Premium:</strong> NPR 3,500 per family (NPR 2,625 government subsidy for poor)</li>
+        <li><strong>Family definition:</strong> Head of household + spouse + dependent children</li>
+      </ul>
+
+      <p><strong>NHIP Coverage Includes:</strong></p>
+      <ul>
+        <li>Outpatient services (OPD)</li>
+        <li>Inpatient treatment (IPD)</li>
+        <li>Medications from empaneled pharmacies</li>
+        <li>Diagnostic tests (X-ray, blood tests, etc.)</li>
+        <li>Emergency treatment</li>
+        <li>Some surgeries and procedures</li>
+        <li>Maternity care</li>
+      </ul>
+
+      <p><strong>NHIP Excludes:</strong></p>
+      <ul>
+        <li>Cosmetic procedures</li>
+        <li>Dental procedures (basic)</li>
+        <li>Organ transplantation</li>
+        <li>Treatment abroad</li>
+        <li>Self-inflicted injuries</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📝 How to Enroll in NHIP</h3>
+      <ol>
+        <li>Visit your local <strong>Health Office</strong> or <strong>Ward Office</strong></li>
+        <li>Collect enrollment form</li>
+        <li>Submit family details (head of household, family members)</li>
+        <li>Pay premium (NPR 3,500 for full family)</li>
+        <li>Receive <strong>Swasthya Card</strong> with QR code</li>
+        <li>Visit any empaneled hospital/health facility with the card</li>
+      </ol>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">💰 Healthcare Costs (Approximate)</h3>
+      <ul>
+        <li><strong>Health Post consultation:</strong> FREE (government)</li>
+        <li><strong>District Hospital:</strong> NPR 50-200 for consultation</li>
+        <li><strong>Private Hospital:</strong> NPR 500-2,000 for specialist consultation</li>
+        <li><strong>MRI Scan:</strong> NPR 5,000-15,000</li>
+        <li><strong>Normal Delivery:</strong> NPR 15,000-50,000 (hospital dependent)</li>
+        <li><strong>Appendectomy:</strong> NPR 40,000-100,000</li>
+        <li><strong>ICU per day:</strong> NPR 10,000-30,000</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🏥 Provincial/Major Hospitals Outside Kathmandu</h3>
+      <ul>
+        <li><strong>Pokhara:</strong> Gandaki Provincial Hospital, Manipal Teaching Hospital</li>
+        <li><strong>Chitwan:</strong> Bharatpur Hospital (major tertiary care)</li>
+        <li><strong>Biratnagar:</strong> Koshi Hospital, Nobel Medical College</li>
+        <li><strong>Bhairahawa:</strong> Lumbini Provincial Hospital</li>
+        <li><strong>Janakpur:</strong> Provincial Hospital</li>
+        <li><strong>Surkhet:</strong> Karnali Provincial Hospital</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">👶 Maternal and Child Health</h3>
+      <ul>
+        <li><strong>Free delivery:</strong> Government provides incentives for institutional delivery</li>
+        <li><strong>Safe Motherhood Program:</strong> NPR 1,500-3,000 incentive for hospital delivery</li>
+        <li><strong>Vaccination:</strong> Free under National Immunization Program (child vaccines)</li>
+        <li><strong>ANC/PNC:</strong> Antenatal and postnatal care at health posts</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🌍 Health Insurance for Visitors</h3>
+      <ul>
+        <li><strong>Visitors should purchase</strong> comprehensive travel insurance before arriving in Nepal</li>
+        <li><strong>Coverage needed:</strong> Medical evacuation (helicopter), hospitalization, trip cancellation</li>
+        <li><strong>Public hospitals</strong> may not accept foreign insurance</li>
+        <li><strong>Private hospitals</strong> are more likely to work with international insurance</li>
+        <li><strong>Cost of evacuation:</strong> USD 3,000-10,000 to Kathmandu from remote areas</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">⚠️ Common Health Issues in Nepal</h3>
+      <ul>
+        <li><strong>Altitude sickness:</strong> Above 2,500m — stay hydrated, acclimatize</li>
+        <li><strong>Water-borne diseases:</strong> Diarrhea, typhoid — drink bottled water</li>
+        <li><strong>Malaria:</strong> Risk in lowland Terai — take prophylaxis if visiting</li>
+        <li><strong>Dengue:</strong> Present in lowlands during monsoon</li>
+        <li><strong>Rabies:</strong> Stray dogs common — seek immediate treatment if bitten</li>
+        <li><strong>Leishmaniasis:</strong> Sandfly bites — in lowland areas</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">💊 Pharmacies and Medications</h3>
+      <ul>
+        <li><strong>Pharmacies:</strong> Available in all cities and towns</li>
+        <li><strong>Generic medicines:</strong> Available at government pharmacies</li>
+        <li><strong>Brand names:</strong> Similar to India, many Indian-made drugs</li>
+        <li><strong>Prescription:</strong> Some medications require prescription</li>
+        <li><strong>Quality:</strong> Government-tested, but buy from reputable pharmacies</li>
+        <li><strong>NHIP card:</strong> Use at empaneled pharmacies for discounted rates</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '🏥', title: 'TU Teaching Hospital', desc: 'Most comprehensive public hospital', tag: 'tag-gov' },
+      { icon: '💳', title: 'NHIP Coverage', desc: 'Up to NPR 1 lakh/year per family', tag: 'tag-gov' },
+      { icon: '📋', title: 'Premium', desc: 'NPR 3,500/year for full family', tag: 'tag-gov' },
+      { icon: '💊', title: 'Free Medicines', desc: 'Generic at government pharmacies', tag: 'tag-gov' },
+      { icon: '👶', title: 'Maternal Care', desc: 'Free institutional delivery incentive', tag: 'tag-gov' },
+      { icon: '🌍', title: 'For Visitors', desc: 'Get travel insurance before coming', tag: 'tag-gov' },
+    ],
+    tips: [
+      { icon: 'fa-heart', text: 'Get your NHIP Swasthya Card — NPR 3,500/year covers up to NPR 1 lakh for your family' },
+      { icon: 'fa-house-chimney', text: 'For minor issues, visit Health Posts first — they\'re free and reduce crowding at hospitals' },
+      { icon: 'fa-syringe', text: 'Carry personal medications — availability of specific drugs is limited outside Kathmandu' },
+      { icon: 'fa-kit-medical', text: 'In emergencies, go directly to Bir Hospital (trauma) or TUTH (general)' },
+      { icon: 'fa-plane', text: 'Visitors MUST have travel insurance with helicopter evacuation coverage' },
+      { icon: 'fa-prescription', text: 'Buy medicines from reputable pharmacies — check expiry dates carefully' },
+    ],
+    related: ['TU Teaching Hospital','Bir Hospital','NHIP Nepal','Swasthya Card','Healthcare Nepal','Medical Tourism Nepal'],
+  },
+
+  /* ═══════════════════════════════════════════════════════
+     CYBERSECURITY SECTION — COMPREHENSIVE TOPICS
+     ═══════════════════════════════════════════════════════ */
+  'phishing': {
+    icon: '🎣', tag: 'tag-cyber', category: 'Cybersecurity',
+    title: 'Phishing Attacks — Complete Guide to Identify and Prevent',
+    answer: `
+      <p><strong>Phishing</strong> is a type of social engineering attack where criminals impersonate legitimate organizations to steal sensitive information like usernames, passwords, credit card details, and personal data. In Nepal, phishing accounts for over <strong>40% of all cybercrime cases</strong> reported to the Nepal Police Cyber Bureau.</p>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📊 Phishing Statistics in Nepal</h3>
+      <ul>
+        <li><strong>40%+ of cybercrime cases</strong> reported in Nepal are phishing-related</li>
+        <li><strong>NPR 50+ million</strong> stolen via phishing in 2023</li>
+        <li><strong>Most targeted sectors:</strong> Banking (Nabil, NIC Asia), eSewa/Khalti users, government employees</li>
+        <li><strong>Common attack methods:</strong> SMS (smishing), Email, WhatsApp, Fake websites</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🎯 Common Phishing Tactics in Nepal</h3>
+      
+      <p><strong>1. Banking Phishing:</strong></p>
+      <ul>
+        <li>Fake SMS: "Dear Customer, your Nabil Bank account has been locked. Verify at: nabil-secure.com"</li>
+        <li>Fake emails from "banks" asking to "verify your identity"</li>
+        <li>Phone calls claiming to be from bank security departments</li>
+        <li>Fake eSewa/Khalti login pages harvesting credentials</li>
+      </ul>
+
+      <p><strong>2. Government Impersonation:</strong></p>
+      <ul>
+        <li>Fake citizenship/passport application portals</li>
+        <li>Phony tax refund emails from "IRD"</li>
+        <li>Fake scholarship notifications from "MoEST"</li>
+        <li>Robocalls about "outstanding warrants"</li>
+      </ul>
+
+      <p><strong>3. Delivery/Shopping Scams:</strong></p>
+      <ul>
+        <li>Fake Pathao/FoodMama notifications about "delivery problems"</li>
+        <li>Phony Amazon/Daraz order confirmations</li>
+        <li>Fake OTP for "order delivery"</li>
+      </ul>
+
+      <p><strong>4. Social Media & Messaging:</strong></p>
+      <ul>
+        <li>WhatsApp messages about "prize winnings" or "lottery"</li>
+        <li>Facebook messages from "friends" needing urgent money</li>
+        <li>Fake job offers on Facebook requiring "processing fees"</li>
+        <li>Romance scams on dating apps</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🔍 How to Identify Phishing</h3>
+      
+      <p><strong>Email Red Flags:</strong></p>
+      <ul>
+        <li>Sender address doesn't match official domain (support@nabilbank.com vs nabil-support.com)</li>
+        <li>Urgent language: "Your account will be suspended in 24 hours!"</li>
+        <li>Grammar and spelling errors</li>
+        <li>Mismatched URLs (hover over links to see true destination)</li>
+        <li>Generic greetings like "Dear Customer" instead of your name</li>
+        <li>Requests for personal information, OTPs, or passwords</li>
+      </ul>
+
+      <p><strong>Website Red Flags:</strong></p>
+      <ul>
+        <li>No HTTPS padlock or certificate warning</li>
+        <li>URL slightly misspelled (g00gle.com instead of google.com)</li>
+        <li>Poor design or low-quality images</li>
+        <li>Missing contact information or fake address</li>
+        <li>Too-good-to-be-true offers</li>
+      </ul>
+
+      <p><strong>SMS/WhatsApp Red Flags:</strong></p>
+      <ul>
+        <li>Unknown sender number</li>
+        <li>Links to non-official websites</li>
+        <li>Requests for OTPs or PINs</li>
+        <li>Grammar errors or weird formatting</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🛡️ How to Protect Yourself</h3>
+      <ul>
+        <li><strong>Never share OTP</strong>, password, or PIN via phone, SMS, or email — banks NEVER ask</li>
+        <li><strong>Verify URLs</strong> by typing official website addresses directly in browser</li>
+        <li><strong>Check sender email</strong> carefully — look for subtle misspellings (rn vs m, l vs I)</li>
+        <li><strong>Enable 2FA</strong> on all important accounts (banking, email, social media)</li>
+        <li><strong>Use password manager</strong> to avoid typing passwords on suspicious sites</li>
+        <li><strong>Never click links</strong> in unexpected messages — go directly to official websites</li>
+        <li><strong>Report suspicious messages</strong> to your bank and Nepal Police Cyber Bureau</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📞 What to Do If You Were Phished</h3>
+      <ol>
+        <li><strong>Act immediately</strong> — time is critical</li>
+        <li><strong>Contact your bank</strong> to freeze accounts and block transactions</li>
+        <li><strong>Change passwords</strong> for all potentially compromised accounts</li>
+        <li><strong>Report to police</strong> — Nepal Police Cyber Bureau: 01-4412348</li>
+        <li><strong>Report to Cyber Bureau email:</strong> cybercrime@nepalpolice.gov.np</li>
+        <li><strong>File FIR</strong> at local police station</li>
+        <li><strong>Monitor accounts</strong> for suspicious activity</li>
+        <li><strong>Check credit report</strong> for unauthorized accounts</li>
+      </ol>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🚨 Nepal Cyber Bureau Contact</h3>
+      <ul>
+        <li><strong>Cyber Bureau:</strong> 01-4412348</li>
+        <li><strong>Emergency:</strong> 100 or 112</li>
+        <li><strong>Email:</strong> cybercrime@nepalpolice.gov.np</li>
+        <li><strong>Location:</strong> Naxal, Kathmandu</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '📱', title: 'SMS Phishing', desc: 'Fake eSewa/bank OTP requests', tag: 'tag-cyber' },
+      { icon: '🌐', title: 'Fake Websites', desc: 'Clone sites mimicking .gov.np', tag: 'tag-cyber' },
+      { icon: '📧', title: 'Email Fraud', desc: 'Fake job/scholarship offers', tag: 'tag-cyber' },
+      { icon: '📞', title: 'Report Scams', desc: 'Cyber Bureau: 01-4412348', tag: 'tag-cyber' },
+      { icon: '🔐', title: 'Enable 2FA', desc: 'On all important accounts', tag: 'tag-cyber' },
+      { icon: '🚫', title: 'Never Share OTP', desc: 'Banks never ask for OTP', tag: 'tag-cyber' },
+    ],
+    tips: [
+      { icon: 'fa-magnifying-glass', text: 'Check URL carefully — nabilbank.com ≠ nabil-bank.com ≠ nabilIbank.com' },
+      { icon: 'fa-key', text: 'Banks NEVER ask for passwords, OTPs, or PINs via phone/email/SMS' },
+      { icon: 'fa-globe', text: 'Type URLs directly in browser — never click links in unexpected messages' },
+      { icon: 'fa-shield-alt', text: 'Enable 2FA on eSewa, Khalti, Gmail, Facebook — use Google Authenticator' },
+      { icon: 'fa-flag', text: 'Report phishing to cybercrime@nepalpolice.gov.np and your bank immediately' },
+      { icon: 'fa-user-check', text: 'Verify caller identity by calling bank\'s official number (from their website)' },
+    ],
+    related: ['Nepal Cybercrime','Social Engineering Nepal','Online Banking Safety Nepal','eSewa Fraud','Password Security Nepal','2FA Setup Nepal'],
+  },
+
+  'hacking': {
+    icon: '💻', tag: 'tag-cyber', category: 'Cybersecurity',
+    title: 'Website Hacking in Nepal — Causes & Prevention',
+    answer: `
+      <p>Nepal has seen a significant rise in website hacking incidents. Between 2020–2024, over
+      <strong>2,000 Nepali websites</strong> were defaced or compromised, with government, educational, and financial
+      institutions being primary targets. Major hacker groups including Anonymous, Bangladesh Cyber Army, and
+      various politically motivated groups have targeted Nepali infrastructure.</p>
+      <div class="highlight">📊 Nepal ranks among the top 20 most targeted countries in Asia for website defacement attacks.</div>
+      <p><strong>Top reasons Nepali websites get hacked:</strong></p>
+      <ul>
+        <li>Outdated WordPress/CMS plugins with known vulnerabilities (CVEs)</li>
+        <li>Weak admin passwords — many sites still use "admin/admin123"</li>
+        <li>SQL Injection — unsanitized database queries in PHP/MySQL sites</li>
+        <li>Cross-Site Scripting (XSS) — no output encoding</li>
+        <li>Shared hosting environments — one compromised site affects neighbors</li>
+        <li>No Web Application Firewall (WAF) protection</li>
+        <li>Outdated server software — PHP 5.x, Apache 2.2 still common</li>
+        <li>No SSL/HTTPS — 60%+ Nepali government sites lack proper SSL</li>
+      </ul>
+      <p><strong>Prevention Framework for Nepal websites:</strong></p>
+      <ul>
+        <li>Migrate to modern stack: Python/Django or Node.js + PostgreSQL</li>
+        <li>Use Cloudflare WAF — free tier available</li>
+        <li>Implement input validation & prepared statements for all SQL</li>
+        <li>Regular security audits and penetration testing</li>
+        <li>Enable HTTPS with Let's Encrypt (free SSL certificates)</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '🔓', title: 'SQL Injection', desc: 'No. 1 attack vector for Nepal gov sites', tag: 'tag-cyber' },
+      { icon: '📦', title: 'Outdated CMS', desc: 'Old WordPress/Joomla = easy target', tag: 'tag-cyber' },
+      { icon: '🛡️', title: 'Cloudflare WAF', desc: 'Free protection blocks 90% of attacks', tag: 'tag-cyber' },
+      { icon: '🔐', title: 'HTTPS Required', desc: 'Free SSL via Let\'s Encrypt for all sites', tag: 'tag-cyber' },
+    ],
+    tips: [
+      { icon: 'fa-rotate', text: 'Update ALL software monthly — WordPress core, plugins, PHP version, server OS' },
+      { icon: 'fa-database', text: 'Use parameterized queries / prepared statements — NEVER concatenate SQL strings' },
+      { icon: 'fa-cloud', text: 'Put Cloudflare in front of your server — DDoS protection + WAF is free' },
+      { icon: 'fa-key', text: 'Use a password manager — generate 20+ character random passwords for admin panels' },
+    ],
+    related: ['Nepal cybersecurity','SQL injection prevention','WordPress security','DDoS attack Nepal','Web security tips'],
+  },
+
+  'password': {
+    icon: '🔒', tag: 'tag-cyber', category: 'Cybersecurity',
+    title: 'Password Security — Complete Guide for Nepal Internet Users',
+    answer: `
+      <p>Poor password hygiene is the #1 cause of account takeovers in Nepal. Studies show that
+      <strong>80% of hacking-related breaches involve weak or stolen passwords</strong>.
+      With Nepal's rapidly growing internet userbase (now 16+ million users), understanding password security
+      is critical for everyone.</p>
+      <div class="highlight">🔑 In 2023, "nepal123", "password1", "admin", "123456" were among the most common passwords found in breached Nepali accounts.</div>
+      <p><strong>What makes a strong password?</strong></p>
+      <ul>
+        <li>Length: minimum 12 characters (16+ is better)</li>
+        <li>Mix of uppercase, lowercase, numbers, and symbols</li>
+        <li>Not based on personal information (name, birthday, phone number)</li>
+        <li>Unique for EVERY account — never reused</li>
+        <li>Not a dictionary word or common phrase</li>
+      </ul>
+      <p><strong>Example strong password:</strong> <code>N3pal@P0rtal!2026#Secure</code></p>
+      <p><strong>Best practices for Nepal users:</strong></p>
+      <ul>
+        <li>Use a password manager: Bitwarden (free & open source) or KeePass</li>
+        <li>Enable 2FA everywhere — especially banking, email, social media</li>
+        <li>Check if your email is breached at haveibeenpwned.com</li>
+        <li>Change passwords after any suspected breach immediately</li>
+        <li>Use separate email for banking vs social media</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '📏', title: '12+ Characters', desc: 'Length is the most important factor', tag: 'tag-cyber' },
+      { icon: '🗝️', title: 'Password Manager', desc: 'Bitwarden — free, open source, secure', tag: 'tag-cyber' },
+      { icon: '📱', title: '2FA Authentication', desc: 'Second layer — even if password stolen', tag: 'tag-cyber' },
+      { icon: '🔍', title: 'Check Breaches', desc: 'haveibeenpwned.com — free breach check', tag: 'tag-cyber' },
+    ],
+    tips: [
+      { icon: 'fa-shield', text: 'Passphrase method: "Everest-is-8848m-HIGH!" — long, memorable, and strong' },
+      { icon: 'fa-mobile', text: 'Use Google Authenticator or Authy for 2FA — better than SMS-based OTP' },
+      { icon: 'fa-ban', text: 'Never use same password on banking + social media — one breach = all breached' },
+      { icon: 'fa-rotate', text: 'Change passwords every 6 months or immediately after any security incident' },
+    ],
+    related: ['2FA Nepal','Phishing prevention','Cybersecurity Nepal','Account security','Password manager'],
+  },
+
+  'social engineering': {
+    icon: '🎭', tag: 'tag-cyber', category: 'Cybersecurity',
+    title: 'Social Engineering — Human Manipulation Tactics in Nepal',
+    answer: `
+      <p><strong>Social Engineering</strong> is the art of manipulating people into revealing confidential information or performing actions that compromise security. Unlike technical hacking, it exploits human psychology — trust, fear, urgency, greed. In Nepal, social engineering attacks are increasingly common and often more successful than technical attacks.</p>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🎯 Common Social Engineering Tactics in Nepal</h3>
+
+      <p><strong>1. Vishing (Voice Phishing):</strong></p>
+      <ul>
+        <li>Caller claims to be from "Nepal Telecom" offering refund</li>
+        <li>Fake "Police" calling about citizenship being used in crime</li>
+        <li>Bank "security officer" asking to "verify your account"</li>
+        <li>eSewa/Khalti "customer support" requesting OTP</li>
+      </ul>
+
+      <p><strong>2. Pretexting:</strong></p>
+      <ul>
+        <li>Scammers create elaborate stories (pretext) to gain trust</li>
+        <li>"I'm from your IT department, we need to verify your password"</li>
+        <li>"I'm calling from the Prime Minister's office"</li>
+        <li>Fake recruitment agencies asking for "processing fees"</li>
+      </ul>
+
+      <p><strong>3. Baiting:</strong></p>
+      <ul>
+        <li>Free USB drives with malware left in public places</li>
+        <li>Fake lottery winning notifications</li>
+        <li>"You won an iPhone!" pop-ups on websites</li>
+        <li>Free WiFi hotspots that steal data</li>
+      </ul>
+
+      <p><strong>4. Quid Pro Quo:</strong></p>
+      <ul>
+        <li>"Free security check" calls actually installing malware</li>
+        <li>Fake tech support calls from "Microsoft"</li>
+        <li>"Government official" offering scholarships for a fee</li>
+      </ul>
+
+      <p><strong>5. Tailgating/Piggybacking:</strong></p>
+      <ul>
+        <li>Following authorized personnel into secure buildings</li>
+        <li>Posing as delivery person to access offices</li>
+        <li>Wearing fake ID badges</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📱 Nepal-Specific Scams</h3>
+      <ul>
+        <li><strong>Foreign Employment Scam:</strong> Fake agencies promise overseas jobs for "processing fee"</li>
+        <li><strong>Scholarship Scam:</strong> Promises of "guaranteed scholarship" for upfront payment</li>
+        <li><strong>WhatsApp Impersonation:</strong> "Your son/daughter is in trouble, send money"</li>
+        <li><strong>Matrimony Fraud:</strong> Fake marriage proposals extracting money</li>
+        <li><strong>Investment Scams:</strong> Ponzi schemes disguised as "business opportunities"</li>
+        <li><strong>Fake Government Officials:</strong> Claiming to help with documents for a fee</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🛡️ How to Defend Against Social Engineering</h3>
+      <ul>
+        <li><strong>Verify caller identity</strong> — hang up and call back using official number from website</li>
+        <li><strong>Never give passwords, OTPs, or personal info</strong> to unsolicited callers</li>
+        <li><strong>Be skeptical</strong> of urgent requests — legitimate organizations don't pressure</li>
+        <li><strong>Don't trust caller ID</strong> — it can be spoofed easily</li>
+        <li><strong>Research before trusting</strong> — verify companies, agencies, job offers</li>
+        <li><strong>Be wary of foreign numbers</strong> calling about "problems back home"</li>
+        <li><strong>Never transfer money</strong> based solely on a phone call</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🚨 What to Do If Targeted</h3>
+      <ol>
+        <li>Do not engage further — hang up or stop responding</li>
+        <li>Do NOT transfer any money or share any information</li>
+        <li>Report to Nepal Police: 100 or 112</li>
+        <li>Report to Cyber Bureau: 01-4412348</li>
+        <li>File FIR at nearest police station</li>
+        <li>Alert family/friends if they might also be targeted</li>
+        <li>For financial scams, contact your bank immediately</li>
+      </ol>
+    `,
+    cards: [
+      { icon: '📞', title: 'Vishing', desc: 'Voice phishing calls from fake officials', tag: 'tag-cyber' },
+      { icon: '💰', title: 'Money Scams', desc: 'Fake jobs, scholarships, investments', tag: 'tag-cyber' },
+      { icon: '🎭', title: 'Pretexting', desc: 'Fake stories to gain trust', tag: 'tag-cyber' },
+      { icon: '🚫', title: 'Never Share OTP', desc: 'No legitimate caller needs your OTP', tag: 'tag-cyber' },
+      { icon: '📋', title: 'Verify First', desc: 'Call official numbers to verify', tag: 'tag-cyber' },
+      { icon: '🚔', title: 'Report Scams', desc: 'Call 100 or Cyber Bureau', tag: 'tag-cyber' },
+    ],
+    tips: [
+      { icon: 'fa-phone-slash', text: 'If someone calls claiming to be from a bank/police/govt asking for OTP — HANG UP' },
+      { icon: 'fa-search', text: 'Research companies before paying — search "[company name] scam" on Google' },
+      { icon: 'fa-user-shield', text: 'Verify "government officials" by calling their department\'s official number' },
+      { icon: 'fa-money-bill-wave', text: 'Never transfer money to strangers — no legitimate prize/job requires upfront payment' },
+      { icon: 'fa-users', text: 'Educate elderly family members — they\'re most commonly targeted' },
+      { icon: 'fa-shield-alt', text: 'If in doubt, don\'t act — legitimate organizations give time to verify' },
+    ],
+    related: ['Phishing Nepal','Cybercrime Nepal','Online Scams Nepal','Banking Fraud Nepal','Nepal Police Cyber Bureau','Social Media Scams Nepal'],
+  },
+
+  'malware ransomware': {
+    icon: '🦠', tag: 'tag-cyber', category: 'Cybersecurity',
+    title: 'Malware & Ransomware — Complete Protection Guide',
+    answer: `
+      <p><strong>Malware</strong> (malicious software) is designed to damage, disrupt, or gain unauthorized access to computer systems. <strong>Ransomware</strong> is a type of malware that encrypts your files and demands payment (ransom) for decryption. In Nepal, ransomware attacks have increased significantly, with average ransom demands reaching <strong>NPR 500,000+</strong>.</p>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🦠 Types of Malware</h3>
+      <ul>
+        <li><strong>Virus:</strong> Attaches to files and spreads when executed</li>
+        <li><strong>Worm:</strong> Spreads across networks without user interaction</li>
+        <li><strong>Trojan:</strong> Disguises as legitimate software to gain access</li>
+        <li><strong>Spyware:</strong> Secretly monitors your activity</li>
+        <li><strong>Adware:</strong> Displays unwanted advertisements</li>
+        <li><strong>Keylogger:</strong> Records keystrokes to steal passwords</li>
+        <li><strong>Ransomware:</strong> Encrypts files and demands payment</li>
+        <li><strong>Cryptominer:</strong> Uses your computer to mine cryptocurrency</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🔓 How Malware Spreads in Nepal</h3>
+      <ul>
+        <li>Email attachments from unknown senders</li>
+        <li>Infected software downloads (especially pirated)</li>
+        <li>Fake "crack" files for paid software</li>
+        <li>Malicious websites (drive-by downloads)</li>
+        <li>Infected USB drives</li>
+        <li>Fake "income tax refund" documents</li>
+        <li>Compromised mobile apps</li>
+        <li>Free movie/game downloads</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">⚠️ Signs of Malware Infection</h3>
+      <ul>
+        <li>Computer running slower than usual</li>
+        <li>Pop-ups appearing frequently</li>
+        <li>Browser redirecting to unfamiliar sites</li>
+        <li>New toolbars/icons you didn't install</li>
+        <li>Programs opening/closing automatically</li>
+        <li>Files mysteriously deleted or encrypted</li>
+        <li>High CPU usage without explanation</li>
+        <li>Battery draining faster (on mobile)</li>
+        <li>Unknown apps appearing</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🛡️ Protection Against Malware</h3>
+      <ul>
+        <li><strong>Install antivirus:</strong> Windows Defender (free) or paid options like Kaspersky, Bitdefender</li>
+        <li><strong>Keep software updated:</strong> Update OS, browser, apps regularly</li>
+        <li><strong>Never download pirated software:</strong> They often contain malware</li>
+        <li><strong>Don't open email attachments:</strong> Unless from trusted sender and expected</li>
+        <li><strong>Use official app stores:</strong> Google Play, Apple App Store</li>
+        <li><strong>Backup regularly:</strong> Use external drive or cloud backup</li>
+        <li><strong>Use strong firewall:</strong> Enable Windows Firewall</li>
+        <li><strong>Be cautious with USB drives:</strong> Scan before opening files</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">💰 Ransomware Specific Protection</h3>
+      <ul>
+        <li><strong>Backup your files:</strong> The 3-2-1 rule — 3 copies, 2 different media, 1 offsite</li>
+        <li><strong>Don't click suspicious links:</strong> In emails, messages, or websites</li>
+        <li><strong>Enable macro protection:</strong> In Microsoft Office settings</li>
+        <li><strong>Use ad-blockers:</strong> To avoid malicious ads (malvertising)</li>
+        <li><strong>Restrict macros:</strong> Disable macros from external sources</li>
+        <li><strong>Network segmentation:</strong> Separate critical systems</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🚨 If Infected — What to Do</h3>
+      <ol>
+        <li><strong>DISCONNECT</strong> from network immediately to prevent spread</li>
+        <li><strong>DO NOT PAY</strong> the ransom — no guarantee of recovery</li>
+        <li>Take screenshot of ransom message</li>
+        <li><strong>Report to Nepal Police Cyber Bureau:</strong> 01-4412348</li>
+        <li>Try restoring from backup if available</li>
+        <li>Format infected device and reinstall OS</li>
+        <li>Change all passwords from clean device</li>
+        <li>Monitor financial accounts for fraud</li>
+      </ol>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">💳 About Paying Ransom</h3>
+      <ul>
+        <li><strong>DO NOT PAY</strong> — Only 65% of ransomware victims who pay get their data back</li>
+        <li>Paying encourages more attacks</li>
+        <li>There's no guarantee the attackers will provide working decryption key</li>
+        <li>You may get only partial decryption or be targeted again</li>
+        <li>If you must pay (last resort): Use cryptocurrency tracing to report to authorities</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '🦠', title: 'Malware Types', desc: 'Virus, trojan, spyware, ransomware', tag: 'tag-cyber' },
+      { icon: '💰', title: 'Ransom Demand', desc: 'Avg NPR 500,000+ in Nepal', tag: 'tag-cyber' },
+      { icon: '🔒', title: 'Don\'t Pay', desc: 'Only 65% recover even after paying', tag: 'tag-cyber' },
+      { icon: '💾', title: 'Backup', desc: '3-2-1 rule: 3 copies, 2 media, 1 offsite', tag: 'tag-cyber' },
+      { icon: '🛡️', title: 'Antivirus', desc: 'Windows Defender or paid options', tag: 'tag-cyber' },
+      { icon: '🚫', title: 'No Pirated Software', desc: 'Primary malware vector in Nepal', tag: 'tag-cyber' },
+    ],
+    tips: [
+      { icon: 'fa-save', text: 'Backup your files daily to external drive AND cloud storage' },
+      { icon: 'fa-shield-virus', text: 'Windows Defender is good enough if kept updated — just don\'t disable it' },
+      { icon: 'fa-ban', text: 'NEVER download pirated software, movies, or games — 80% contain malware' },
+      { icon: 'fa-link', text: 'Don\'t click links in unexpected emails — type website address directly' },
+      { icon: 'fa-sync', text: 'Keep Windows/macOS and all apps updated — updates fix security holes' },
+      { icon: 'fa-usb', text: 'Be very careful with USB drives — scan them before opening files' },
+    ],
+    related: ['Ransomware Nepal','Antivirus Nepal','Backup Nepal','Cybercrime Nepal','Online Safety Nepal','Data Recovery Nepal'],
+  },
+
+  /* ═══════════════════════════════════════════════════════
+     GENERAL NEPAL — COMPREHENSIVE INFORMATION
+     ═══════════════════════════════════════════════════════ */
+  'nepal': {
+    icon: '🇳🇵', tag: 'tag-gen', category: 'About Nepal',
+    title: 'Nepal — Complete Country Guide',
+    answer: `
+      <p><strong>Nepal</strong> (नेपाल), officially the <strong>Federal Democratic Republic of Nepal</strong>, is a landlocked country in South Asia located between India and China (Tibet Autonomous Region). Known as the "<strong>Land of the Himalayas</strong>", it contains 8 of the world's 14 highest mountains including Mount Everest.</p>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📊 Country Statistics</h3>
+      <ul>
+        <li><strong>Population:</strong> ~30 million (2024 estimate)</li>
+        <li><strong>Area:</strong> 147,181 km² (93rd largest country)</li>
+        <li><strong>Capital:</strong> Kathmandu (1.5 million)</li>
+        <li><strong>Official Language:</strong> Nepali (lingua franca)</li>
+        <li><strong>Currency:</strong> Nepali Rupee (NPR) | 1 NPR ≈ 0.0075 USD</li>
+        <li><strong>Time Zone:</strong> UTC+5:45 (unique — only country with 45-minute offset)</li>
+        <li><strong>Driving:</strong> Left side of road</li>
+        <li><strong>Calling Code:</strong> +977</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🗺️ Geography</h3>
+      <ul>
+        <li><strong>Terrain:</strong> Terai plains (south), hills (middle), Himalayas (north)</li>
+        <li><strong>Highest Point:</strong> Mount Everest (8,848.86m)</li>
+        <li><strong>Lowest Point:</strong> Terai plains (70m above sea level)</li>
+        <li><strong>Climate:</strong> Subtropical to arctic (varies by altitude)</li>
+        <li><strong>Major Rivers:</strong> Koshi, Gandaki, Karnali, Mahakali</li>
+        <li><strong>Biodiversity:</strong> 6.5% of world's species in less than 0.1% of land area</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🏛️ Government & Politics</h3>
+      <ul>
+        <li><strong>Government:</strong> Federal parliamentary republic</li>
+        <li><strong>Provinces:</strong> 7</li>
+        <li><strong>Districts:</strong> 77</li>
+        <li><strong>Municipalities:</strong> 753 (including rural and urban)</li>
+        <li><strong>Constitution:</strong> 2015</li>
+        <li><strong>Head of State:</strong> President</li>
+        <li><strong>Head of Government:</strong> Prime Minister</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">👥 Demographics</h3>
+      <ul>
+        <li><strong>Ethnic Groups:</strong> 125+ distinct ethnic groups</li>
+        <li><strong>Languages:</strong> 123 languages (Indo-Aryan and Sino-Tibetan families)</li>
+        <li><strong>Religion:</strong> Hindu majority (81%), Buddhist (9%), Muslim (4%), others</li>
+        <li><strong>Literacy Rate:</strong> 76.3% (2023)</li>
+        <li><strong>Life Expectancy:</strong> 70 years</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">💰 Economy</h3>
+      <ul>
+        <li><strong>GDP:</strong> ~$40 billion USD (2024)</li>
+        <li><strong>GDP Per Capita:</strong> ~$1,340 USD</li>
+        <li><strong>Main Industries:</strong> Tourism, remittances, hydropower, agriculture</li>
+        <li><strong>Major Exports:</strong> Textiles, pulses, iron/steel, handicrafts</li>
+        <li><strong>Hydropower Potential:</strong> 40,000+ MW (only 2-3% developed)</li>
+        <li><strong>Remittances:</strong> ~25% of GDP (one of highest globally)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🏔️ Mountains and Trekking</h3>
+      <ul>
+        <li><strong>14 peaks above 8,000m:</strong> Nepal has 8 of them</li>
+        <li><strong>800+ peaks:</strong> Above 6,000m</li>
+        <li><strong>Trekking trails:</strong> 10+ major trekking routes</li>
+        <li><strong>National Parks:</strong> 12 national parks (UNESCO listed: 2)</li>
+        <li><strong>Tourist arrivals:</strong> 1+ million annually (pre-COVID: 1.2M in 2019)</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">📜 History Highlights</h3>
+      <ul>
+        <li><strong>Ancient:</strong> Gopal dynasty (c. 2500 BCE) — earliest recorded</li>
+        <li><strong>Medieval:</strong> Malla Kingdom unified Nepal (14th-18th centuries)</li>
+        <li><strong>1814-1816:</strong> Anglo-Nepal War, Treaty of Sugauli</li>
+        <li><strong>1846:</strong> Rise of Rana dynasty (hereditary prime ministers)</li>
+        <li><strong>1950-51:</strong> Democracy movement, end of Rana rule</li>
+        <li><strong>1996-2006:</strong> Maoist Civil War</li>
+        <li><strong>2008:</strong> Nepal becomes federal democratic republic</li>
+        <li><strong>2015:</strong> New constitution promulgated</li>
+        <li><strong>2015:</strong> Gorkha Earthquake (7.8 magnitude) — 9,000+ killed</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🎭 Culture and Traditions</h3>
+      <ul>
+        <li><strong>National Symbol:</strong> Rhododendron (flower), Himalayan Monal (bird)</li>
+        <li><strong>Festivals:</strong> Dashain (biggest), Tihar, Holi, Indra Jatra</li>
+        <li><strong>Food:</strong> Dal Bhat (rice and lentils) — national dish</li>
+        <li><strong>Non-rectangular flag:</strong> Only country with non-rectangular national flag</li>
+        <li><strong>Living Goddess:</strong> Kumari tradition — young girls worshipped as living goddesses</li>
+        <li><strong>Cow:</strong> National animal (worshipped, not eaten)</li>
+        <li><strong>Yeti:</strong> Legendary creature featured in Nepali folklore</li>
+      </ul>
+
+      <h3 style="color:#93c5fd;margin:20px 0 10px;font-size:1.1rem;">🛬 Visa Information</h3>
+      <ul>
+        <li><strong>Visa on Arrival:</strong> Available at Tribhuvan International Airport</li>
+        <li><strong>Tourist Visa Fees:</strong>
+          <ul>
+            <li>15 days: USD 30</li>
+            <li>30 days: USD 50</li>
+            <li>90 days: USD 125</li>
+          </ul>
+        </li>
+        <li><strong>Requirements:</strong> Valid passport (6+ months), return ticket, passport photos</li>
+        <li><strong>Extension:</strong> Available at Department of Immigration, Kathmandu</li>
+        <li><strong>SAARC nationals:</strong> 30 days free visa (Indian nationals exempt)</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '🏔️', title: '8 of 14 Peaks', desc: '8 of world\'s 14 highest mountains', tag: 'tag-gen' },
+      { icon: '👥', title: '30 Million', desc: '125+ ethnic groups, 123 languages', tag: 'tag-gen' },
+      { icon: '🌊', title: 'Hydropower', desc: '40,000+ MW theoretical potential', tag: 'tag-gen' },
+      { icon: '🏛️', title: '7 Provinces', desc: '77 districts, 753 municipalities', tag: 'tag-gen' },
+      { icon: '💰', title: 'Remittances', desc: '~25% of GDP (highest globally)', tag: 'tag-gen' },
+      { icon: '🎭', title: 'Dashain', desc: 'Biggest festival (October)', tag: 'tag-gen' },
+    ],
+    tips: [
+      { icon: 'fa-plane', text: 'Visa on arrival available for most nationalities — bring USD cash and photos' },
+      { icon: 'fa-passport', text: 'Your passport must be valid for 6+ months from entry date' },
+      { icon: 'fa-clock', text: 'Nepal time is UTC+5:45 — unique offset, remember this for flights' },
+      { icon: 'fa-car', text: 'Drive on LEFT side of road — unusual for a South Asian country' },
+      { icon: 'fa-hand-holding-heart', text: 'Greet with "Namaste" (pressing palms together) — not handshake' },
+      { icon: 'fa-coins', text: 'Carry cash for small purchases — credit cards accepted mainly in cities' },
+    ],
+    related: ['Nepal Visa','Nepal Culture','Nepal Economy','Nepal History','Visit Nepal','Kathmandu Guide'],
+  },
+
+  'education': {
+    icon: '🎓', tag: 'tag-edu', category: 'Education',
+    title: 'Nepal Education System & Scholarship Opportunities',
+    answer: `
+      <p>Nepal's education system is managed by the <strong>Ministry of Education, Science and Technology (MoEST)</strong>.
+      The country has made remarkable progress in education — literacy rate has risen from 54% (2011) to over <strong>76% (2023)</strong>,
+      with female literacy improving significantly.</p>
+      <div class="highlight">📚 Total students enrolled: 7.5 million+ | Schools: 36,000+ | Universities: 12 public + 10+ private</div>
+      <p><strong>Education structure:</strong></p>
+      <ul>
+        <li>Early Childhood Development (ECD) — Ages 3–5</li>
+        <li>Basic Education (Grade 1–8) — Free and compulsory</li>
+        <li>Secondary Education (Grade 9–12) — SEE and +2 (NEB)</li>
+        <li>Higher Education — Bachelor's, Master's, PhD</li>
+      </ul>
+      <p><strong>Major Scholarship Programs:</strong></p>
+      <ul>
+        <li>Government of Nepal Scholarships (MoEST) — 1,200+ seats annually in public campuses</li>
+        <li>PM Scholarship for MBBS, Engineering — merit-based</li>
+        <li>Chinese Government Scholarship (CSC) — 300+ seats for Nepal</li>
+        <li>Indian ICCR Scholarship — 200+ seats for Nepal students</li>
+        <li>Japanese MEXT Scholarship — graduate level</li>
+        <li>Fulbright Scholarship — USA (postgraduate)</li>
+        <li>Colombo Plan Scholarship — various countries</li>
+      </ul>
+    `,
+    cards: [
+      { icon: '🏫', title: 'Free Basic Education', desc: 'Grade 1–8 free and compulsory for all', tag: 'tag-edu' },
+      { icon: '🎓', title: 'PM Scholarship', desc: 'MBBS/Engineering merit-based fully funded', tag: 'tag-edu' },
+      { icon: '🇨🇳', title: 'China CSC', desc: '300+ Nepal seats in Chinese universities', tag: 'tag-edu' },
+      { icon: '🇺🇸', title: 'Fulbright USA', desc: 'Full scholarship for master\'s in USA', tag: 'tag-edu' },
+    ],
+    tips: [
+      { icon: 'fa-calendar', text: 'MoEST scholarship applications open February–March each year' },
+      { icon: 'fa-star', text: 'Higher SEE/+2 GPA significantly increases scholarship chances' },
+      { icon: 'fa-language', text: 'IELTS 6.5+ or TOEFL 80+ required for most international scholarships' },
+      { icon: 'fa-globe', text: 'Visit moest.gov.np for official scholarship listings and deadlines' },
+    ],
+    related: ['SEE exam Nepal','Tribhuvan University','IOE entrance','Nepal scholarship 2026','Study abroad Nepal'],
+  },
+};
+
+/* ── KEYWORD MAPPING ── */
+const keywordMap = [
+  { keys: ['everest','sagarmatha','chomolungma','ebc','base camp','trekking','lukla','sherpa'], id: 'mount everest' },
+  { keys: ['pokhara','phewa','annapurna view','fewa','sarangkot','tal barahi','lakeside pokhara'], id: 'pokhara' },
+  { keys: ['kathmandu','ktm','boudhanath','pashupatinath','patan','bhaktapur','swayambhu','thamel','durbar square','unesco heritage'], id: 'kathmandu' },
+  { keys: ['chitwan','rhino','tiger','jungle','safari','sauraha','wildlife','tharu','one horned rhino','rapti river'], id: 'chitwan' },
+  { keys: ['annapurna','abc trek','poon hill','thorong la','circuit','Mardi Himal','trekking permits'], id: 'annapurna' },
+  { keys: ['lumbini','buddha','buddhist','maya devi','ashoka pillar','birthplace buddha','kapilvastu'], id: 'lumbini' },
+  { keys: ['passport','travel document','dop','mrp','epassport','biometric passport','rahatdhani'], id: 'passport' },
+  { keys: ['citizenship','nagarikta','cdo','identity card','national id','nagarik praman patr','ward office'], id: 'citizenship' },
+  { keys: ['tax','pan','ird','vat','income tax','tds','revenue','permanent account number'], id: 'tax' },
+  { keys: ['driving license','license','saruwa','transport','dotm','driving test','traffic rules'], id: 'driving license' },
+  { keys: ['health','health insurance','hospital','medical','swasthya bima','nhip','doctor','treatment','bimar'], id: 'health insurance' },
+  { keys: ['phishing','fake email','fraud','scam','esewa fraud','banking fraud','smishing','fake sms'], id: 'phishing' },
+  { keys: ['social engineering','vishing','pretexting','scammer','manipulation','fake call','phone scam'], id: 'social engineering' },
+  { keys: ['malware','ransomware','virus','trojan','spyware','cryptominer','keylogger','encrypt'], id: 'malware ransomware' },
+  { keys: ['hack','hacking','cyber attack','breach','ddos','sql inject','xss','website security','defacement'], id: 'hacking' },
+  { keys: ['password','2fa','two factor','authentication','account security','secure login','password manager'], id: 'password' },
+  { keys: ['nepal','country','republic','himalaya','terai','geography','culture','about nepal'], id: 'nepal' },
+  { keys: ['education','school','scholarship','university','college','see exam','tu','tribhuvan university','IOE'], id: 'education' },
+];
+
+function findResult(query) {
+  const q = query.toLowerCase().replace(/[^a-z0-9 ]/g,'');
+  // exact key match
+  for (const entry of Object.entries(KB)) {
+    if (q.includes(entry[0])) return entry[1];
+  }
+  // keyword map
+  for (const km of keywordMap) {
+    if (km.keys.some(k => q.includes(k))) {
+      return KB[km.id];
+    }
+  }
+  return null;
+}
+
+function getRelated(result) {
+  const all = result ? (result.related || []) : ['Mount Everest','Kathmandu','Nepal passport','Phishing Nepal','Scholarship Nepal'];
+  return all.slice(0, 6);
+}
+
+function buildPage(query) {
+  const result = findResult(query);
+  const main = document.getElementById('mainContent');
+
+  if (!result) {
+    main.innerHTML = `
+      <a class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i> Back to Nepal Portal</a>
+      <div class="query-header">
+        <div class="query-label">Search Results</div>
+        <div class="query-title">"${esc(query)}"</div>
+        <div class="query-meta">
+          <span><i class="fas fa-circle-info"></i> 0 results found</span>
+          <span><i class="fas fa-globe"></i> Nepal Portal AI</span>
+        </div>
+      </div>
+      <div class="no-result">
+        <div class="emoji">🔍</div>
+        <p style="font-size:1.1rem;font-weight:600;margin-bottom:10px">No specific results found for "<strong>${esc(query)}</strong>"</p>
+        <p>Try searching for: Tourism, Government Services, Cybersecurity, Education, or specific places in Nepal.</p>
+      </div>
+      ${buildRelated(['Mount Everest','Nepal passport','Phishing Nepal','Chitwan safari','Scholarship Nepal','Kathmandu'])}
+    `;
+    return;
+  }
+
+  main.innerHTML = `
+    <a class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i> Back to Nepal Portal</a>
+
+    <div class="query-header">
+      <div class="query-label">AI Search Result</div>
+      <div class="query-title">${esc(query)}</div>
+      <div class="query-meta">
+        <span><i class="fas fa-robot"></i> AI Answer</span>
+        <span><i class="fas fa-tag"></i> ${esc(result.category)}</span>
+        <span><i class="fas fa-clock"></i> Instant</span>
+      </div>
+    </div>
+
+    <div class="ai-card">
+      <div class="ai-badge"><i class="fas fa-robot"></i> Nepal Portal AI</div>
+      <div class="ai-answer">${result.answer}</div>
+    </div>
+
+    ${result.cards && result.cards.length ? `
+    <div class="section-title"><i class="fas fa-th-large"></i> Quick Facts</div>
+    <div class="result-cards">
+      ${result.cards.map(c => `
+        <div class="result-card">
+          <div class="result-card-icon">${c.icon}</div>
+          <h4>${esc(c.title)}</h4>
+          <p>${esc(c.desc)}</p>
+          <span class="tag ${c.tag}">${esc(result.category)}</span>
+        </div>
+      `).join('')}
+    </div>` : ''}
+
+    ${result.tips && result.tips.length ? `
+    <div class="section-title"><i class="fas fa-lightbulb"></i> Expert Tips</div>
+    <div class="tips-box">
+      <h4><i class="fas fa-lightbulb" style="color:var(--gold)"></i> Tips for Nepal visitors & citizens</h4>
+      ${result.tips.map(t => `
+        <div class="tip-item">
+          <i class="fas ${t.icon}"></i>
+          <span>${esc(t.text)}</span>
+        </div>
+      `).join('')}
+    </div>` : ''}
+
+    ${buildRelated(result.related)}
+  `;
+}
+
+function buildRelated(related) {
+  if (!related || !related.length) return '';
+  return `
+    <div class="section-title"><i class="fas fa-compass"></i> Related Searches</div>
+    <div class="related">
+      ${related.map(r => `
+        <div class="related-chip" onclick="openSearchTab('${esc(r).replace(/'/g,"\\'")}')">
+          <i class="fas fa-search"></i> ${esc(r)}
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function openSearchTab(q) {
+  window.open(`search.html?q=${encodeURIComponent(q)}`, '_blank');
+}
+
+function reSearch() {
+  const val = document.getElementById('topSearch').value.trim();
+  if (val) window.open(`search.html?q=${encodeURIComponent(val)}`, '_blank');
+}
+
+document.getElementById('topSearch').addEventListener('keydown', e => {
+  if (e.key === 'Enter') reSearch();
+});
+
+function esc(str) {
+  if (!str) return '';
+  const d = document.createElement('div');
+  d.appendChild(document.createTextNode(String(str)));
+  return d.innerHTML;
+}
+
+/* ── INIT ── */
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const query = params.get('q') || '';
+  document.getElementById('topSearch').value = query;
+
+  // Simulate loading delay for UX
+  setTimeout(() => {
+    document.getElementById('loadingState').remove();
+    if (query) {
+      buildPage(query);
+    } else {
+      document.getElementById('mainContent').innerHTML = `
+        <div class="no-result">
+          <div class="emoji">🔍</div>
+          <p>Enter a search term to explore Nepal Portal AI.</p>
+        </div>
+        ${buildRelated(['Mount Everest','Pokhara','Passport Nepal','Chitwan','Phishing Nepal','Scholarship Nepal'])}
+      `;
+    }
+  }, 800);
+});
+</script>
+</body>
+</html>

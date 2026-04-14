@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Nepal Portal - Leaderboards. View top contributors, reputation rankings, and achievement leaders."/>
+  <meta name="theme-color" content="#0066cc"/>
+  <title>Leaderboards - Nepal Portal</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="styles-enhanced.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .leaderboard-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    .leaderboard-header {
+      background: linear-gradient(135deg, var(--primary), #004999);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      color: white;
+      text-align: center;
+    }
+
+    .leaderboard-header h1 {
+      margin: 0 0 10px 0;
+      font-size: 2.5rem;
+    }
+
+    .leaderboard-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      border-bottom: 2px solid var(--border-color);
+      flex-wrap: wrap;
+    }
+
+    .leaderboard-tab {
+      padding: 15px 25px;
+      background: none;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      border-bottom: 3px solid transparent;
+      transition: 0.3s;
+      font-weight: 500;
+    }
+
+    .leaderboard-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .leaderboard-content {
+      display: none;
+    }
+
+    .leaderboard-content.active {
+      display: block;
+    }
+
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--glass-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .leaderboard-table thead {
+      background: rgba(0, 102, 204, 0.1);
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .leaderboard-table th {
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .leaderboard-table td {
+      padding: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .leaderboard-table tbody tr:hover {
+      background: rgba(0, 102, 204, 0.05);
+    }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #004999);
+      color: white;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .rank-badge.gold {
+      background: linear-gradient(135deg, #ffd700, #ffb700);
+      color: #333;
+    }
+
+    .rank-badge.silver {
+      background: linear-gradient(135deg, #c0c0c0, #808080);
+      color: white;
+    }
+
+    .rank-badge.bronze {
+      background: linear-gradient(135deg, #cd7f32, #8b4513);
+      color: white;
+    }
+
+    .user-cell {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #004999);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .user-info h4 {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .user-info p {
+      margin: 3px 0 0 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .stat-value {
+      font-weight: 600;
+      color: var(--primary);
+      text-align: center;
+    }
+
+    .period-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .period-btn {
+      padding: 8px 16px;
+      background: var(--glass-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: 0.3s;
+      color: var(--text-muted);
+    }
+
+    .period-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .period-btn:hover {
+      border-color: var(--primary);
+    }
+
+    @media (max-width: 768px) {
+      .leaderboard-table {
+        font-size: 0.9rem;
+      }
+
+      .leaderboard-table th,
+      .leaderboard-table td {
+        padding: 10px;
+      }
+
+      .user-info h4 {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">                                       
+      <span class="flag">🇳🇵</span>                 
+      <span class="logo-text">Nepal Portal</span>
+    </div>     
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="user-profile.html">My Profile</a></li>
+      <li><a href="#">Leaderboards</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-btn" id="darkModeToggle" onclick="toggleDarkMode()" title="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== LEADERBOARD SECTION ========== -->
+<div class="leaderboard-container">
+  <div class="leaderboard-header">
+    <h1>🏆 Leaderboards</h1>
+    <p>Recognize our top community contributors and achievers</p>
+  </div>
+
+  <div class="leaderboard-tabs">
+    <button class="leaderboard-tab active" onclick="switchLeaderboard('reputation')">
+      <i class="fas fa-star"></i> Reputation
+    </button>
+    <button class="leaderboard-tab" onclick="switchLeaderboard('contributors')">
+      <i class="fas fa-pen"></i> Contributors
+    </button>
+    <button class="leaderboard-tab" onclick="switchLeaderboard('followers')">
+      <i class="fas fa-heart"></i> Followers
+    </button>
+    <button class="leaderboard-tab" onclick="switchLeaderboard('reporters')">
+      <i class="fas fa-flag"></i> Problem Reporters
+    </button>
+  </div>
+
+  <!-- Reputation Leaderboard -->
+  <div id="reputation-board" class="leaderboard-content active">
+    <h2>Reputation Rankings</h2>
+    <table class="leaderboard-table" id="reputationTable">
+      <thead>
+        <tr>
+          <th style="width: 60px;">Rank</th>
+          <th>Member</th>
+          <th style="text-align: center; width: 120px;">Reputation</th>
+          <th style="text-align: center; width: 100px;">Posts</th>
+        </tr>
+      </thead>
+      <tbody id="reputationBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Contributors Leaderboard -->
+  <div id="contributors-board" class="leaderboard-content">
+    <h2>Top Contributors</h2>
+    <table class="leaderboard-table" id="contributorsTable">
+      <thead>
+        <tr>
+          <th style="width: 60px;">Rank</th>
+          <th>Member</th>
+          <th style="text-align: center; width: 120px;">Posts</th>
+          <th style="text-align: center; width: 100px;">Reputation</th>
+        </tr>
+      </thead>
+      <tbody id="contributorsBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Followers Leaderboard -->
+  <div id="followers-board" class="leaderboard-content">
+    <h2>Most Influential Members</h2>
+    <table class="leaderboard-table" id="followersTable">
+      <thead>
+        <tr>
+          <th style="width: 60px;">Rank</th>
+          <th>Member</th>
+          <th style="text-align: center; width: 120px;">Followers</th>
+          <th style="text-align: center; width: 100px;">Following</th>
+        </tr>
+      </thead>
+      <tbody id="followersBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Problem Reporters Leaderboard -->
+  <div id="reporters-board" class="leaderboard-content">
+    <h2>Top Problem Reporters</h2>
+    <table class="leaderboard-table" id="reportersTable">
+      <thead>
+        <tr>
+          <th style="width: 60px;">Rank</th>
+          <th>Member</th>
+          <th style="text-align: center; width: 120px;">Issues Reported</th>
+          <th style="text-align: center; width: 100px;">City</th>
+        </tr>
+      </thead>
+      <tbody id="reportersBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script src="utils.js"></script>
+<script src="roles.js"></script>
+<script src="profiles.js"></script>
+<script src="follow.js"></script>
+<script src="leaderboards.js"></script>
+<script src="script.js"></script>
+<script>
+function switchLeaderboard(board) {
+  // Hide all boards
+  document.querySelectorAll('.leaderboard-content').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.leaderboard-tab').forEach(t => t.classList.remove('active'));
+
+  // Show selected board
+  document.getElementById(board + '-board').classList.add('active');
+  event.target.classList.add('active');
+
+  // Render board
+  if (board === 'reputation') renderReputationBoard();
+  else if (board === 'contributors') renderContributorsBoard();
+  else if (board === 'followers') renderFollowersBoard();
+  else if (board === 'reporters') renderReportersBoard();
+}
+
+function getMedalClass(rank) {
+  if (rank === 1) return 'gold';
+  if (rank === 2) return 'silver';
+  if (rank === 3) return 'bronze';
+  return '';
+}
+
+function renderReputationBoard() {
+  const leaderboard = Leaderboards.getReputationLeaderboard(20);
+  const body = document.getElementById('reputationBody');
+
+  body.innerHTML = leaderboard.map((user, index) => `
+    <tr>
+      <td>
+        <div class="rank-badge ${getMedalClass(index + 1)}">${index + 1}</div>
+      </td>
+      <td>
+        <div class="user-cell">
+          <div class="user-avatar">${user.name[0].toUpperCase()}</div>
+          <div class="user-info">
+            <h4><a href="#" onclick="openUserProfile('${user.email}'); return false;">${user.name}</a></h4>
+            <p>${user.city}</p>
+          </div>
+        </div>
+      </td>
+      <td class="stat-value" style="text-align: center;">${Profiles.getUserReputation(user.email)}</td>
+      <td class="stat-value" style="text-align: center;">${user.posts || 0}</td>
+    </tr>
+  `).join('');
+}
+
+function renderContributorsBoard() {
+  const leaderboard = Leaderboards.getContributorsLeaderboard(20);
+  const body = document.getElementById('contributorsBody');
+
+  body.innerHTML = leaderboard.map((user, index) => `
+    <tr>
+      <td>
+        <div class="rank-badge ${getMedalClass(index + 1)}">${index + 1}</div>
+      </td>
+      <td>
+        <div class="user-cell">
+          <div class="user-avatar">${user.name[0].toUpperCase()}</div>
+          <div class="user-info">
+            <h4><a href="#" onclick="openUserProfile('${user.email}'); return false;">${user.name}</a></h4>
+            <p>${user.city}</p>
+          </div>
+        </div>
+      </td>
+      <td class="stat-value" style="text-align: center;">${user.posts || 0}</td>
+      <td class="stat-value" style="text-align: center;">${Profiles.getUserReputation(user.email)}</td>
+    </tr>
+  `).join('');
+}
+
+function renderFollowersBoard() {
+  const leaderboard = Leaderboards.getFollowersLeaderboard(20);
+  const body = document.getElementById('followersBody');
+
+  body.innerHTML = leaderboard.map((user, index) => `
+    <tr>
+      <td>
+        <div class="rank-badge ${getMedalClass(index + 1)}">${index + 1}</div>
+      </td>
+      <td>
+        <div class="user-cell">
+          <div class="user-avatar">${user.name[0].toUpperCase()}</div>
+          <div class="user-info">
+            <h4><a href="#" onclick="openUserProfile('${user.email}'); return false;">${user.name}</a></h4>
+            <p>${user.city}</p>
+          </div>
+        </div>
+      </td>
+      <td class="stat-value" style="text-align: center;">${user.followerCount || 0}</td>
+      <td class="stat-value" style="text-align: center;">${user.following || 0}</td>
+    </tr>
+  `).join('');
+}
+
+function renderReportersBoard() {
+  const leaderboard = Leaderboards.getTopProblemReporters(20);
+  const body = document.getElementById('reportersBody');
+
+  body.innerHTML = leaderboard.map((user, index) => `
+    <tr>
+      <td>
+        <div class="rank-badge ${getMedalClass(index + 1)}">${index + 1}</div>
+      </td>
+      <td>
+        <div class="user-cell">
+          <div class="user-avatar">${user.name[0].toUpperCase()}</div>
+          <div class="user-info">
+            <h4><a href="#" onclick="openUserProfile('${user.email}'); return false;">${user.name}</a></h4>
+            <p>${user.city}</p>
+          </div>
+        </div>
+      </td>
+      <td class="stat-value" style="text-align: center;">${user.problemsReported || 0}</td>
+      <td class="stat-value" style="text-align: center;">${user.district}</td>
+    </tr>
+  `).join('');
+}
+
+function openUserProfile(email) {
+  window.location.href = 'user-profile.html';
+}
+
+// Initial load
+document.addEventListener('DOMContentLoaded', renderReputationBoard);
+</script>
+</body>
+</html>

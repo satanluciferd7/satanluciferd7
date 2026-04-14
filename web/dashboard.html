@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Dashboard - Nepal Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="utils.js"></script>
+  <script src="roles.js"></script>
+  <script src="analytics.js"></script>
+  <script src="notifications.js"></script>
+  <script src="profiles.js"></script>
+  <script src="bookmarks.js"></script>
+  <script src="leaderboards.js"></script>
+  <script src="messaging.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-back"><i class="fas fa-arrow-left"></i> Home</a>
+      <div class="nav-logo">🇳🇵 Nepal Portal — Dashboard</div>
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    <aside class="dashboard-sidebar">
+      <div class="sidebar-profile">
+        <div class="avatar" id="dashAvatar">U</div>
+        <div id="dashName">User</div>
+        <div id="dashRole" class="role-badge">Citizen</div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#overview" class="nav-item active"><i class="fas fa-tachometer-alt"></i> Overview</a>
+        <a href="#activity"><i class="fas fa-history"></i> Activity</a>
+        <a href="#bookmarks"><i class="fas fa-bookmark"></i> Bookmarks</a>
+        <a href="#messages"><i class="fas fa-envelope"></i> Messages</a>
+        <a href="#notifications"><i class="fas fa-bell"></i> Notifications</a>
+        <a href="#leaderboard"><i class="fas fa-trophy"></i> Leaderboard</a>
+        <a href="#settings"><i class="fas fa-cog"></i> Settings</a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <section id="overview" class="dashboard-section active">
+        <h1>Dashboard Overview</h1>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon followers"><i class="fas fa-users"></i></div>
+            <div class="stat-value" id="followersCount">0</div>
+            <div>Followers</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon posts"><i class="fas fa-pen"></i></div>
+            <div class="stat-value" id="postsCount">0</div>
+            <div>Posts</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon problems"><i class="fas fa-exclamation-triangle"></i></div>
+            <div class="stat-value" id="problemsCount">0</div>
+            <div>Problems Reported</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon reputation"><i class="fas fa-star"></i></div>
+            <div class="stat-value" id="reputationScore">0</div>
+            <div>Reputation</div>
+          </div>
+        </div>
+        <div class="charts-grid">
+          <div class="chart-card">
+            <h3>Weekly Activity</h3>
+            <canvas id="activityChart"></canvas>
+          </div>
+          <div class="chart-card">
+            <h3>Top Categories</h3>
+            <canvas id="categoryChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section id="activity" class="dashboard-section">
+        <h1>Recent Activity</h1>
+        <div id="activityFeed"></div>
+      </section>
+
+      <section id="bookmarks" class="dashboard-section">
+        <h1>Saved Bookmarks</h1>
+        <div id="bookmarkList"></div>
+      </section>
+
+      <section id="messages" class="dashboard-section">
+        <h1>Messages</h1>
+        <div id="messageList"></div>
+      </section>
+
+      <section id="notifications" class="dashboard-section">
+        <h1>Notifications</h1>
+        <div id="notificationList"></div>
+        <button onclick="Notifications.markAllAsRead(getSessionEmail())">Mark All Read</button>
+      </section>
+
+      <section id="leaderboard" class="dashboard-section">
+        <h1>Leaderboards</h1>
+        <div id="leaderboardList"></div>
+      </section>
+
+      <section id="settings" class="dashboard-section">
+        <h1>Settings</h1>
+        <div class="settings-form">
+          <div class="form-group">
+            <label>Email Notifications</label>
+            <input type="checkbox" id="emailNotifs">
+          </div>
+          <div class="form-group">
+            <label>SMS Notifications</label>
+            <input type="checkbox" id="smsNotifs">
+          </div>
+          <div class="form-group">
+            <label>Dark Mode</label>
+            <input type="checkbox" id="darkModePref">
+          </div>
+          <button onclick="saveSettings()">Save Settings</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Initialize dashboard
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDashboard();
+      setupNav();
+    });
+
+    function loadDashboard() {
+      const email = getSessionEmail();
+      if (!email) {
+        window.location.href = 'index.html';
+        return;
+      }
+      
+      const dash = Analytics.getUserDashboard(email);
+      updateProfile(dash.profile);
+      updateStats(dash.stats);
+      
+      // Charts
+      createActivityChart();
+      createCategoryChart();
+      
+      // Load sections
+      loadActivityFeed();
+      loadBookmarks();
+      loadMessages();
+      loadNotifications();
+      loadLeaderboard();
+    }
+
+    function setupNav() {
+      document.querySelectorAll('.sidebar-nav a').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = link.getAttribute('href').substring(1);
+          switchSection(target);
+        });
+      });
+    }
+
+    function switchSection(target) {
+      document.querySelectorAll('.dashboard-section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(target).classList.add('active');
+      document.querySelectorAll('.sidebar-nav a').forEach(link => link.classList.remove('active'));
+      document.querySelector(`[href="#${target}"]`).classList.add('active');
+    }
+
+    function updateProfile(profile) {
+      document.getElementById('dashName').textContent = profile.name;
+      document.getElementById('dashRole').textContent = profile.role || 'Citizen';
+      // Avatar
+      if (profile.avatarUrl) {
+        document.getElementById('dashAvatar').innerHTML = `<img src="${profile.avatarUrl}" alt="Avatar">`;
+      }
+    }
+
+    function updateStats(stats) {
+      document.getElementById('followersCount').textContent = stats.followers;
+      document.getElementById('postsCount').textContent = stats.posts;
+      document.getElementById('problemsCount').textContent = stats.problems || 0;
+      document.getElementById('reputationScore').textContent = stats.reputation;
+    }
+
+    function createActivityChart() {
+      const ctx = document.getElementById('activityChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+          datasets: [{
+            label: 'Activity',
+            data: [12, 19, 3, 17, 28, 14, 20],
+            borderColor: '#3399ff',
+            tension: 0.4
+          }]
+        }
+      });
+    }
+
+    function createCategoryChart() {
+      const ctx = document.getElementById('categoryChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Roads', 'Water', 'Safety', 'Other'],
+          datasets: [{
+            data: [35, 25, 20, 20],
+            backgroundColor: ['#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3']
+          }]
+        }
+      });
+    }
+
+    function loadActivityFeed() {
+      // Simulated activity
+      document.getElementById('activityFeed').innerHTML = `
+        <div class="activity-item">
+          <i class="fas fa-check-circle success"></i>
+          <div>Problem #123 marked as resolved in Kathmandu</div>
+          <span>2h ago</span>
+        </div>
+        <div class="activity-item">
+          <i class="fas fa-comment"></i>
+          <div>Someone commented on your post</div>
+          <span>1 day ago</span>
+        </div>
+      `;
+    }
+
+    // Placeholder functions
+    function getSessionEmail() { return localStorage.getItem('np_session') ? JSON.parse(localStorage.getItem('np_session')).email : null; }
+  </script>
+</body>
+</html>
+

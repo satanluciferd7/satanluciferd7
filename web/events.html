@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Nepal Portal - Events Calendar. Discover government programs, community events, and announcements."/>
+  <meta name="theme-color" content="#0066cc"/>
+  <title>Events & Calendar - Nepal Portal</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="styles-enhanced.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .events-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    .events-header {
+      background: linear-gradient(135deg, var(--primary), #004999);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 40px;
+      color: white;
+      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .events-header-content h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .events-header-content p {
+      margin: 10px 0 0 0;
+      opacity: 0.9;
+    }
+
+    .create-event-btn {
+      padding: 12px 24px;
+      background: white;
+      color: var(--primary);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .create-event-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .events-filters {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 10px 20px;
+      background: var(--glass-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: 0.3s;
+      color: var(--text-muted);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .filter-btn:hover {
+      border-color: var(--primary);
+    }
+
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .event-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .event-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+      box-shadow: 0 10px 30px rgba(0, 102, 204, 0.15);
+    }
+
+    .event-header {
+      background: linear-gradient(135deg, var(--primary), #004999);
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+    }
+
+    .event-date {
+      text-align: center;
+    }
+
+    .event-date-day {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .event-date-month {
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    .event-category {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .event-content {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .event-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0 0 10px 0;
+    }
+
+    .event-description {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 0 0 15px 0;
+      line-height: 1.4;
+    }
+
+    .event-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 15px;
+    }
+
+    .event-meta-item {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .event-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .event-btn {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: 0.3s;
+      color: var(--primary);
+    }
+
+    .event-btn:hover {
+      background: rgba(0, 102, 204, 0.1);
+    }
+
+    .event-btn.primary {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .event-btn.primary:hover {
+      background: #004999;
+    }
+
+    .calendar-view {
+      background: var(--glass-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 40px;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+    .calendar-day-header {
+      text-align: center;
+      font-weight: 600;
+      color: var(--primary);
+      padding: 10px;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .calendar-day:hover {
+      background: rgba(0, 102, 204, 0.1);
+      border-color: var(--primary);
+    }
+
+    .calendar-day.has-events {
+      background: rgba(0, 102, 204, 0.05);
+      border-color: var(--primary);
+    }
+
+    .calendar-day-number {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .calendar-event-indicator {
+      display: flex;
+      gap: 2px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .event-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    .no-events {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      .events-header {
+        flex-direction: column;
+        padding: 30px 20px;
+      }
+
+      .events-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">                                       
+      <span class="flag">🇳🇵</span>                 
+      <span class="logo-text">Nepal Portal</span>
+    </div>     
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="user-profile.html">My Profile</a></li>
+      <li><a href="#">Events</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-btn" id="darkModeToggle" onclick="toggleDarkMode()" title="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== EVENTS SECTION ========== -->
+<div class="events-container">
+  <div class="events-header">
+    <div class="events-header-content">
+      <h1>📅 Events & Announcements</h1>
+      <p>Discover government programs and community events happening across Nepal</p>
+    </div>
+    <button class="create-event-btn" onclick="openCreateEventModal()">
+      <i class="fas fa-plus"></i> Create Event
+    </button>
+  </div>
+
+  <div class="events-filters">
+    <button class="filter-btn active" onclick="filterEvents('all')">All Events</button>
+    <button class="filter-btn" onclick="filterEvents('government')">Government</button>
+    <button class="filter-btn" onclick="filterEvents('education')">Education</button>
+    <button class="filter-btn" onclick="filterEvents('health')">Health</button>
+    <button class="filter-btn" onclick="filterEvents('tourism')">Tourism</button>
+  </div>
+
+  <div class="events-grid" id="eventsGrid"></div>
+
+  <div class="no-events" id="noEvents" style="display: none;">
+    <i class="fas fa-calendar-xmark" style="font-size: 3rem; margin-bottom: 15px;"></i>
+    <p>No events found matching your criteria</p>
+  </div>
+</div>
+
+<!-- ========== CREATE EVENT MODAL ========== -->
+<div id="createEventModal" class="modal" style="display: none;">
+  <div class="modal-content" style="max-width: 600px;">
+    <div class="modal-header">
+      <h2>Create New Event</h2>
+      <button class="close-btn" onclick="closeModal('createEventModal')">&times;</button>
+    </div>
+    <form onsubmit="submitCreateEvent(event)" style="padding: 20px; display: flex; flex-direction: column; gap: 15px;">
+      <div class="form-group">
+        <label>Event Title</label>
+        <input type="text" id="eventTitle" required />
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="eventDescription" required style="min-height: 100px;"></textarea>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div class="form-group">
+          <label>Start Date & Time</label>
+          <input type="datetime-local" id="eventStart" required />
+        </div>
+        <div class="form-group">
+          <label>End Date & Time</label>
+          <input type="datetime-local" id="eventEnd" required />
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div class="form-group">
+          <label>Category</label>
+          <select id="eventCategory" required>
+            <option value="government">Government</option>
+            <option value="education">Education</option>
+            <option value="health">Health</option>
+            <option value="tourism">Tourism</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>District</label>
+          <input type="text" id="eventDistrict" value="Kathmandu" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>City</label>
+        <input type="text" id="eventCity" required />
+      </div>
+      <button type="submit" class="btn-login" style="width: 100%;">Create Event</button>
+    </form>
+  </div>
+</div>
+
+<script src="utils.js"></script>
+<script src="roles.js"></script>
+<script src="profiles.js"></script>
+<script src="events.js"></script>
+<script src="notifications.js"></script>
+<script src="script.js"></script>
+<script>
+let currentFilter = 'all';
+
+function filterEvents(category) {
+  currentFilter = category;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderEvents();
+}
+
+function renderEvents() {
+  const allEvents = Events.getEvents();
+  let filtered = allEvents;
+
+  if (currentFilter !== 'all') {
+    filtered = filtered.filter(e => e.category === currentFilter);
+  }
+
+  const container = document.getElementById('eventsGrid');
+  const noEvents = document.getElementById('noEvents');
+
+  if (filtered.length === 0) {
+    container.innerHTML = '';
+    noEvents.style.display = 'block';
+    return;
+  }
+
+  noEvents.style.display = 'none';
+  container.innerHTML = filtered.map(event => {
+    const startDate = new Date(event.startDate);
+    const userEmail = Database.get('np_session')?.user;
+    const isAttending = userEmail && event.attendees.includes(userEmail);
+    const isInterested = userEmail && event.interested.includes(userEmail);
+
+    return `
+      <div class="event-card">
+        <div class="event-header">
+          <div>
+            <div class="event-date">
+              <div class="event-date-day">${startDate.getDate()}</div>
+              <div class="event-date-month">${startDate.toLocaleString('default', { month: 'short' })}</div>
+            </div>
+          </div>
+          <div class="event-category">${event.category}</div>
+        </div>
+        <div class="event-content">
+          <h3 class="event-title">${event.title}</h3>
+          <p class="event-description">${event.description}</p>
+          <div class="event-meta">
+            <div class="event-meta-item">
+              <i class="fas fa-clock"></i>
+              ${startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </div>
+            <div class="event-meta-item">
+              <i class="fas fa-map-marker-alt"></i>
+              ${event.city}, ${event.district}
+            </div>
+            <div class="event-meta-item">
+              <i class="fas fa-users"></i>
+              ${event.attendees.length} attending
+            </div>
+          </div>
+          <div class="event-actions">
+            <button class="event-btn ${isAttending ? 'primary' : ''}" 
+                    onclick="rsvpEvent(${event.id}, 'attending')">
+              <i class="fas fa-check"></i> ${isAttending ? 'Going' : 'RSVP'}
+            </button>
+            <button class="event-btn ${isInterested ? 'primary' : ''}" 
+                    onclick="rsvpEvent(${event.id}, 'interested')">
+              <i class="fas fa-star"></i> ${isInterested ? 'Interested' : 'Interested'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function rsvpEvent(eventId, status) {
+  const userEmail = Database.get('np_session')?.user;
+  if (!userEmail) {
+    alert('Please log in first');
+    return;
+  }
+
+  Events.rsvpEvent(userEmail, eventId, status);
+  renderEvents();
+}
+
+function openCreateEventModal() {
+  const userEmail = Database.get('np_session')?.user;
+  if (!userEmail) {
+    alert('Please log in first');
+    return;
+  }
+  document.getElementById('createEventModal').style.display = 'flex';
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+
+function submitCreateEvent(e) {
+  e.preventDefault();
+  const userEmail = Database.get('np_session')?.user;
+
+  const event = Events.createEvent(
+    document.getElementById('eventTitle').value,
+    document.getElementById('eventDescription').value,
+    document.getElementById('eventStart').value,
+    document.getElementById('eventEnd').value,
+    document.getElementById('eventCategory').value,
+    {
+      district: document.getElementById('eventDistrict').value,
+      city: document.getElementById('eventCity').value
+    },
+    userEmail
+  );
+
+  closeModal('createEventModal');
+  alert('Event created successfully!');
+  renderEvents();
+}
+
+// Initial load
+document.addEventListener('DOMContentLoaded', renderEvents);
+</script>
+</body>
+</html>

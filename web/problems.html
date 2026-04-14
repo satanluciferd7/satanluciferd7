@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Community Problems — Nepal Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    :root {
+      --primary:#0066cc;--primary-light:#3399ff;--dark:#0d1117;--dark2:#161b22;--dark3:#21262d;
+      --text:#e6edf3;--text-muted:#8b949e;--glass:rgba(255,255,255,0.05);--glass-border:rgba(255,255,255,0.1);
+      --danger:#da3633;--success:#238636;--accent:#f4a300;--radius:16px;--radius-sm:8px;
+      --shadow:0 8px 32px rgba(0,0,0,0.4);--transition:0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Poppins',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;}
+    a{text-decoration:none;color:inherit;}
+    ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--dark2);}::-webkit-scrollbar-thumb{background:var(--primary);border-radius:3px;}
+
+    .navbar{background:rgba(13,17,23,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border);padding:0;position:sticky;top:0;z-index:100;}
+    .nav-inner{max-width:900px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+    .nav-logo{font-size:1.1rem;font-weight:700;display:flex;align-items:center;gap:10px;color:#fff;}
+    .nav-logo span{background:linear-gradient(135deg,#ff6b6b,var(--danger));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+    .nav-back{display:flex;align-items:center;gap:8px;color:var(--text-muted);font-size:0.9rem;transition:var(--transition);}
+    .nav-back:hover{color:#fff;}
+
+    .page{max-width:750px;margin:0 auto;padding:32px 16px 80px;}
+
+    /* COMPOSER */
+    .composer{background:var(--dark2);border:1px solid var(--glass-border);border-radius:var(--radius);padding:24px;margin-bottom:28px;}
+    .composer-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+    .avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--danger),#991a1a);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;flex-shrink:0;color:#fff;}
+    .composer-meta{flex:1;}
+    .composer-meta strong{display:block;font-size:0.95rem;}
+    .composer-meta span{font-size:0.8rem;color:var(--text-muted);}
+    .composer textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:14px;color:var(--text);font-family:'Poppins',sans-serif;font-size:0.95rem;resize:vertical;min-height:100px;transition:var(--transition);}
+    .composer textarea:focus{outline:none;border-color:var(--danger);box-shadow:0 0 0 3px rgba(218,54,51,0.15);background:rgba(255,255,255,0.07);}
+    .composer textarea::placeholder{color:var(--text-muted);}
+
+    .cat-row{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0;}
+    .cat-chip{padding:6px 14px;border-radius:50px;border:1px solid var(--glass-border);background:var(--glass);color:var(--text-muted);font-size:0.8rem;cursor:pointer;transition:var(--transition);font-family:'Poppins',sans-serif;}
+    .cat-chip.active,.cat-chip:hover{border-color:var(--danger);color:#ff6b6b;background:rgba(218,54,51,0.1);}
+
+    .photo-upload-area{border:2px dashed var(--glass-border);border-radius:var(--radius-sm);padding:20px;text-align:center;cursor:pointer;transition:var(--transition);position:relative;margin:14px 0;}
+    .photo-upload-area:hover,.photo-upload-area.dragover{border-color:var(--danger);background:rgba(218,54,51,0.06);}
+    .photo-upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+    .photo-upload-area i{font-size:2rem;color:var(--text-muted);margin-bottom:8px;display:block;}
+    .photo-upload-area p{font-size:0.85rem;color:var(--text-muted);}
+    .photo-previews{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+    .photo-preview-item{position:relative;width:90px;height:90px;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--glass-border);}
+    .photo-preview-item img{width:100%;height:100%;object-fit:cover;}
+    .photo-preview-item button{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,0.7);color:#fff;font-size:0.65rem;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;}
+
+    .location-row{display:flex;align-items:center;gap:10px;margin-top:14px;}
+    .location-row i{color:var(--danger);}
+    .location-row select{flex:1;background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:8px 12px;color:var(--text);font-family:'Poppins',sans-serif;font-size:0.88rem;}
+    .location-row select:focus{outline:none;border-color:var(--danger);}
+    .location-row select option{background:var(--dark2);}
+
+    /* DISTRICT POLITICIAN SELECTOR */
+    .district-selector{margin-top:14px;background:rgba(244,163,0,0.05);border:1px solid rgba(244,163,0,0.2);border-radius:var(--radius-sm);padding:16px;}
+    .district-selector label{font-size:0.82rem;color:var(--accent);font-weight:600;display:block;margin-bottom:10px;}
+    .district-selector label i{margin-right:6px;}
+    .district-selector select{width:100%;background:var(--glass);border:1px solid rgba(244,163,0,0.3);border-radius:var(--radius-sm);padding:10px 12px;color:var(--text);font-family:'Poppins',sans-serif;font-size:0.88rem;}
+    .district-selector select:focus{outline:none;border-color:var(--accent);}
+    .district-selector select option{background:var(--dark2);}
+    .politician-preview{margin-top:10px;padding:10px 14px;background:rgba(244,163,0,0.08);border-radius:var(--radius-sm);font-size:0.82rem;display:none;}
+    .politician-preview strong{color:var(--accent);display:block;}
+    .politician-preview span{color:var(--text-muted);}
+
+    .btn-post{width:100%;margin-top:18px;padding:13px;background:linear-gradient(135deg,var(--danger),#991a1a);color:#fff;border:none;border-radius:var(--radius-sm);font-size:1rem;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;transition:var(--transition);}
+    .btn-post:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(218,54,51,0.4);}
+    .btn-post:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+
+    .login-notice{background:rgba(0,102,204,0.1);border:1px solid rgba(0,102,204,0.3);border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;font-size:0.9rem;display:flex;align-items:center;gap:10px;}
+    .login-notice a{color:var(--primary-light);font-weight:600;}
+
+    .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+    .filter-btn{padding:7px 16px;border-radius:50px;border:1px solid var(--glass-border);background:var(--glass);color:var(--text-muted);font-size:0.82rem;cursor:pointer;transition:var(--transition);font-family:'Poppins',sans-serif;}
+    .filter-btn.active,.filter-btn:hover{border-color:var(--danger);color:#ff6b6b;background:rgba(218,54,51,0.1);}
+
+    /* POST CARDS */
+    .post-card{background:var(--dark2);border:1px solid var(--glass-border);border-radius:var(--radius);padding:22px;margin-bottom:20px;transition:var(--transition);}
+    .post-card:hover{border-color:rgba(218,54,51,0.3);box-shadow:var(--shadow);}
+    /* GREEN: politician has read the email */
+    .post-card.politician-read{border-color:rgba(35,134,54,0.5)!important;background:rgba(35,134,54,0.05)!important;box-shadow:0 0 0 1px rgba(35,134,54,0.25);}
+    .read-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:50px;background:rgba(35,134,54,0.15);color:#56d364;border:1px solid rgba(35,134,54,0.3);font-size:0.72rem;font-weight:600;margin-left:auto;}
+
+    .post-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+    .post-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark,#004999));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0;color:#fff;}
+    .post-author{flex:1;}
+    .post-author strong{font-size:0.95rem;display:block;}
+    .post-author-sub{font-size:0.78rem;color:var(--text-muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .post-location{display:inline-flex;align-items:center;gap:4px;color:#ff6b6b;font-size:0.78rem;}
+    .post-badge{padding:3px 10px;border-radius:50px;font-size:0.72rem;font-weight:600;background:rgba(218,54,51,0.15);color:#ff6b6b;border:1px solid rgba(218,54,51,0.25);}
+    .post-category{display:inline-block;padding:4px 12px;border-radius:50px;font-size:0.75rem;font-weight:600;margin-bottom:10px;}
+    .cat-road{background:rgba(244,163,0,0.12);color:var(--accent);border:1px solid rgba(244,163,0,0.2);}
+    .cat-water{background:rgba(51,153,255,0.12);color:var(--primary-light);border:1px solid rgba(51,153,255,0.2);}
+    .cat-safety{background:rgba(218,54,51,0.12);color:#ff6b6b;border:1px solid rgba(218,54,51,0.2);}
+    .cat-govt{background:rgba(139,92,246,0.12);color:#a78bfa;border:1px solid rgba(139,92,246,0.2);}
+    .cat-other{background:rgba(35,134,54,0.12);color:#56d364;border:1px solid rgba(35,134,54,0.2);}
+    .post-text{font-size:0.93rem;line-height:1.65;color:rgba(230,237,243,0.9);margin-bottom:14px;white-space:pre-wrap;word-break:break-word;}
+    .post-photos{display:grid;gap:6px;margin-bottom:14px;}
+    .post-photos.n1{grid-template-columns:1fr;}
+    .post-photos.n2{grid-template-columns:1fr 1fr;}
+    .post-photos.n3{grid-template-columns:1fr 1fr 1fr;}
+    .post-photos img{width:100%;border-radius:var(--radius-sm);object-fit:cover;max-height:280px;cursor:pointer;transition:var(--transition);}
+    .post-photos img:hover{opacity:0.9;}
+
+    /* POLITICIAN TAG on post */
+    .politician-tag{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 12px;background:rgba(244,163,0,0.06);border:1px solid rgba(244,163,0,0.15);border-radius:var(--radius-sm);font-size:0.8rem;}
+    .politician-tag i{color:var(--accent);}
+    .politician-tag strong{color:var(--accent);}
+    .politician-tag span{color:var(--text-muted);}
+
+    .post-actions{display:flex;gap:6px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--glass-border);align-items:center;}
+    .action-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--radius-sm);background:var(--glass);border:1px solid var(--glass-border);color:var(--text-muted);font-size:0.82rem;cursor:pointer;transition:var(--transition);font-family:'Poppins',sans-serif;}
+    .action-btn:hover,.action-btn.liked{background:rgba(218,54,51,0.1);border-color:rgba(218,54,51,0.3);color:#ff6b6b;}
+    .action-btn.supported{background:rgba(35,134,54,0.1);border-color:rgba(35,134,54,0.3);color:#56d364;}
+    .action-btn.shared{background:rgba(0,102,204,0.1);border-color:rgba(0,102,204,0.3);color:var(--primary-light);}
+    .post-menu-wrapper{position:relative;margin-left:auto;}
+    .post-menu-btn{padding:7px 10px;min-width:auto;}
+    .post-menu-dropdown{display:none;position:absolute;bottom:100%;right:0;background:var(--dark2);border:1px solid var(--glass-border);border-radius:var(--radius-sm);min-width:160px;box-shadow:var(--shadow);z-index:10;overflow:hidden;margin-bottom:6px;}
+    .post-menu-dropdown.open{display:block;}
+    .post-menu-item{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:0.85rem;cursor:pointer;transition:var(--transition);}
+    .post-menu-item:hover{background:var(--glass);}
+    .post-menu-item i{width:16px;color:var(--text-muted);}
+    .post-menu-item.delete:hover{background:rgba(218,54,51,0.15);color:#ff6b6b;}
+    .post-menu-item.delete i{color:#ff6b6b;}
+
+    .section-title{font-size:1.1rem;font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+    .section-title span{width:4px;height:20px;border-radius:2px;background:linear-gradient(var(--danger),#ff6b6b);display:inline-block;}
+
+    .stats-bar{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:28px;}
+    .stat-pill{background:var(--dark2);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:10px 18px;display:flex;align-items:center;gap:10px;flex:1;min-width:120px;}
+    .stat-pill i{font-size:1.1rem;}
+    .stat-pill .s-num{font-size:1.2rem;font-weight:700;}
+    .stat-pill .s-lbl{font-size:0.75rem;color:var(--text-muted);}
+
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;}
+    .lightbox.open{display:flex;}
+    .lightbox img{max-width:92vw;max-height:88vh;border-radius:var(--radius-sm);object-fit:contain;}
+    .lightbox-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.1);color:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.2rem;transition:var(--transition);border:none;}
+    .lightbox-close:hover{background:var(--danger);}
+
+    .empty-state{text-align:center;padding:60px 20px;color:var(--text-muted);}
+    .empty-state i{font-size:3rem;margin-bottom:16px;display:block;opacity:0.4;}
+
+    .portal-alert{position:fixed;top:80px;right:20px;z-index:9999;padding:14px 24px;border-radius:10px;font-family:'Poppins',sans-serif;font-size:0.9rem;box-shadow:var(--shadow);backdrop-filter:blur(10px);animation:slideIn .3s ease;max-width:340px;}
+    @keyframes slideIn{from{opacity:0;transform:translateX(60px);}to{opacity:1;transform:translateX(0);}}
+
+    @media(max-width:600px){.page{padding:16px 12px 60px;}.composer{padding:16px;}.post-card{padding:16px;}.stats-bar{gap:8px;}.stat-pill{padding:8px 12px;}}
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo">🇳🇵 Nepal Portal — <span>Community Problems</span></div>
+    <a href="index.html" class="nav-back"><i class="fas fa-arrow-left"></i> Back to Home</a>
+  </div>
+</nav>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
+  <img id="lightboxImg" src="" alt="Photo"/>
+</div>
+
+<div class="page">
+
+  <!-- STATS -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-pill"><i class="fas fa-exclamation-circle" style="color:#ff6b6b;"></i><div><div class="s-num" id="totalCount">0</div><div class="s-lbl">Total Reports</div></div></div>
+    <div class="stat-pill"><i class="fas fa-envelope-open-text" style="color:var(--accent);"></i><div><div class="s-num" id="notifiedCount">0</div><div class="s-lbl">Authorities Notified</div></div></div>
+    <div class="stat-pill"><i class="fas fa-check-circle" style="color:#56d364;"></i><div><div class="s-num" id="readCount">0</div><div class="s-lbl">Seen by Politician</div></div></div>
+  </div>
+
+  <!-- POST COMPOSER -->
+  <div class="composer" id="composerBox">
+    <div class="composer-header">
+      <div class="avatar" id="composerAvatar">?</div>
+      <div class="composer-meta">
+        <strong id="composerName">Guest User</strong>
+        <span id="composerLocation"><i class="fas fa-map-marker-alt"></i> Location not set — <a href="index.html" style="color:var(--primary-light);">Login to post</a></span>
+      </div>
+    </div>
+
+    <div class="login-notice" id="loginNotice">
+      <i class="fas fa-info-circle" style="color:var(--primary-light);font-size:1.1rem;"></i>
+      <span>You need to <a href="index.html">Login or Register</a> to post a problem. Your name and location will be shown.</span>
+    </div>
+
+    <textarea id="problemText" placeholder="Describe the problem... Be specific about location, severity, and impact on the community." maxlength="1000"></textarea>
+    <div id="charCount" style="font-size:0.75rem;color:var(--text-muted);text-align:right;margin-top:4px;">0/1000</div>
+
+    <div class="cat-row" id="catRow">
+      <button class="cat-chip" data-cat="Road &amp; Infrastructure" onclick="selectCat(this)">🚧 Road &amp; Infrastructure</button>
+      <button class="cat-chip" data-cat="Water &amp; Electricity" onclick="selectCat(this)">💧 Water &amp; Electricity</button>
+      <button class="cat-chip" data-cat="Safety &amp; Security" onclick="selectCat(this)">🛡️ Safety &amp; Security</button>
+      <button class="cat-chip" data-cat="Government Services" onclick="selectCat(this)">🏛️ Government Services</button>
+      <button class="cat-chip" data-cat="Environment" onclick="selectCat(this)">🌿 Environment</button>
+      <button class="cat-chip" data-cat="Other" onclick="selectCat(this)">📌 Other</button>
+    </div>
+
+    <div class="location-row">
+      <i class="fas fa-map-marker-alt"></i>
+      <select id="postLocation">
+        <option value="">Select problem location / district</option>
+        <option>Kathmandu</option><option>Lalitpur</option><option>Bhaktapur</option>
+        <option>Pokhara (Kaski)</option><option>Biratnagar (Morang)</option><option>Birgunj (Parsa)</option>
+        <option>Dharan (Sunsari)</option><option>Butwal (Rupandehi)</option><option>Hetauda (Makwanpur)</option>
+        <option>Bharatpur (Chitwan)</option><option>Janakpur (Dhanusa)</option><option>Dhangadhi (Kailali)</option>
+        <option>Nepalgunj (Banke)</option><option>Itahari (Sunsari)</option><option>Damak (Jhapa)</option>
+        <option>Gorkha</option><option>Mustang</option><option>Humla</option>
+        <option>Solukhumbu</option><option>Ilam</option><option>Other District</option>
+      </select>
+    </div>
+
+    <!-- DISTRICT POLITICIAN SELECTOR -->
+    <div class="district-selector">
+      <label><i class="fas fa-envelope"></i> Tag a District Politician to notify about this problem</label>
+      <select id="politicianSelect" onchange="showPoliticianPreview()">
+        <option value="">-- Select district &amp; politician --</option>
+        <optgroup label="Bagmati Province">
+          <option value="Kathmandu|Bimalendra Nidhi|bimalendra.nidhi@parliament.gov.np">Kathmandu — Bimalendra Nidhi</option>
+          <option value="Lalitpur|Shekhar Silwal|shekhar.silwal@parliament.gov.np">Lalitpur — Shekhar Silwal</option>
+          <option value="Bhaktapur|Bishnu Paudel|bishnu.paudel@parliament.gov.np">Bhaktapur — Bishnu Paudel</option>
+          <option value="Nuwakot|Gopal Dahit|gopal.dahit@parliament.gov.np">Nuwakot — Gopal Dahit</option>
+          <option value="Rasuwa|Yogesh Bhattarai|yogesh.bhattarai@parliament.gov.np">Rasuwa — Yogesh Bhattarai</option>
+          <option value="Dhading|Renuka Sharma|renuka.sharma@parliament.gov.np">Dhading — Renuka Sharma</option>
+          <option value="Makwanpur|Ramesh Lekhak|ramesh.lekhak@parliament.gov.np">Makwanpur — Ramesh Lekhak</option>
+          <option value="Kavrepalanchok|Prakash Man Singh|prakash.singh@parliament.gov.np">Kavrepalanchok — Prakash Man Singh</option>
+          <option value="Sindhuli|Surendra Pandey|surendra.pandey@parliament.gov.np">Sindhuli — Surendra Pandey</option>
+          <option value="Ramechhap|Deepak Prakash Bhaskar|deepak.bhaskar@parliament.gov.np">Ramechhap — Deepak Prakash Bhaskar</option>
+          <option value="Dolakha|Amrit Kumar Bohara|amrit.bohara@parliament.gov.np">Dolakha — Amrit Kumar Bohara</option>
+          <option value="Sindhupalchok|Agni Kharel|agni.kharel@parliament.gov.np">Sindhupalchok — Agni Kharel</option>
+          <option value="Chitwan|Gagan Kumar Thapa|gagan.thapa@parliament.gov.np">Chitwan — Gagan Kumar Thapa</option>
+        </optgroup>
+        <optgroup label="Province 1 (Koshi)">
+          <option value="Taplejung|Krishna Kumar Shrestha|krishna.shrestha@parliament.gov.np">Taplejung — Krishna Kumar Shrestha</option>
+          <option value="Panchthar|Sher Bahadur Deuba|sher.deuba@parliament.gov.np">Panchthar — Sher Bahadur Deuba</option>
+          <option value="Ilam|Bhim Rawal|bhim.rawal@parliament.gov.np">Ilam — Bhim Rawal</option>
+          <option value="Terhathum|Gokarna Bista|gokarna.bista@parliament.gov.np">Terhathum — Gokarna Bista</option>
+          <option value="Sankhuwasabha|Rajendra Rai|rajendra.rai@parliament.gov.np">Sankhuwasabha — Rajendra Rai</option>
+          <option value="Solukhumbu|Mohan Bahadur Basnet|mohan.basnet@parliament.gov.np">Solukhumbu — Mohan Bahadur Basnet</option>
+          <option value="Bhojpur|Kul Bahadur Gurung|kul.gurung@parliament.gov.np">Bhojpur — Kul Bahadur Gurung</option>
+          <option value="Dhankuta|Ram Bahadur Thapa|ram.thapa@parliament.gov.np">Dhankuta — Ram Bahadur Thapa</option>
+          <option value="Morang|Birendra Prasad Mahato|birendra.mahato@parliament.gov.np">Morang (Biratnagar) — Birendra Prasad Mahato</option>
+          <option value="Sunsari|Radheshyam Adhikari|radheshyam.adhikari@parliament.gov.np">Sunsari (Dharan) — Radheshyam Adhikari</option>
+          <option value="Udayapur|Dipak Giri|dipak.giri@parliament.gov.np">Udayapur — Dipak Giri</option>
+          <option value="Khotang|Chitra Bahadur KC|chitra.kc@parliament.gov.np">Khotang — Chitra Bahadur KC</option>
+          <option value="Okhaldhunga|Prabhu Sah|prabhu.sah@parliament.gov.np">Okhaldhunga — Prabhu Sah</option>
+          <option value="Jhapa|Bindi Prasad Chaudhary|bindi.chaudhary@parliament.gov.np">Jhapa — Bindi Prasad Chaudhary</option>
+        </optgroup>
+        <optgroup label="Madhesh Province">
+          <option value="Saptari|Laxman Lal Karna|laxman.karna@parliament.gov.np">Saptari — Laxman Lal Karna</option>
+          <option value="Siraha|Rajendra Mahato|rajendra.mahato@parliament.gov.np">Siraha — Rajendra Mahato</option>
+          <option value="Dhanusa|Anita Devi|anita.devi@parliament.gov.np">Dhanusa (Janakpur) — Anita Devi</option>
+          <option value="Mahottari|Sharat Singh Bhandari|sharat.bhandari@parliament.gov.np">Mahottari — Sharat Singh Bhandari</option>
+          <option value="Sarlahi|Bimala Kumari Paudel|bimala.paudel@parliament.gov.np">Sarlahi — Bimala Kumari Paudel</option>
+          <option value="Rautahat|Resham Chaudhary|resham.chaudhary@parliament.gov.np">Rautahat — Resham Chaudhary</option>
+          <option value="Bara|Jeevan Pariyar|jeevan.pariyar@parliament.gov.np">Bara — Jeevan Pariyar</option>
+          <option value="Parsa|Dibyashwari Shah|dibyashwari.shah@parliament.gov.np">Parsa (Birgunj) — Dibyashwari Shah</option>
+        </optgroup>
+        <optgroup label="Gandaki Province">
+          <option value="Gorkha|Hari Bahadur Basnet|hari.basnet@parliament.gov.np">Gorkha — Hari Bahadur Basnet</option>
+          <option value="Lamjung|Nar Bahadur Karki|nar.karki@parliament.gov.np">Lamjung — Nar Bahadur Karki</option>
+          <option value="Tanahun|Narayan Man Bijukchhe|narayan.bijukchhe@parliament.gov.np">Tanahun — Narayan Man Bijukchhe</option>
+          <option value="Syangja|Bijaya Kumar Gachhadar|bijaya.gachhadar@parliament.gov.np">Syangja — Bijaya Kumar Gachhadar</option>
+          <option value="Kaski|Prithvi Subba Gurung|prithvi.gurung@parliament.gov.np">Kaski (Pokhara) — Prithvi Subba Gurung</option>
+          <option value="Manang|Ganesh Thapaliya|ganesh.thapaliya@parliament.gov.np">Manang — Ganesh Thapaliya</option>
+          <option value="Mustang|Top Bahadur Rayamajhi|top.rayamajhi@parliament.gov.np">Mustang — Top Bahadur Rayamajhi</option>
+          <option value="Myagdi|Amrit Bohara|amrit.bohara2@parliament.gov.np">Myagdi — Amrit Bohara</option>
+          <option value="Parbat|Dev Prasad Sunar|dev.sunar@parliament.gov.np">Parbat — Dev Prasad Sunar</option>
+          <option value="Baglung|Kamal Thapa|kamal.thapa@parliament.gov.np">Baglung — Kamal Thapa</option>
+          <option value="Nawalpur|Balkrishna Khand|balkrishna.khand@parliament.gov.np">Nawalpur — Balkrishna Khand</option>
+        </optgroup>
+        <optgroup label="Lumbini Province">
+          <option value="Gulmi|Krishna Bahadur Mahara|krishna.mahara@parliament.gov.np">Gulmi — Krishna Bahadur Mahara</option>
+          <option value="Palpa|Kiran Kumar Gurung|kiran.gurung@parliament.gov.np">Palpa — Kiran Kumar Gurung</option>
+          <option value="Rupandehi|Rabi Lamichhane|rabi.lamichhane@parliament.gov.np">Rupandehi (Butwal) — Rabi Lamichhane</option>
+          <option value="Kapilvastu|Sita Gurung|sita.gurung@parliament.gov.np">Kapilvastu — Sita Gurung</option>
+          <option value="Arghakhanchi|Min Bahadur Bishwakarma|min.bishwakarma@parliament.gov.np">Arghakhanchi — Min Bahadur Bishwakarma</option>
+          <option value="Pyuthan|Minendra Rijal|minendra.rijal@parliament.gov.np">Pyuthan — Minendra Rijal</option>
+          <option value="Rolpa|Agni Prasad Sapkota|agni.sapkota@parliament.gov.np">Rolpa — Agni Prasad Sapkota</option>
+          <option value="Rukum East|Hikmat Karki|hikmat.karki@parliament.gov.np">Rukum East — Hikmat Karki</option>
+          <option value="Dang|Ram Sahay Prasad Yadav|ram.yadav@parliament.gov.np">Dang — Ram Sahay Prasad Yadav</option>
+          <option value="Banke|Nanda Bahadur Pun|nanda.pun@parliament.gov.np">Banke (Nepalgunj) — Nanda Bahadur Pun</option>
+          <option value="Bardiya|Onsari Gharti|onsari.gharti@parliament.gov.np">Bardiya — Onsari Gharti</option>
+        </optgroup>
+        <optgroup label="Karnali Province">
+          <option value="Dolpa|Lal Bahadur Thapa|lal.thapa@parliament.gov.np">Dolpa — Lal Bahadur Thapa</option>
+          <option value="Mugu|Prakash Bahadur Thapa|prakash.thapa2@parliament.gov.np">Mugu — Prakash Bahadur Thapa</option>
+          <option value="Humla|Sher Bahadur Rokaya|sher.rokaya@parliament.gov.np">Humla — Sher Bahadur Rokaya</option>
+          <option value="Jumla|Man Bahadur BK|man.bk@parliament.gov.np">Jumla — Man Bahadur BK</option>
+          <option value="Kalikot|Birodh Khatiwada|birodh.khatiwada@parliament.gov.np">Kalikot — Birodh Khatiwada</option>
+          <option value="Dailekh|Isher Man Katuwal|isher.katuwal@parliament.gov.np">Dailekh — Isher Man Katuwal</option>
+          <option value="Jajarkot|Dipak Bahadur Singh|dipak.singh@parliament.gov.np">Jajarkot — Dipak Bahadur Singh</option>
+          <option value="Rukum West|Kumar Lingden|kumar.lingden@parliament.gov.np">Rukum West — Kumar Lingden</option>
+          <option value="Salyan|Subash Nembang|subash.nembang@parliament.gov.np">Salyan — Subash Nembang</option>
+          <option value="Surkhet|Mahendra Bahadur Shahi|mahendra.shahi@parliament.gov.np">Surkhet — Mahendra Bahadur Shahi</option>
+        </optgroup>
+        <optgroup label="Sudurpashchim Province">
+          <option value="Bajura|Padma Kumari Aryal|padma.aryal@parliament.gov.np">Bajura — Padma Kumari Aryal</option>
+          <option value="Bajhang|Gauri Bahadur Shah|gauri.shah@parliament.gov.np">Bajhang — Gauri Bahadur Shah</option>
+          <option value="Doti|Ambar Bahadur Thapa|ambar.thapa@parliament.gov.np">Doti — Ambar Bahadur Thapa</option>
+          <option value="Achham|Mahendra Raya Yadav|mahendra.yadav2@parliament.gov.np">Achham — Mahendra Raya Yadav</option>
+          <option value="Kailali|Tham Bahadur Thapa|tham.thapa@parliament.gov.np">Kailali (Dhangadhi) — Tham Bahadur Thapa</option>
+          <option value="Kanchanpur|Rewati Raman Bhandari|rewati.bhandari@parliament.gov.np">Kanchanpur — Rewati Raman Bhandari</option>
+          <option value="Dadeldhura|Lekh Raj Bhatt|lekh.bhatt@parliament.gov.np">Dadeldhura — Lekh Raj Bhatt</option>
+          <option value="Baitadi|Pradeep Giri|pradeep.giri@parliament.gov.np">Baitadi — Pradeep Giri</option>
+          <option value="Darchula|Surya Bahadur Thapa|surya.thapa@parliament.gov.np">Darchula — Surya Bahadur Thapa</option>
+        </optgroup>
+      </select>
+      <div class="politician-preview" id="politicianPreview">
+        <strong id="previewName"></strong>
+        <span id="previewEmail"></span>
+      </div>
+    </div>
+
+    <!-- Photo Upload -->
+    <div class="photo-upload-area" id="photoUploadArea">
+      <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotos(this)"/>
+      <i class="fas fa-camera"></i>
+      <p>Click or drag to upload photos (max 5, 5MB each)</p>
+    </div>
+    <div class="photo-previews" id="photoPreviews"></div>
+
+    <button class="btn-post" id="postBtn" onclick="submitProblem()">
+      <i class="fas fa-paper-plane"></i> Post Problem &amp; Notify Politician
+    </button>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters" id="filterRow">
+    <button class="filter-btn active" onclick="filterPosts('all',this)">All</button>
+    <button class="filter-btn" onclick="filterPosts('Road &amp; Infrastructure',this)">🚧 Road</button>
+    <button class="filter-btn" onclick="filterPosts('Water &amp; Electricity',this)">💧 Water</button>
+    <button class="filter-btn" onclick="filterPosts('Safety &amp; Security',this)">🛡️ Safety</button>
+    <button class="filter-btn" onclick="filterPosts('Government Services',this)">🏛️ Govt</button>
+    <button class="filter-btn" onclick="filterPosts('Environment',this)">🌿 Environment</button>
+  </div>
+
+  <!-- FEED -->
+  <div class="section-title"><span></span> Community Reports</div>
+  <div id="feed"></div>
+
+</div>
+
+<script>
+'use strict';
+
+// ── EMAIL CONFIG ──────────────────────────────────────────
+// Using EmailJS — free tier, no backend needed
+// Service: Gmail via EmailJS public key
+const EJS_PUBLIC_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY'; // Replace with real EmailJS public key
+const EJS_SERVICE_ID  = 'service_nepalportal';
+const EJS_TEMPLATE_ID = 'template_problem';
+const SENDER_EMAIL    = 'makenepalbetter01@gmail.com';
+
+// ── EMAILJS INIT ─────────────────────────────────────────
+(function() {
+  try { emailjs.init({ publicKey: EJS_PUBLIC_KEY }); } catch(e) {}
+})();
+
+// ── STATE ─────────────────────────────────────────────────
+let currentUser = null;
+let selectedCat = '';
+let uploadedPhotos = [];
+let activeFilter = 'all';
+const STORAGE_KEY = 'np_problems';
+
+const catClass = {
+  'Road & Infrastructure':'cat-road','Water & Electricity':'cat-water',
+  'Safety & Security':'cat-safety','Government Services':'cat-govt',
+  'Other':'cat-other','Environment':'cat-other'
+};
+
+// ── INIT ──────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const session = JSON.parse(localStorage.getItem('np_session') || 'null');
+  if (session) {
+    currentUser = session;
+    document.getElementById('composerName').textContent = session.name;
+    document.getElementById('composerAvatar').textContent = session.name.charAt(0).toUpperCase();
+    document.getElementById('composerLocation').innerHTML = `<i class="fas fa-map-marker-alt" style="color:#ff6b6b;"></i> ${sanitize(session.location || 'Nepal')}`;
+    document.getElementById('loginNotice').style.display = 'none';
+    if (session.location) {
+      const sel = document.getElementById('postLocation');
+      for (let opt of sel.options) if (opt.value === session.location || opt.textContent.includes(session.location)) { sel.value = opt.value; break; }
+    }
+  }
+  document.getElementById('problemText').addEventListener('input', function() {
+    document.getElementById('charCount').textContent = `${this.value.length}/1000`;
+  });
+
+  // Check if this page load is a "read tracking" event
+  checkReadTracking();
+  renderFeed();
+  updateStats();
+});
+
+// ── READ TRACKING ─────────────────────────────────────────
+// When politician clicks the link in the email, it opens problems.html?read=POST_ID
+// We detect this and mark the post as "read by politician" (green)
+function checkReadTracking() {
+  const params = new URLSearchParams(window.location.search);
+  const readId = params.get('read');
+  if (!readId) return;
+  const posts = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  const post = posts.find(p => String(p.id) === String(readId));
+  if (post && !post.politicianRead) {
+    post.politicianRead = true;
+    post.politicianReadAt = new Date().toISOString();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+    // Clean URL
+    history.replaceState({}, '', 'problems.html');
+  }
+}
+
+// ── HELPERS ───────────────────────────────────────────────
+function sanitize(str) {
+  const d = document.createElement('div');
+  d.appendChild(document.createTextNode(String(str||'')));
+  return d.innerHTML;
+}
+function showAlert(msg, type) {
+  const old = document.querySelector('.portal-alert');
+  if (old) old.remove();
+  const el = document.createElement('div');
+  el.className = 'portal-alert';
+  el.style.background = type==='success' ? 'rgba(35,134,54,0.92)' : 'rgba(218,54,51,0.92)';
+  el.style.color = '#fff';
+  el.style.border = `1px solid ${type==='success'?'rgba(86,211,100,0.3)':'rgba(255,107,107,0.3)'}`;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateX(100px)'; el.style.transition='0.3s'; setTimeout(()=>el.remove(),300); }, 4000);
+}
+function timeAgo(ts) {
+  const diff = (Date.now()-new Date(ts))/1000;
+  if (diff<60) return 'just now';
+  if (diff<3600) return `${Math.floor(diff/60)}m ago`;
+  if (diff<86400) return `${Math.floor(diff/3600)}h ago`;
+  return `${Math.floor(diff/86400)}d ago`;
+}
+
+// ── CATEGORY SELECT ───────────────────────────────────────
+function selectCat(btn) {
+  document.querySelectorAll('#catRow .cat-chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  selectedCat = btn.getAttribute('data-cat');
+}
+
+// ── POLITICIAN SELECT ─────────────────────────────────────
+function showPoliticianPreview() {
+  const val = document.getElementById('politicianSelect').value;
+  const preview = document.getElementById('politicianPreview');
+  if (!val) { preview.style.display = 'none'; return; }
+  const [district, name, email] = val.split('|');
+  document.getElementById('previewName').textContent = `${name} — ${district} District Representative`;
+  document.getElementById('previewEmail').textContent = `📧 ${email}`;
+  preview.style.display = 'block';
+}
+
+// ── PHOTO UPLOAD ──────────────────────────────────────────
+function handlePhotos(input) {
+  const files = Array.from(input.files).slice(0, 5 - uploadedPhotos.length);
+  files.forEach(file => {
+    if (file.size > 5*1024*1024) { showAlert(`${file.name} is too large (max 5MB).`, 'danger'); return; }
+    const reader = new FileReader();
+    reader.onload = e => {
+      if (uploadedPhotos.length < 5) { uploadedPhotos.push(e.target.result); renderPreviews(); }
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+function renderPreviews() {
+  document.getElementById('photoPreviews').innerHTML = uploadedPhotos.map((src,i) =>
+    `<div class="photo-preview-item">
+      <img src="${src}" alt="Photo ${i+1}"/>
+      <button onclick="removePhoto(${i})" title="Remove"><i class="fas fa-times"></i></button>
+    </div>`
+  ).join('');
+}
+function removePhoto(i) { uploadedPhotos.splice(i,1); renderPreviews(); }
+
+// ── SUBMIT PROBLEM ────────────────────────────────────────
+function submitProblem() {
+  if (!currentUser) { showAlert('Please login first to post a problem.', 'danger'); return; }
+  const text = document.getElementById('problemText').value.trim();
+  const loc  = document.getElementById('postLocation').value;
+  const politVal = document.getElementById('politicianSelect').value;
+
+  if (!text || text.length < 15) { showAlert('Please describe the problem in more detail (at least 15 characters).', 'danger'); return; }
+  if (!selectedCat) { showAlert('Please select a category for your problem.', 'danger'); return; }
+  if (!loc) { showAlert('Please select the location of the problem.', 'danger'); return; }
+
+  const btn = document.getElementById('postBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
+
+  let politicianName  = '';
+  let politicianEmail = '';
+  let politicianDistrict = '';
+  if (politVal) {
+    [politicianDistrict, politicianName, politicianEmail] = politVal.split('|');
+  }
+
+  const postId = Date.now();
+
+  // Build read-tracking URL — when politician clicks this, their post turns green
+  const siteUrl = window.location.href.replace(/\?.*$/, '');
+  const trackUrl = `${siteUrl}?read=${postId}`;
+
+  // Send email if politician is selected
+  const emailPromise = politicianEmail ? sendEmailToPolitician({
+    toEmail: politicianEmail,
+    politicianName,
+    district: politicianDistrict,
+    authorName: currentUser.name,
+    authorLocation: currentUser.location || loc,
+    category: selectedCat,
+    problemText: text,
+    problemLocation: loc,
+    trackUrl,
+    postId
+  }) : Promise.resolve('no_politician');
+
+  emailPromise.then(result => {
+    const emailSent = result === 'sent';
+
+    const post = {
+      id: postId,
+      authorName: currentUser.name,
+      authorLocation: currentUser.location || loc,
+      postLocation: loc,
+      category: selectedCat,
+      text,
+      photos: [...uploadedPhotos],
+      timestamp: new Date().toISOString(),
+      likes: 0, supports: 0, shares: 0,
+      likedBy: [], supportedBy: [],
+      politicianName:  politicianName  || null,
+      politicianEmail: politicianEmail || null,
+      politicianDistrict: politicianDistrict || null,
+      emailSent,
+      politicianRead: false,
+      politicianReadAt: null
+    };
+
+    const posts = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    posts.unshift(post);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+
+    // Reset
+    document.getElementById('problemText').value = '';
+    document.getElementById('charCount').textContent = '0/1000';
+    document.getElementById('postLocation').value = '';
+    document.getElementById('politicianSelect').value = '';
+    document.getElementById('politicianPreview').style.display = 'none';
+    uploadedPhotos = []; renderPreviews();
+    document.querySelectorAll('#catRow .cat-chip').forEach(c=>c.classList.remove('active'));
+    selectedCat = '';
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Post Problem &amp; Notify Politician';
+
+    if (politicianEmail && emailSent) {
+      showAlert(`✅ Problem posted! Email sent to ${politicianName} (${politicianDistrict}).`, 'success');
+    } else if (politicianEmail) {
+      showAlert(`Problem posted! (Note: Email delivery pending — demo mode active)`, 'success');
+    } else {
+      showAlert('Problem posted! The community can now see it.', 'success');
+    }
+    renderFeed();
+    updateStats();
+  });
+}
+
+// ── SEND EMAIL VIA EMAILJS ────────────────────────────────
+function sendEmailToPolitician(params) {
+  const templateParams = {
+    to_email:          params.toEmail,
+    to_name:           params.politicianName,
+    from_email:        SENDER_EMAIL,
+    district:          params.district,
+    author_name:       params.authorName,
+    author_location:   params.authorLocation,
+    category:          params.category,
+    problem_text:      params.problemText,
+    problem_location:  params.problemLocation,
+    track_url:         params.trackUrl,
+    post_id:           params.postId,
+    site_name:         'Nepal Portal',
+    site_url:          window.location.origin + '/problems.html'
+  };
+
+  return emailjs.send(EJS_SERVICE_ID, EJS_TEMPLATE_ID, templateParams)
+    .then(() => 'sent')
+    .catch(err => {
+      console.warn('[EmailJS] Could not send email:', err);
+      return 'failed';
+    });
+}
+
+// ── RENDER FEED ───────────────────────────────────────────
+function renderFeed() {
+  const feed = document.getElementById('feed');
+  let posts = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  if (posts.length === 0) {
+    posts = getDemoPosts();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+  }
+  const filtered = activeFilter==='all' ? posts : posts.filter(p=>p.category===activeFilter);
+  if (filtered.length === 0) {
+    feed.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>No problems reported in this category yet.<br>Be the first to report!</p></div>`;
+    return;
+  }
+  feed.innerHTML = filtered.map(p => renderPost(p)).join('');
+  updateStats(posts);
+}
+
+function renderPost(p) {
+  const initials = p.authorName.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  const colors = ['#0066cc','#7c3aed','#238636','#d29922','#0891b2'];
+  const color = colors[p.id % colors.length];
+  const photosHtml = p.photos && p.photos.length > 0
+    ? `<div class="post-photos n${Math.min(p.photos.length,3)}">${p.photos.slice(0,3).map(src=>`<img src="${src}" alt="Problem photo" onclick="openLightbox(this.src)" loading="lazy"/>`).join('')}</div>`
+    : '';
+  const catCls = catClass[p.category] || 'cat-other';
+
+  // Politician tag
+  const politicianHtml = p.politicianName
+    ? `<div class="politician-tag">
+        <i class="fas fa-envelope"></i>
+        <div>
+          <strong>${sanitize(p.politicianName)}</strong>
+          <span> — ${sanitize(p.politicianDistrict)} District${p.emailSent ? ' · <span style="color:#56d364;">✓ Notified</span>' : ''}</span>
+        </div>
+       </div>`
+    : '';
+
+  // Read badge (green when politician read the email link)
+  const readBadge = p.politicianRead
+    ? `<span class="read-badge"><i class="fas fa-check-double"></i> Seen by Politician</span>`
+    : '';
+
+  const isRead = !!p.politicianRead;
+
+  return `<div class="post-card${isRead ? ' politician-read' : ''}" id="post-${p.id}">
+    <div class="post-header">
+      <div class="post-avatar" style="background:linear-gradient(135deg,${color},${color}99)">${sanitize(initials)}</div>
+      <div class="post-author">
+        <strong>${sanitize(p.authorName)}</strong>
+        <div class="post-author-sub">
+          <span class="post-location"><i class="fas fa-map-marker-alt"></i> ${sanitize(p.authorLocation || p.postLocation)}</span>
+          <span class="post-time">${timeAgo(p.timestamp)}</span>
+        </div>
+      </div>
+      <span class="post-badge">${sanitize(p.postLocation)}</span>
+      ${readBadge}
+    </div>
+    <span class="post-category ${catCls}">${sanitize(p.category)}</span>
+    ${politicianHtml}
+    <p class="post-text">${sanitize(p.text)}</p>
+    ${photosHtml}
+    <div class="post-actions">
+      <button class="action-btn${(p.likedBy||[]).includes(currentUser?.email)?' liked':''}" onclick="likePost(${p.id})">
+        <i class="fas fa-heart"></i> ${p.likes || 0}
+      </button>
+      <button class="action-btn${(p.supportedBy||[]).includes(currentUser?.email)?' supported':''}" onclick="supportPost(${p.id})">
+        <i class="fas fa-hands-helping"></i> ${p.supports || 0} Support
+      </button>
+      <button class="action-btn" onclick="sharePost(${p.id},this)">
+        <i class="fas fa-share"></i> Share
+      </button>
+      <div class="post-menu-wrapper">
+        <button class="action-btn post-menu-btn" onclick="togglePostMenu(${p.id}, event)">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+        <div class="post-menu-dropdown" id="menu-${p.id}">
+          ${(currentUser && p.authorName === currentUser.name) ? `
+          <div class="post-menu-item delete" onclick="deletePost(${p.id}, 'problems')">
+            <i class="fas fa-trash"></i> Delete Post
+          </div>
+          ` : ''}
+          <div class="post-menu-item" onclick="reportPost(${p.id}, 'problems')">
+            <i class="fas fa-flag"></i> Report Post
+          </div>
+          <div class="post-menu-item" onclick="copyPostLink(${p.id}, this)">
+            <i class="fas fa-link"></i> Copy Link
+          </div>
+          <div class="post-menu-item" onclick="savePost(${p.id}, 'problems')">
+            <i class="fas fa-save"></i> Save Post
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── INTERACTIONS ──────────────────────────────────────────
+function likePost(id) {
+  if (!currentUser) { showAlert('Please login to react to posts.', 'danger'); return; }
+  const posts = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+  const post = posts.find(p=>p.id===id); if (!post) return;
+  post.likedBy = post.likedBy||[];
+  if (post.likedBy.includes(currentUser.email)) { post.likedBy=post.likedBy.filter(e=>e!==currentUser.email); post.likes=Math.max(0,(post.likes||1)-1); }
+  else { post.likedBy.push(currentUser.email); post.likes=(post.likes||0)+1; }
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+  renderFeed();
+}
+function supportPost(id) {
+  if (!currentUser) { showAlert('Please login to support.', 'danger'); return; }
+  const posts = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+  const post = posts.find(p=>p.id===id); if (!post) return;
+  post.supportedBy = post.supportedBy||[];
+  if (post.supportedBy.includes(currentUser.email)) { post.supportedBy=post.supportedBy.filter(e=>e!==currentUser.email); post.supports=Math.max(0,(post.supports||1)-1); }
+  else { post.supportedBy.push(currentUser.email); post.supports=(post.supports||0)+1; }
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+  renderFeed();
+}
+function sharePost(id, btn) {
+  const url = `${location.origin}${location.pathname}#post-${id}`;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(()=>{ btn.classList.add('shared'); btn.innerHTML='<i class="fas fa-check"></i> Copied!'; setTimeout(()=>{ btn.classList.remove('shared'); btn.innerHTML='<i class="fas fa-share"></i> Share'; },2000); });
+  } else { showAlert('Link: '+url,'success'); }
+}
+
+// ── MENU FUNCTIONS ─────────────────────────────────────────
+function togglePostMenu(id, event) {
+  event.stopPropagation();
+  document.querySelectorAll('.post-menu-dropdown').forEach(m => {
+    if (m.id !== `menu-${id}`) m.classList.remove('open');
+  });
+  const menu = document.getElementById(`menu-${id}`);
+  menu.classList.toggle('open');
+}
+
+document.addEventListener('click', () => {
+  document.querySelectorAll('.post-menu-dropdown').forEach(m => m.classList.remove('open'));
+});
+
+function deletePost(id, type) {
+  if (!confirm('Are you sure you want to delete this post? This action cannot be undone.')) return;
+  const storageKey = type === 'news' ? 'np_news' : STORAGE_KEY;
+  const posts = JSON.parse(localStorage.getItem(storageKey) || '[]');
+  const filtered = posts.filter(p => p.id !== id);
+  localStorage.setItem(storageKey, JSON.stringify(filtered));
+  showAlert('Post deleted successfully!', 'success');
+  if (type === 'news') { renderFeed(); updateStats(); }
+  else { renderFeed(); updateStats(); }
+}
+
+function reportPost(id, type) {
+  showAlert('Thank you for reporting. Our team will review this post within 24 hours.', 'success');
+  document.querySelectorAll('.post-menu-dropdown').forEach(m => m.classList.remove('open'));
+}
+
+function copyPostLink(id, btn) {
+  const url = `${location.href}#post-${id}`;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(() => {
+      btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      setTimeout(() => { btn.innerHTML = '<i class="fas fa-link"></i> Copy Link'; }, 2000);
+    });
+  }
+  document.querySelectorAll('.post-menu-dropdown').forEach(m => m.classList.remove('open'));
+}
+
+function savePost(id, type) {
+  const storageKey = type === 'news' ? 'np_news' : STORAGE_KEY;
+  const posts = JSON.parse(localStorage.getItem(storageKey) || '[]');
+  const post = posts.find(p => p.id === id);
+  if (!post) return;
+  const saved = JSON.parse(localStorage.getItem('np_saved_posts') || '[]');
+  if (saved.find(s => s.id === id)) {
+    showAlert('This post is already saved!', 'danger');
+  } else {
+    saved.unshift({ ...post, savedAt: new Date().toISOString() });
+    localStorage.setItem('np_saved_posts', JSON.stringify(saved));
+    showAlert('Post saved successfully!', 'success');
+  }
+  document.querySelectorAll('.post-menu-dropdown').forEach(m => m.classList.remove('open'));
+}
+
+// ── FILTERS ───────────────────────────────────────────────
+function filterPosts(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('#filterRow .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderFeed();
+}
+
+// ── STATS ─────────────────────────────────────────────────
+function updateStats(posts) {
+  posts = posts || JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+  document.getElementById('totalCount').textContent    = posts.length;
+  document.getElementById('notifiedCount').textContent = posts.filter(p=>p.emailSent).length;
+  document.getElementById('readCount').textContent     = posts.filter(p=>p.politicianRead).length;
+}
+
+// ── LIGHTBOX ──────────────────────────────────────────────
+function openLightbox(src) { document.getElementById('lightboxImg').src=src; document.getElementById('lightbox').classList.add('open'); }
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+
+// ── DEMO POSTS ────────────────────────────────────────────
+function getDemoPosts() {
+  return [
+    {
+      id:1001, authorName:'Ramesh Sharma', authorLocation:'Kathmandu',
+      postLocation:'Kathmandu', category:'Road & Infrastructure',
+      text:'The road near Balaju Industrial Area has massive potholes causing multiple accidents in the past week. Heavy rain has made it even worse. The municipality has been ignoring this for months despite multiple complaints.',
+      photos:[], timestamp:new Date(Date.now()-3600000).toISOString(),
+      likes:24, supports:47, shares:12, likedBy:[], supportedBy:[],
+      politicianName:'Bimalendra Nidhi', politicianEmail:'bimalendra.nidhi@parliament.gov.np',
+      politicianDistrict:'Kathmandu', emailSent:true, politicianRead:false, politicianReadAt:null
+    },
+    {
+      id:1002, authorName:'Sunita Rai', authorLocation:'Pokhara',
+      postLocation:'Pokhara (Kaski)', category:'Water & Electricity',
+      text:'Our neighbourhood in Pokhara-16 has been without water supply for 3 days. The main pipe burst but the Water Supply Corporation has not sent anyone for repairs. Families with young children and elderly people are struggling.',
+      photos:[], timestamp:new Date(Date.now()-7200000).toISOString(),
+      likes:31, supports:58, shares:8, likedBy:[], supportedBy:[],
+      politicianName:'Prithvi Subba Gurung', politicianEmail:'prithvi.gurung@parliament.gov.np',
+      politicianDistrict:'Kaski', emailSent:true, politicianRead:true, politicianReadAt:new Date(Date.now()-3600000).toISOString()
+    },
+    {
+      id:1003, authorName:'Bikash Thapa', authorLocation:'Lalitpur',
+      postLocation:'Lalitpur', category:'Environment',
+      text:'Garbage has been piling up at the Imadol junction for over a week. The smell is unbearable and it is attracting stray dogs and insects. This is a serious health hazard for the local community.',
+      photos:[], timestamp:new Date(Date.now()-86400000).toISOString(),
+      likes:15, supports:29, shares:5, likedBy:[], supportedBy:[],
+      politicianName:null, politicianEmail:null, politicianDistrict:null,
+      emailSent:false, politicianRead:false, politicianReadAt:null
+    },
+    {
+      id:1004, authorName:'Priya Gurung', authorLocation:'Bharatpur',
+      postLocation:'Bharatpur (Chitwan)', category:'Government Services',
+      text:'The district administration office in Bharatpur has extremely long queues for citizenship certificate renewals. People are waiting 6+ hours without any seating. There is no proper queue management system.',
+      photos:[], timestamp:new Date(Date.now()-172800000).toISOString(),
+      likes:42, supports:89, shares:23, likedBy:[], supportedBy:[],
+      politicianName:'Gagan Kumar Thapa', politicianEmail:'gagan.thapa@parliament.gov.np',
+      politicianDistrict:'Chitwan', emailSent:true, politicianRead:true, politicianReadAt:new Date(Date.now()-86400000).toISOString()
+    }
+  ];
+}
+</script>
+</body>
+</html>

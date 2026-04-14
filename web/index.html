@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <meta http-equiv="X-Frame-Options" content="DENY"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; frame-src https://www.google.com;"/>
+  <meta name="description" content="Nepal Portal - Your gateway to Government Services, Tourism & Cybersecurity Awareness. Access civic services, report problems, and explore Nepal."/>
+  <meta name="keywords" content="Nepal, government services, citizenship, passport, driving license, tourism, cybersecurity, news"/>
+  <meta name="theme-color" content="#0066cc"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Nepal Portal"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%230066cc' width='192' height='192'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='120' font-weight='bold' fill='white'>🇳🇵</text></svg>"/>
+  <title>Nepal Portal - सरकारी, पर्यटन र साइबर सुरक्षा</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="styles-enhanced.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+<!-- ========== PAGE LOADER ========== -->
+<div class="page-loader" id="pageLoader">
+  <div class="loader-content">
+    <div class="loader-spinner">
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+    </div>
+    <div class="loader-text">
+      <p data-en="Loading Nepal Portal..." data-ne="नेपाल पोर्टल लोड हो रहेको छ...">Loading Nepal Portal...</p>
+      <div class="loader-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">                                       
+      <span class="flag">🇳🇵</span>                 
+      <span class="logo-text" data-en="Nepal Portal" data-ne="नेपाल पोर्टल">Nepal Portal</span>
+    </div>     
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" data-en="Home" data-ne="गृहपृष्ठ">Home</a></li>
+      <li class="nav-item dropdown">
+        <button class="dropdown-toggle" type="button" onclick="toggleNavDropdown(event, 'navDropdown')" data-en="Explore" data-ne="अन्वेषण">Explore <i class="fas fa-chevron-down"></i></button>
+        <ul class="dropdown-menu" id="navDropdown">
+          <li><a href="#government" data-en="Government" data-ne="सरकार">Government</a></li>
+          <li><a href="services.html" data-en="Service Guide" data-ne="सेवा गाइड">Service Guide</a></li>
+          <li><a href="#tourism" data-en="Tourism" data-ne="पर्यटन">Tourism</a></li>
+          <li><a href="#cybersecurity" data-en="Cyber Security" data-ne="साइबर सुरक्षा">Cyber Security</a></li>
+          <li><a href="news.html" data-en="News" data-ne="समाचार">News</a></li>
+          <li><a href="problems.html" data-en="Problems" data-ne="समस्याहरू">Problems</a></li>
+        </ul>
+      </li>
+      <li><a href="community.html" data-en="Community" data-ne="समुदाय">Community</a></li>
+      <li><a href="help.html" data-en="Help" data-ne="मद्दत">Help</a></li>
+      <li><a href="#contact" data-en="Contact" data-ne="सम्पर्क">Contact</a></li>
+    </ul>                                            
+    <div class="nav-actions">
+      <button class="nav-btn" id="darkModeToggle" onclick="toggleDarkMode()" title="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="nav-btn" id="notificationBtn" onclick="toggleNotifications()" title="Notifications">
+        <i class="fas fa-bell"></i>
+        <span id="notifBadge" style="position: absolute; top: -5px; right: -5px; background: #ff6b6b; color: #fff; width: 18px; height: 18px; border-radius: 50%; font-size: 0.7rem; display: none; align-items: center; justify-content: center;">0</span>
+      </button>
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btnEn" onclick="setLang('en')">EN</button>
+        <span>|</span>
+        <button class="lang-btn" id="btnNe" onclick="setLang('ne')">नेपाली</button>
+      </div>
+      <!-- Login btn (shown when logged out) -->
+      <button class="btn-login" id="navLoginBtn" onclick="openModal('loginModal')" data-en="Login" data-ne="लगइन">Login</button>
+      <!-- Profile icon (shown when logged in) -->
+      <div class="nav-profile" id="navProfile" style="display:none;position:relative;">
+        <button class="profile-icon-btn" id="profileIconBtn" onclick="toggleProfileDropdown()" title="My Profile">
+          <span id="navAvatarImg" style="display:none;width:36px;height:36px;border-radius:50%;object-fit:cover;overflow:hidden;"></span>
+          <span id="navAvatarInitial" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#004999);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.95rem;color:#fff;"></span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown" style="display:none;">
+          <div class="profile-dropdown-header">
+            <div id="dropName" style="font-weight:600;font-size:0.95rem;"></div>
+            <div id="dropLocation" style="font-size:0.78rem;color:var(--text-muted);"></div>
+          </div>
+          <a href="profile.html" class="profile-dropdown-item"><i class="fas fa-user-circle"></i> My Profile</a>
+          <a href="admin.html" class="profile-dropdown-item"><i class="fas fa-shield-alt"></i> Admin Panel</a>
+          <div class="profile-dropdown-item" onclick="logoutUser()" style="cursor:pointer;color:#ff6b6b;"><i class="fas fa-sign-out-alt"></i> Logout</div>
+        </div>
+      </div>
+      <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== HERO SECTION ========== -->
+<section class="hero" id="home">
+  <div class="hero-overlay"></div>
+  <div class="hero-particles" id="particles"></div>
+  <div class="hero-content">
+    <div class="hero-badge" data-en="🇳🇵 Official Nepal Portal" data-ne="🇳🇵 आधिकारिक नेपाल पोर्टल">🇳🇵 Official Nepal Portal</div>
+    <h1 class="hero-title" data-en="Welcome to Nepal" data-ne="नेपालमा स्वागत छ">Welcome to Nepal</h1>
+    <p class="hero-subtitle" data-en="Your gateway to Government Services, Tourism & Cybersecurity Awareness" data-ne="सरकारी सेवा, पर्यटन र साइबर सुरक्षाको लागि तपाईंको द्वार">Your gateway to Government Services, Tourism & Cybersecurity Awareness</p>
+    <div class="hero-search">
+      <i class="fas fa-search"></i>
+      <input type="text" id="heroSearch" placeholder="Search services, places, news..." data-en-placeholder="Search services, places, news..." data-ne-placeholder="सेवा, स्थान, समाचार खोज्नुहोस्..." oninput="liveSearch(this.value)" autocomplete="off"/>
+      <button onclick="doSearch()" data-en="Search" data-ne="खोज्नुहोस्">Search</button>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num" data-count="77">0</span><span>Districts</span></div>
+      <div class="stat"><span class="stat-num" data-count="10">0</span><span>M+ Tourists/yr</span></div>
+      <div class="stat"><span class="stat-num" data-count="8">0</span><span>Peaks 8000m+</span></div>
+      <div class="stat"><span class="stat-num" data-count="300">0</span><span>+ Govt Services</span></div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <a href="#government"><i class="fas fa-chevron-down"></i></a>
+  </div>
+</section>
+
+<!-- ========== QUICK SERVICES ========== -->
+<section class="quick-services">
+  <div class="container">
+    <div class="services-grid">
+      <div class="service-card" onclick="window.open('search.html?q=Government+Services+Nepal','_blank')">
+        <i class="fas fa-landmark"></i>
+        <h3 data-en="Government Services" data-ne="सरकारी सेवाहरू">Government Services</h3>
+        <p data-en="From citizenship certificates to passport applications, taxes, and driving licenses — access all government services in one place. Our portal connects you directly to official portals, making bureaucracy simple and accessible." data-ne="नागरिकता प्रमाणपत्रदेखि राहदानी, कर, र सवारी चालक अनुमतिपत्रसम्म — सबै सरकारी सेवाहरू एकै ठाउँमा।">From citizenship certificates to passport applications, taxes, and driving licenses — access all government services in one place. Our portal connects you directly to official portals, making bureaucracy simple and accessible.</p>
+      </div>
+      <div class="service-card" onclick="window.open('search.html?q=Nepal+Tourism','_blank')">
+        <i class="fas fa-mountain"></i>
+        <h3 data-en="Explore Tourism" data-ne="पर्यटन अन्वेषण">Explore Tourism</h3>
+        <p data-en="Discover Nepal's breathtaking landscapes — from the majestic Himalayas including Mount Everest (8,848m) to ancient temples, serene lakes of Pokhara, and the wildlife-rich jungles of Chitwan. Experience 8 of the world's 14 highest peaks!" data-ne="नेपालको मनमोहक प्राकृतिक सौन्दर्य पत्ता लगाउनुहोस् — सगरमाथा (८,८४८ मिटर) लगायतका विशाल हिमाल, प्राचीन मन्दिर, र पोखराका शान्त तालहरू।">Discover Nepal's breathtaking landscapes — from the majestic Himalayas including Mount Everest (8,848m) to ancient temples, serene lakes of Pokhara, and the wildlife-rich jungles of Chitwan. Experience 8 of the world's 14 highest peaks!</p>
+      </div>
+      <div class="service-card" onclick="window.open('search.html?q=Cybersecurity+Nepal','_blank')">
+        <i class="fas fa-shield-halved"></i>
+        <h3 data-en="Cyber Security" data-ne="साइबर सुरक्षा">Cyber Security</h3>
+        <p data-en="Learn to protect yourself from online threats including phishing scams, malware, and identity theft. With 500+ Nepali websites hacked in 2023, cybersecurity awareness is crucial. Stay safe, stay informed, protect your digital life." data-ne="अनलाइन खतराहरूबाट आफूलाई जोगाउन सिक्नुहोस् जसमा फिसिङ, मालवेयर, र पहिचान चोरी समावेश छन्। सुरक्षित रहनुहोस्, सूचित रहनुहोस्।">Learn to protect yourself from online threats including phishing scams, malware, and identity theft. With 500+ Nepali websites hacked in 2023, cybersecurity awareness is crucial. Stay safe, stay informed, protect your digital life.</p>
+      </div>
+      <div class="service-card" onclick="window.open('news.html','_blank')">
+        <i class="fas fa-newspaper"></i>
+        <h3 data-en="Latest News" data-ne="ताजा समाचार">Latest News</h3>
+        <p data-en="Stay updated with the latest developments in Nepal — from government policies and economic news to tourism updates, sports achievements, and community stories. Be informed about what matters in Nepal and beyond." data-ne="नेपालको ताजा विकासबारे अपडेट रहनुहोस् — सरकारी नीतिहरू, आर्थिक समाचार, पर्यटन अपडेट, खेलकुद उपलब्धिहरू, र सामुदायिक कथाहरू।">Stay updated with the latest developments in Nepal — from government policies and economic news to tourism updates, sports achievements, and community stories. Be informed about what matters in Nepal and beyond.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== GOVERNMENT SECTION ========== -->
+<section class="section" id="government">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" data-en="Civic Portal" data-ne="नागरिक पोर्टल">Civic Portal</span>
+      <h2 data-en="Government Services" data-ne="सरकारी सेवाहरू">Government Services</h2>
+      <p data-en="Access essential civic services online. Click any service to learn about requirements, processes, and official portals." data-ne="आवश्यक नागरिक सेवाहरू अनलाइन पहुँच गर्नुहोस्। कुनै पनि सेवामा क्लिक गर्नुहोस्।">Access essential civic services online. Click any service to learn about requirements, processes, and official portals.</p>
+    </div>
+    <div class="cards-grid">
+      <div class="info-card gov-card">
+        <div class="card-icon"><i class="fas fa-id-card"></i></div>
+        <h3 data-en="Citizenship & National ID" data-ne="नागरिकता र राष्ट्रिय परिचयपत्र">Citizenship & National ID</h3>
+        <p data-en="Your essential identity document for all civic services. Apply at your District Office or Ward Office." data-ne="सबै नागरिक सेवाहरूका लागि तपाईंको आवश्यक परिचयपत्र। जिल्ला कार्यालय वा वडा कार्यालयमा आवेदन दिनुहोस्।">Your essential identity document for all civic services. Apply at your District Office or Ward Office.</p>
+        <a href="search.html?q=Citizenship+Certificate+Nepal" class="card-link" data-en="Learn More →" data-ne="थप जान्नुहोस् →">Learn More →</a>
+      </div>
+      <div class="info-card gov-card">
+        <div class="card-icon"><i class="fas fa-passport"></i></div>
+        <h3 data-en="Passport Services" data-ne="राहदानी सेवाहरू">Passport Services</h3>
+        <p data-en="Machine Readable Passports (MRP) and new e-Passports available. Apply online at dop.gov.np." data-ne="मेशिन रিডेबल पासपोर्ट (MRP) र नयाँ e-पासपोर्ट उपलब्ध। dop.gov.np मा अनलाइन आवेदन दिनुहोस्।">Machine Readable Passports (MRP) and new e-Passports available. Apply online at dop.gov.np.</p>
+        <a href="search.html?q=Passport+Application+Nepal" class="card-link" data-en="Learn More →" data-ne="थप जान्नुहोस् →">Learn More →</a>
+      </div>
+      <div class="info-card gov-card">
+        <div class="card-icon"><i class="fas fa-car"></i></div>
+        <h3 data-en="Transport & Driving License" data-ne="यातायात र सवारी चालक अनुमतिपत्र">Transport & Driving License</h3>
+        <p data-en="Get your driving license through written and practical tests. Categories: Two-wheeler, Light, Heavy, Public vehicle." data-ne="लिखित र प्रयोगात्मक परीक्षाबाट सवारी चालक अनुमतिपत्र प्राप्त गर्नुहोस्।">Get your driving license through written and practical tests. Categories: Two-wheeler, Light, Heavy, Public vehicle.</p>
+        <a href="search.html?q=Driving+License+Nepal" class="card-link" data-en="Learn More →" data-ne="थप जान्नुहोस् →">Learn More →</a>
+      </div>
+      <div class="info-card gov-card">
+        <div class="card-icon"><i class="fas fa-graduation-cap"></i></div>
+        <h3 data-en="Education & Scholarships" data-ne="शिक्षा र छात्रवृत्ति">Education & Scholarships</h3>
+        <p data-en="Government and international scholarships for students. Major universities: TU, PU, KU." data-ne="विद्यार्थीहरूका लागि सरकारी र अन्तर्राष्ट्रिय छात्रवृत्ति।">Government and international scholarships for students. Major universities: TU, PU, KU.</p>
+        <a href="search.html?q=Nepal+Education+Scholarship" class="card-link" data-en="Learn More →" data-ne="थप जान्नुहोस् →">Learn More →</a>
+      </div>
+      <div class="info-card gov-card">
+        <div class="card-icon"><i class="fas fa-heartbeat"></i></div>
+        <h3 data-en="Health Services & Insurance" data-ne="स्वास्थ्य सेवा र बीमा">Health Services & Insurance</h3>
+        <p data-en="National Health Insurance covers up to NPR 1 lakh/year. Free care at government health posts." data-ne="राष्ट्रिय स्वास्थ्य बीमाले वार्षिक १ लाखसम्म कभर गर्छ। सरकारी स्वास्थ्य पोस्टमा निःशुल्क सेवा।">National Health Insurance covers up to NPR 1 lakh/year. Free care at government health posts.</p>
+        <a href="search.html?q=Nepal+Health+Insurance" class="card-link" data-en="Learn More →" data-ne="थप जान्नुहोस् →">Learn More →</a>
+      </div>
+      <div class="info-card gov-card">
+        <div class="card-icon"><i class="fas fa-coins"></i></div>
+        <h3 data-en="Tax & PAN Registration" data-ne="कर र प्यान दर्ता">Tax & PAN Registration</h3>
+        <p data-en="PAN mandatory for businesses and high earners. File taxes online at ird.gov.np." data-ne="व्यवसाय र उच्च आय भएकाहरूका लागि PAN अनिवार्य। ird.gov.np मा अनलाइन कर तिर्नुहोस्।">PAN mandatory for businesses and high earners. File taxes online at ird.gov.np.</p>
+        <a href="search.html?q=Tax+PAN+Registration+Nepal" class="card-link" data-en="Learn More →" data-ne="थप जान्नुहोस् →">Learn More →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TOURISM SECTION ========== -->
+<section class="section section-dark" id="tourism">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" data-en="Explore Nepal" data-ne="नेपाल अन्वेषण">Explore Nepal</span>
+      <h2 data-en="Tourism & Travel" data-ne="पर्यटन र यात्रा">Tourism & Travel</h2>
+      <p data-en="World-class trekking, mountaineering, UNESCO heritage sites, and wildlife. Click any destination for detailed guides." data-ne="विश्वस्तरीय ट्रेकिङ, पर्वतारोहण, युनेस्को सम्पदा स्थल, र वन्यजीव। कुनै पनि गन्तव्यमा क्लिक गर्नुहोस्।">World-class trekking, mountaineering, UNESCO heritage sites, and wildlife. Click any destination for detailed guides.</p>
+    </div>
+    <div class="tourism-grid">
+      <div class="tourism-card" style="cursor:pointer" onclick="window.open('search.html?q=Mount+Everest','_blank')">
+        <div class="tourism-img everest"></div>
+        <div class="tourism-info">
+          <span class="tourism-tag" data-en="Adventure" data-ne="साहसिक">Adventure</span>
+          <h3 data-en="Mount Everest (8,848m)" data-ne="सगरमाथा (८,८४८ मिटर)">Mount Everest (8,848m)</h3>
+          <p data-en="World's highest peak at 8,848.86m. Famous EBC Trek: 12-16 days through Sherpa villages and monasteries." data-ne="विश्वको सर्वोच्च शिखर ८,८४८.८६ मिटर। famous EBC ट्रेक: शेर्पा गाउँहरू र मन्दिरहरू हुँदै १२-१६ दिन।">World's highest peak at 8,848.86m. Famous EBC Trek: 12-16 days through Sherpa villages and monasteries.</p>
+          <div class="tourism-meta">
+            <span><i class="fas fa-map-marker-alt"></i> Solukhumbu</span>
+            <span><i class="fas fa-star"></i> 5.0</span>
+            <span><i class="fas fa-clock"></i> 12-16 days trek</span>
+          </div>
+        </div>
+      </div>
+      <div class="tourism-card" style="cursor:pointer" onclick="window.open('search.html?q=Pokhara+Valley','_blank')">
+        <div class="tourism-img pokhara"></div>
+        <div class="tourism-info">
+          <span class="tourism-tag" data-en="Nature" data-ne="प्रकृति">Nature</span>
+          <h3 data-en="Pokhara — City of Lakes" data-ne="पोखरा — तालहरूको शहर">Pokhara — City of Lakes</h3>
+          <p data-en="Tourism capital with stunning Annapurna views. Phewa Lake, Tal Barahi Temple, Sarangkot sunrise. Adventure: paragliding, rafting." data-ne="अन्नपूर्ण दृश्य र शान्त तालहरू भएको पर्यटन राजधानी। फेवा ताल, टल बराही मन्दिर, सारांकोटमा सूर्योदय।">Tourism capital with stunning Annapurna views. Phewa Lake, Tal Barahi Temple, Sarangkot sunrise. Adventure: paragliding, rafting.</p>
+          <div class="tourism-meta">
+            <span><i class="fas fa-map-marker-alt"></i> Gandaki (Kaski)</span>
+            <span><i class="fas fa-star"></i> 4.9</span>
+            <span><i class="fas fa-plane"></i> 25min from KTM</span>
+          </div>
+        </div>
+      </div>
+      <div class="tourism-card" style="cursor:pointer" onclick="window.open('search.html?q=Kathmandu+Heritage','_blank')">
+        <div class="tourism-img kathmandu"></div>
+        <div class="tourism-info">
+          <span class="tourism-tag" data-en="Culture" data-ne="संस्कृति">Culture</span>
+          <h3 data-en="Kathmandu Valley Heritage" data-ne="काठमाडौं उपत्यका सम्पदा">Kathmandu Valley Heritage</h3>
+          <p data-en="7 UNESCO World Heritage Sites in 15km radius! Pashupatinath, Boudhanath, Swayambhunath, Durbar Squares, and more." data-ne="१५ किलोमिटरमा ७ युनेस्को विश्व सम्पदा स्थल! पशुपतिनाथ, बौद्धनाथ, स्वयम्भुनाट, दरबार क्षेत्रहरू।">7 UNESCO World Heritage Sites in 15km radius! Pashupatinath, Boudhanath, Swayambhunath, Durbar Squares, and more.</p>
+          <div class="tourism-meta">
+            <span><i class="fas fa-map-marker-alt"></i> Bagmati Province</span>
+            <span><i class="fas fa-star"></i> 4.8</span>
+            <span><i class="fas fa-landmark"></i> 7 UNESCO Sites</span>
+          </div>
+        </div>
+      </div>
+      <div class="tourism-card" style="cursor:pointer" onclick="window.open('search.html?q=Chitwan+National+Park','_blank')">
+        <div class="tourism-img chitwan"></div>
+        <div class="tourism-info">
+          <span class="tourism-tag" data-en="Wildlife" data-ne="वन्यजीव">Wildlife</span>
+          <h3 data-en="Chitwan National Park" data-ne="चितवन राष्ट्रिय निकुञ्ज">Chitwan National Park</h3>
+          <p data-en="UNESCO site with 700+ one-horned rhinos (95% of world population), 93 Bengal tigers. Elephant safaris, canoe rides, jungle walks." data-ne="युनेस्को स्थल, ७००+ एकसिंगे गैंडा, ९३ बंगाल बाघ। हात्ती सफारी, डुङ्गा यात्रा, जङ्गल हिँडाइ।">UNESCO site with 700+ one-horned rhinos (95% of world population), 93 Bengal tigers. Elephant safaris, canoe rides, jungle walks.</p>
+          <div class="tourism-meta">
+            <span><i class="fas fa-map-marker-alt"></i> Chitwan District</span>
+            <span><i class="fas fa-star"></i> 4.9</span>
+            <span><i class="fas fa-bus"></i> 5-6hrs from KTM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Map -->
+    <div class="map-section">
+      <h3 data-en="Explore Nepal on Map" data-ne="नक्शामा नेपाल अन्वेषण गर्नुहोस्">Explore Nepal on Map</h3>
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3559710.3457823!2d82.3273!3d28.3949!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3995e8c77d69fe39%3A0x5a8e7e7e0e0e0e0e!2sNepal!5e0!3m2!1sen!2s!4v1234567890"
+          width="100%" height="400" style="border:0; border-radius:16px;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade" title="Nepal Map" sandbox="allow-scripts allow-same-origin">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CYBERSECURITY SECTION ========== -->
+<section class="section" id="cybersecurity">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" data-en="Stay Safe Online" data-ne="अनलाइन सुरक्षित रहनुहोस्">Stay Safe Online</span>
+      <h2 data-en="Cybersecurity Awareness" data-ne="साइबर सुरक्षा जागरूकता">Cybersecurity Awareness</h2>
+      <p data-en="Protect yourself online. 500+ Nepal sites hacked in 2023. Click each topic to learn how to stay safe." data-ne="अनलाइन आफूलाई जोगाउनुहोस्। २०२३ मा ५००+ नेपाली साइट ह्याक भए।">Protect yourself online. 500+ Nepal sites hacked in 2023. Click each topic to learn how to stay safe.</p>
+    </div>
+    <div class="cyber-grid">
+      <div class="cyber-card">
+        <div class="cyber-icon red"><i class="fas fa-user-secret"></i></div>
+        <h3 data-en="Phishing Attacks" data-ne="फिसिङ आक्रमण">Phishing Attacks</h3>
+        <p data-en="Fake emails/SMS impersonating banks, government, or delivery services. 43% of Nepal's cybercrime. Click to learn how to spot them." data-ne="बैंक, सरकार, वा डेलिभरी सेवाको नाउँमा नक्कली इमेल/SMS। नेपालको ४३% साइबर अपराध।">Fake emails/SMS impersonating banks, government, or delivery services. 43% of Nepal's cybercrime.</p>
+        <div class="cyber-tip">
+          <strong data-en="Tip:" data-ne="सुझाव:">Tip:</strong>
+          <span data-en="Verify sender's email domain. Banks never ask passwords via email. Report: cybercrime@npolice.gov.np" data-ne="प्रेषकको इमेल डोमेन प्रमाणित गर्नुहोस्। cybercrime@npolice.gov.np मा रिपोर्ट गर्नुहोस्।">Verify sender's email. Banks never ask passwords via email.</span>
+        </div>
+      </div>
+      <div class="cyber-card">
+        <div class="cyber-icon orange"><i class="fas fa-bug"></i></div>
+        <h3 data-en="Malware & Ransomware" data-ne="मालवेयर र र्यान्समवेयर">Malware & Ransomware</h3>
+        <p data-en="Viruses, trojans, and ransomware that lock your files and demand payment. Average ransom: NPR 500,000+." data-ne="भाइरस, ट्रोजन, र र्यान्समवेयरले तपाईंका फाइलहरू लक गरी फिरौती माग्छन्।">Viruses, trojans, and ransomware that lock your files and demand payment.</p>
+        <div class="cyber-tip">
+          <strong data-en="Tip:" data-ne="सुझाव:">Tip:</strong>
+          <span data-en="Use genuine antivirus. Never download pirated software. Keep backups on external drive." data-ne="गत्न एन्टिभाइरस प्रयोग गर्नुहोस्। बाह्य ड्राइभमा ब्याकअप राख्नुहोस्।">Use genuine antivirus. Keep backups on external drive.</span>
+        </div>
+      </div>
+      <div class="cyber-card">
+        <div class="cyber-icon blue"><i class="fas fa-lock-open"></i></div>
+        <h3 data-en="Weak Passwords" data-ne="कमजोर पासवर्ड">Weak Passwords</h3>
+        <p data-en="'123456' is Nepal's most hacked password. 67% of victims used weak/reused passwords." data-ne="'१२३४५६' नेपालको सबैभन्दा ह्याक गरिएको पासवर्ड हो।">Most hacked password in Nepal is '123456'. 67% of victims used weak passwords.</p>
+        <div class="cyber-tip">
+          <strong data-en="Tip:" data-ne="सुझाव:">Tip:</strong>
+          <span data-en="Use 16+ character passwords. Enable 2FA on all accounts." data-ne="१६+ अक्षरको पासवर्ड प्रयोग गर्नुहोस्। सबै खातामा 2FA सक्षम गर्नुहोस्।">Use 16+ character passwords. Enable 2FA.</span>
+        </div>
+      </div>
+      <div class="cyber-card">
+        <div class="cyber-icon green"><i class="fas fa-wifi"></i></div>
+        <h3 data-en="Public WiFi Risks" data-ne="सार्वजनिक WiFi जोखिम">Public WiFi Risks</h3>
+        <p data-en="Hackers intercept data on unsecured public networks. Fake WiFi hotspots common in Thamel & Pokhara." data-ne="ह्याकरहरूले असुरक्षित सार्वजनिक नेटवर्कमा तपाईंको डेटा रोक्छन्।">Hackers intercept data on unsecured networks. Fake hotspots common in tourist areas.</p>
+        <div class="cyber-tip">
+          <strong data-en="Tip:" data-ne="सुझाव:">Tip:</strong>
+          <span data-en="Use VPN on public WiFi. Avoid banking on public networks." data-ne="सार्वजनिक WiFi मा VPN प्रयोग गर्नुहोस्। बैंकिङ नगर्नुहोस्।">Use VPN on public WiFi. Avoid banking.</span>
+        </div>
+      </div>
+      <div class="cyber-card">
+        <div class="cyber-icon purple"><i class="fas fa-globe"></i></div>
+        <h3 data-en="Website Security" data-ne="वेबसाइट सुरक्षा">Website Security</h3>
+        <p data-en="SQL injection, XSS, and CSRF attacks target banking, telecom, and government sites. 500+ Nepal sites hacked in 2023." data-ne="SQL इन्जेक्सन, XSS, र CSRF आक्रमणले बैंकिङ, टेलिकम, र सरकारी साइटहरूलाई लक्षित गर्छ।">SQL injection and XSS attacks target banking and government sites.</p>
+        <div class="cyber-tip">
+          <strong data-en="Tip:" data-ne="सुझाव:">Tip:</strong>
+          <span data-en="Check for HTTPS padlock. Use ad blockers. Report suspicious sites." data-ne="HTTPS प्याडलक हेर्नुहोस्। संदिग्ध साइट रिपोर्ट गर्नुहोस्।">Check for HTTPS padlock. Report suspicious sites.</span>
+        </div>
+      </div>
+      <div class="cyber-card">
+        <div class="cyber-icon yellow"><i class="fas fa-mobile-alt"></i></div>
+        <h3 data-en="Social Engineering" data-ne="सामाजिक इन्जिनियरिङ">Social Engineering</h3>
+        <p data-en="Scammers exploit human psychology — fake NTC refunds, police calls about citizenship misuse, fake job offers." data-ne=" scammer ले मानव मनोविज्ञानको शोषण गर्छन् — नक्कली NTC रिफन्ड, प्रहरी कल, नक्कली जागिरको प्रस्ताव।">Scammers exploit human psychology with fake refund calls, police calls, and job offers.</p>
+        <div class="cyber-tip">
+          <strong data-en="Tip:" data-ne="सुझाव:">Tip:</strong>
+          <span data-en="Never share OTP or passwords over phone. Report: 100 (Police) or 9851234567 (Cyber Bureau)." data-ne="फोनमा OTP वा पासवर्ड नदिनुहोस्। १०० (प्रहरी) मा रिपोर्ट गर्नुहोस्।">Never share OTP over phone. Report to 100 or 9851234567.</span>
+        </div>
+    </div>
+    <!-- Cyber Stats -->
+    <div class="cyber-stats">
+      <div class="cyber-stat-card">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span class="big-num">500+</span>
+        <p data-en="Nepal websites hacked in 2023" data-ne="२०२३ मा ह्याक भएका नेपाली वेबसाइटहरू">Nepal websites hacked in 2023</p>
+      </div>
+      <div class="cyber-stat-card">
+        <i class="fas fa-dollar-sign"></i>
+        <span class="big-num">$2M+</span>
+        <p data-en="Estimated losses from cybercrime" data-ne="साइबर अपराधबाट अनुमानित नोक्सानी">Estimated losses from cybercrime</p>
+      </div>
+      <div class="cyber-stat-card">
+        <i class="fas fa-shield-alt"></i>
+        <span class="big-num">90%</span>
+        <p data-en="Attacks are preventable with awareness" data-ne="जागरूकताले रोक्न सकिने आक्रमणहरू">Attacks are preventable with awareness</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== NEWS SECTION ========== -->
+<section class="section section-dark" id="news">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" data-en="Latest Updates" data-ne="ताजा अपडेटहरू">Latest Updates</span>
+      <h2 data-en="News & Announcements" data-ne="समाचार र घोषणाहरू">News & Announcements</h2>
+      <p data-en="Stay informed with the latest developments from Nepal — government policies, economic trends, tourism updates, sports achievements, infrastructure projects, and community stories. News categories include Government, Tourism, Cyber Security, Education, Health, Economy, and Community. Click 'Post Your News' to share important updates with the community. Your posts help keep Nepal informed and connected! Breaking news is marked with a 'Breaking' tag and appears at the top of news feeds." data-ne="नेपालको ताजा विकासबारे अपडेट रहनुहोस् — सरकारी नीतिहरू, आर्थिक प्रवृत्तिहरू, पर्यटन अपडेटहरू, खेलकुद उपलब्धिहरू, पूर्वाधार परियोजनाहरू, र सामुदायिक कथाहरू।">Stay informed with the latest developments from Nepal — government policies, economic trends, tourism updates, sports achievements, infrastructure projects, and community stories.</p>
+      <a href="news.html" class="btn-login" style="display:inline-block;margin-top:16px;padding:10px 28px;text-decoration:none;">
+        <i class="fas fa-pen"></i> Post Your News
+      </a>
+    </div>
+    <div class="news-grid">
+      <div class="news-card featured">
+        <div class="news-img news1"></div>
+        <div class="news-content">
+          <span class="news-cat government" data-en="Government" data-ne="सरकार">Government</span>
+          <h3 data-en="Nepal Launches New Digital ID System for All Citizens" data-ne="नेपालले सबै नागरिकका लागि नयाँ डिजिटल परिचयपत्र प्रणाली सुरू गर्यो">Nepal Launches New Digital ID System for All Citizens</h3>
+          <p data-en="Biometric digital IDs to integrate with banks, hospitals, and government offices. Rollout starts May 2026." data-ne="बायोमेट्रिक डिजिटल ID ले बैंक, अस्पताल, र सरकारी कार्यालयहरूसँग एकीकरण गर्नेछ।">Biometric digital IDs to integrate with banks, hospitals, and government offices. Rollout starts May 2026.</p>
+          <div class="news-meta">
+            <span><i class="fas fa-calendar"></i> April 10, 2026</span>
+            <a href="search.html?q=Nepal+Digital+ID+System" data-en="Read More" data-ne="थप पढ्नुहोस्">Read More</a>
+          </div>
+        </div>
+      </div>
+      <div class="news-card">
+        <div class="news-img news2"></div>
+        <div class="news-content">
+          <span class="news-cat tourism" data-en="Tourism" data-ne="पर्यटन">Tourism</span>
+          <h3 data-en="Record 1.2 Million Tourists Visit Nepal in Q1 2026" data-ne="२०२६ को पहिलो त्रैमासमा रेकर्ड १२ लाख पर्यटकले नेपाल भ्रमण गरे">Record 1.2 Million Tourists Visit Nepal in Q1 2026</h3>
+          <p data-en="34% increase from Q1 2025. India (28%), USA (15%), UK (8%) lead arrivals. NPR 48 billion revenue generated." data-ne="Q1 2025 भन्दा ३४% वृद्धि। भारत (२८%), USA (१५%), UK (८%) अग्रणी आगमन।">34% increase from Q1 2025. India (28%), USA (15%), UK (8%) lead arrivals.</p>
+          <div class="news-meta">
+            <span><i class="fas fa-calendar"></i> April 8, 2026</span>
+            <a href="search.html?q=Nepal+Tourism+2026" data-en="Read More" data-ne="थप पढ्नुहोस्">Read More</a>
+          </div>
+        </div>
+      </div>
+      <div class="news-card">
+        <div class="news-img news3"></div>
+        <div class="news-content">
+          <span class="news-cat cyber" data-en="Cyber Security" data-ne="साइबर सुरक्षा">Cyber Security</span>
+          <h3 data-en="Nepal Government Websites Hit by DDoS Attack, Recovery Underway" data-ne="नेपाल सरकारका वेबसाइटहरूमा DDoS आक्रमण, पुनःप्राप्ति जारी">Nepal Government Websites Hit by DDoS Attack, Recovery Underway</h3>
+          <p data-en="PMO, Finance Ministry portals affected. Attack from 15,000 devices across 40 countries. Services restored within 12 hours." data-ne="प्रधानमन्त्री कार्यालय, अर्थ मन्त्रालयका पोर्टलहरू प्रभावित। ४० देशका १५,००० उपकरणबाट आक्रमण।">PMO, Finance Ministry portals affected. Attack from 15,000 devices across 40 countries.</p>
+          <div class="news-meta">
+            <span><i class="fas fa-calendar"></i> April 5, 2026</span>
+            <a href="search.html?q=Nepal+Hacking+DDoS" data-en="Read More" data-ne="थप पढ्नुहोस्">Read More</a>
+          </div>
+        </div>
+      </div>
+      <div class="news-card">
+        <div class="news-img news4"></div>
+        <div class="news-content">
+          <span class="news-cat education" data-en="Education" data-ne="शिक्षा">Education</span>
+          <h3 data-en="New Scholarship Program for 10,000 Students Announced" data-ne="१०,००० विद्यार्थीका लागि नयाँ छात्रवृत्ति कार्यक्रमको घोषणा">New Scholarship Program for 10,000 Students Announced</h3>
+          <p data-en="Full tuition + NPR 5,000 monthly stipend for SEE 3.6+ GPA. Applications open May 1 at moe.gov.np." data-ne="SEE मा 3.6+ GPA भएकाहरूका लागि पूर्ण शिक्षा शुल्क + NPR 5,000 मासिक वृत्ति।">Full tuition + NPR 5,000 monthly stipend for SEE 3.6+ GPA. Applications open May 1.</p>
+          <div class="news-meta">
+            <span><i class="fas fa-calendar"></i> April 3, 2026</span>
+            <a href="search.html?q=Nepal+Education+Scholarship" data-en="Read More" data-ne="थप पढ्नुहोस्">Read More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ========== PROBLEMS SECTION ========== -->
+<section class="section" id="problems" style="background:linear-gradient(135deg,#0d1117 0%,#1a0a14 100%);">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" style="background:rgba(218,54,51,0.15);border-color:rgba(218,54,51,0.3);color:#ff6b6b;">Community Voice</span>
+      <h2 data-en="Report a Problem" data-ne="समस्या रिपोर्ट गर्नुहोस्">Report a Problem</h2>
+      <p data-en="Your voice matters! Report local issues directly to your elected representatives and local authorities. Whether it's a dangerous pothole, water shortage, or safety concern — share it here. When you report, you can tag your local politician who will receive an email notification. Together, we can make Nepal a better place to live." data-ne="तपाईंको आवाज महत्त्वपूर्ण छ! स्थानीय समस्याहरू तपाईंको निर्वाचित प्रतिनिधि र स्थानीय अधिकारीहरूलाई सीधै रिपोर्ट गर्नुहोस्।">Your voice matters! Report local issues directly to your elected representatives and local authorities. When you report, you can tag your local politician who will receive an email notification.</p>
+      <a href="problems.html" class="btn-login" style="display:inline-block;margin-top:16px;padding:10px 28px;text-decoration:none;background:linear-gradient(135deg,#da3633,#991a1a);">
+        <i class="fas fa-exclamation-circle"></i> Report a Problem
+      </a>
+    </div>
+    <div class="cards-grid">
+      <div class="info-card" style="border-color:rgba(218,54,51,0.2);cursor:pointer;" onclick="window.open('problems.html','_blank')">
+        <div class="card-icon" style="background:linear-gradient(135deg,#da3633,#991a1a)"><i class="fas fa-road"></i></div>
+        <h3>Road & Infrastructure</h3>
+        <p>Report potholes, broken roads, street lights, drainage issues, and missing road signs. Help make your neighborhood safer.</p>
+        <span class="card-link" style="color:#ff6b6b;">Report Now →</span>
+      </div>
+      <div class="info-card" style="border-color:rgba(244,163,0,0.2);cursor:pointer;" onclick="window.open('problems.html','_blank')">
+        <div class="card-icon" style="background:linear-gradient(135deg,#d29922,#a07010)"><i class="fas fa-tint"></i></div>
+        <h3>Water & Electricity</h3>
+        <p>Report supply disruptions, load shedding, leaking pipes, billing issues, and contamination. Your voice improves public utilities.</p>
+        <span class="card-link" style="color:var(--accent);">Report Now →</span>
+      </div>
+      <div class="info-card" style="border-color:rgba(139,92,246,0.2);cursor:pointer;" onclick="window.open('problems.html','_blank')">
+        <div class="card-icon" style="background:linear-gradient(135deg,#7c3aed,#5b21b6)"><i class="fas fa-shield-alt"></i></div>
+        <h3>Safety & Security</h3>
+        <p>Report crime, suspicious activities, harassment, and emergencies. For life-threatening issues, call 100 (Police) or 112 immediately.</p>
+        <span class="card-link" style="color:#a78bfa;">Report Now →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CONTACT SECTION ========== -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag" data-en="Get in Touch" data-ne="सम्पर्कमा आउनुहोस्">Get in Touch</span>
+      <h2 data-en="Contact Us" data-ne="हामीलाई सम्पर्क गर्नुहोस्">Contact Us</h2>
+    </div>
+    <div class="contact-wrapper">
+      <div class="contact-info">
+        <h3 data-en="Nepal Portal Office" data-ne="नेपाल पोर्टल कार्यालय">Nepal Portal Office</h3>
+        <div class="contact-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span data-en="Singha Durbar, Kathmandu, Nepal" data-ne="सिंहदरबार, काठमाडौं, नेपाल">Singha Durbar, Kathmandu, Nepal</span>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-phone"></i>
+          <span>+977-1-4200000</span>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-envelope"></i>
+          <span>info@nepalportal.gov.np</span>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-clock"></i>
+          <span data-en="Sun - Fri: 9:00 AM - 5:00 PM" data-ne="आइत - शुक्र: बिहान ९:०० - साँझ ५:००">Sun - Fri: 9:00 AM - 5:00 PM</span>
+        </div>
+        <div class="social-links">
+          <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <form class="contact-form" id="contactForm" onsubmit="submitContact(event)" novalidate>
+        <div class="form-group">
+          <label data-en="Full Name" data-ne="पूरा नाम">Full Name</label>
+          <input type="text" id="contactName" placeholder="Your full name" required maxlength="100" autocomplete="name"/>
+          <span class="error-msg" id="nameError"></span>
+        </div>
+        <div class="form-group">
+          <label data-en="Email Address" data-ne="इमेल ठेगाना">Email Address</label>
+          <input type="email" id="contactEmail" placeholder="your@email.com" required maxlength="200" autocomplete="email"/>
+          <span class="error-msg" id="emailError"></span>
+        </div>
+        <div class="form-group">
+          <label data-en="Subject" data-ne="विषय">Subject</label>
+          <select id="contactSubject">
+            <option value="" data-en="Select a subject" data-ne="विषय छान्नुहोस्">Select a subject</option>
+            <option value="government" data-en="Government Services" data-ne="सरकारी सेवाहरू">Government Services</option>
+            <option value="tourism" data-en="Tourism Inquiry" data-ne="पर्यटन सोधपुछ">Tourism Inquiry</option>
+            <option value="cyber" data-en="Cybersecurity Report" data-ne="साइबर सुरक्षा रिपोर्ट">Cybersecurity Report</option>
+            <option value="other" data-en="Other" data-ne="अन्य">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label data-en="Message" data-ne="सन्देश">Message</label>
+          <textarea id="contactMessage" rows="5" placeholder="Your message..." required maxlength="1000"></textarea>
+          <span class="error-msg" id="msgError"></span>
+        </div>
+        <button type="submit" class="btn-submit" data-en="Send Message" data-ne="सन्देश पठाउनुहोस्">Send Message</button>
+        <div class="form-success" id="formSuccess" data-en="✅ Message sent successfully!" data-ne="✅ सन्देश सफलतापूर्वक पठाइयो!"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">🇳🇵 <span data-en="Nepal Portal" data-ne="नेपाल पोर्टल">Nepal Portal</span></div>
+        <p data-en="Your trusted digital gateway to Nepal's government services, tourism, and cybersecurity." data-ne="नेपालको सरकारी सेवा, पर्यटन र साइबर सुरक्षाको लागि तपाईंको विश्वसनीय डिजिटल द्वार।">Your trusted digital gateway to Nepal's government services, tourism, and cybersecurity.</p>
+      </div>
+      <div class="footer-links">
+        <h4 data-en="Quick Links" data-ne="द्रुत लिंकहरू">Quick Links</h4>
+        <ul>
+          <li><a href="#government" data-en="Government Services" data-ne="सरकारी सेवाहरू">Government Services</a></li>
+          <li><a href="#tourism" data-en="Tourism" data-ne="पर्यटन">Tourism</a></li>
+          <li><a href="#cybersecurity" data-en="Cyber Security" data-ne="साइबर सुरक्षा">Cyber Security</a></li>
+          <li><a href="#news" data-en="News" data-ne="समाचार">News</a></li>
+          <li><a href="news.html" data-en="Post News" data-ne="समाचार पोस्ट">Post News</a></li>
+          <li><a href="problems.html" data-en="Report Problem" data-ne="समस्या रिपोर्ट">Report Problem</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4 data-en="Resources" data-ne="स्रोतहरू">Resources</h4>
+        <ul>
+          <li><a href="#" data-en="Privacy Policy" data-ne="गोपनीयता नीति">Privacy Policy</a></li>
+          <li><a href="#" data-en="Terms of Use" data-ne="प्रयोगका सर्तहरू">Terms of Use</a></li>
+          <li><a href="#" data-en="Accessibility" data-ne="पहुँचयोग्यता">Accessibility</a></li>
+          <li><a href="#" data-en="Sitemap" data-ne="साइटम्याप">Sitemap</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4 data-en="Security" data-ne="सुरक्षा">Security</h4>
+        <ul>
+          <li><a href="#" data-en="Report a Cyber Threat" data-ne="साइबर खतरा रिपोर्ट गर्नुहोस्">Report a Cyber Threat</a></li>
+          <li><a href="#" data-en="Security Guidelines" data-ne="सुरक्षा दिशानिर्देश">Security Guidelines</a></li>
+          <li><a href="#" data-en="Emergency Contacts" data-ne="आपतकालीन सम्पर्कहरू">Emergency Contacts</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p data-en="© 2026 Nepal Portal. All rights reserved. | Secured with SSL & CSP" data-ne="© २०२६ नेपाल पोर्टल। सर्वाधिकार सुरक्षित। | SSL र CSP सुरक्षित">© 2026 Nepal Portal. All rights reserved. | Secured with SSL & CSP</p>
+      <div class="security-badges">
+        <span><i class="fas fa-lock"></i> SSL Secured</span>
+        <span><i class="fas fa-shield-alt"></i> CSP Protected</span>
+        <span><i class="fas fa-user-shield"></i> GDPR Compliant</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ========== LOGIN MODAL ========== -->
+<div class="modal-overlay" id="loginModal" onclick="closeModalOutside(event, 'loginModal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('loginModal')"><i class="fas fa-times"></i></button>
+    <div class="modal-tabs">
+      <button class="tab-btn active" id="tabLogin" onclick="switchTab('login')" data-en="Login" data-ne="लगइन">Login</button>
+      <button class="tab-btn" id="tabRegister" onclick="switchTab('register')" data-en="Register" data-ne="दर्ता गर्नुहोस्">Register</button>
+    </div>
+    <!-- Login Form -->
+    <form id="loginForm" onsubmit="submitLogin(event)" novalidate>
+      <h2 data-en="Welcome Back" data-ne="फेरि स्वागत छ">Welcome Back</h2>
+      <div class="form-group">
+        <label data-en="Email" data-ne="इमेल">Email</label>
+        <input type="email" id="loginEmail" required placeholder="your@email.com" maxlength="200" autocomplete="email"/>
+      </div>
+      <div class="form-group password-group">
+        <label data-en="Password" data-ne="पासवर्ड">Password</label>
+        <input type="password" id="loginPassword" required placeholder="Enter your password" maxlength="128" autocomplete="current-password"/>
+        <button type="button" class="toggle-pass" onclick="togglePassword('loginPassword')"><i class="fas fa-eye"></i></button>
+      </div>
+      <div class="form-options">
+        <label class="checkbox-label">
+          <input type="checkbox" id="rememberMe"/> <span data-en="Remember me" data-ne="मलाई सम्झनुहोस्">Remember me</span>
+        </label>
+        <a href="#" data-en="Forgot Password?" data-ne="पासवर्ड बिर्सनुभयो?">Forgot Password?</a>
+      </div>
+      <button type="submit" class="btn-submit" data-en="Login" data-ne="लगइन">Login</button>
+      <div class="divider"><span data-en="or" data-ne="वा">or</span></div>
+      <button type="button" class="btn-social google" data-en="Continue with Google" data-ne="गुगलसँग जारी राख्नुहोस्"><i class="fab fa-google"></i> Continue with Google</button>
+    </form>
+    <!-- Register Form -->
+    <form id="registerForm" class="hidden" onsubmit="submitRegister(event)" novalidate>
+      <h2 data-en="Create Account" data-ne="खाता बनाउनुहोस्">Create Account</h2>
+      <div class="form-group">
+        <label data-en="Full Name" data-ne="पूरा नाम">Full Name</label>
+        <input type="text" id="regName" required placeholder="Your full name" maxlength="100" autocomplete="name"/>
+      </div>
+      <div class="form-group">
+        <label data-en="Email" data-ne="इमेल">Email</label>
+        <input type="email" id="regEmail" required placeholder="your@email.com" maxlength="200" autocomplete="email"/>
+      </div>
+      <div class="form-group">
+        <label>Phone Number (Nepal)</label>
+        <div style="display:flex;gap:8px;">
+          <input type="tel" id="regPhone" required placeholder="98XXXXXXXX" maxlength="10" pattern="[0-9]{10}" style="flex:1;" autocomplete="tel"/>
+          <button type="button" id="sendOtpBtn" onclick="sendOTP()" style="white-space:nowrap;padding:0 16px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border-radius:var(--radius-sm);font-size:0.85rem;font-weight:600;font-family:Poppins,sans-serif;">Send OTP</button>
+        </div>
+      </div>
+      <div class="form-group" id="otpGroup" style="display:none;">
+        <label>Enter OTP (sent to your number)</label>
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="regOtp" placeholder="6-digit code" maxlength="6" style="flex:1;letter-spacing:4px;font-size:1.1rem;text-align:center;"/>
+          <button type="button" onclick="verifyOTP()" style="white-space:nowrap;padding:0 16px;background:linear-gradient(135deg,#238636,#155724);color:#fff;border-radius:var(--radius-sm);font-size:0.85rem;font-weight:600;font-family:Poppins,sans-serif;">Verify</button>
+        </div>
+        <span id="otpStatus" style="font-size:0.8rem;margin-top:4px;"></span>
+      </div>
+      <div class="form-group">
+        <label>Location / City</label>
+        <select id="regLocation" required>
+          <option value="">Select your city/district</option>
+          <option>Kathmandu</option><option>Pokhara</option><option>Lalitpur</option><option>Bhaktapur</option>
+          <option>Biratnagar</option><option>Birgunj</option><option>Dharan</option><option>Butwal</option>
+          <option>Hetauda</option><option>Bharatpur</option><option>Janakpur</option><option>Dhangadhi</option>
+          <option>Nepalgunj</option><option>Itahari</option><option>Damak</option><option>Gorkha</option>
+          <option>Mustang</option><option>Humla</option><option>Solukhumbu</option><option>Ilam</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="form-group">
+          <label>Age</label>
+          <input type="number" id="regAge" required placeholder="Your age" min="13" max="120"/>
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <select id="regGender" required>
+            <option value="">Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other / Prefer not to say</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group password-group">
+        <label data-en="Password" data-ne="पासवर्ड">Password</label>
+        <input type="password" id="regPassword" required placeholder="Min 8 chars, include numbers & symbols" maxlength="128" autocomplete="new-password" oninput="checkPasswordStrength(this.value)"/>
+        <button type="button" class="toggle-pass" onclick="togglePassword('regPassword')"><i class="fas fa-eye"></i></button>
+        <div class="password-strength" id="strengthBar">
+          <div class="strength-fill" id="strengthFill"></div>
+        </div>
+        <span class="strength-text" id="strengthText"></span>
+      </div>
+      <div class="form-group">
+        <label data-en="Confirm Password" data-ne="पासवर्ड पुष्टि गर्नुहोस्">Confirm Password</label>
+        <input type="password" id="regConfirm" required placeholder="Confirm your password" maxlength="128" autocomplete="new-password"/>
+      </div>
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="agreeTerms" required/>
+          <span data-en="I agree to the Terms & Privacy Policy" data-ne="म सर्तहरू र गोपनीयता नीतिसँग सहमत छु">I agree to the Terms & Privacy Policy</span>
+        </label>
+      </div>
+      <button type="submit" class="btn-submit" data-en="Create Account" data-ne="खाता बनाउनुहोस्">Create Account</button>
+    </form>
+  </div>
+</div>
+
+<!-- Back to Top -->
+<button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="Back to top">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<script src="utils.js"></script>
+<script src="roles.js"></script>
+<script src="features.js"></script>
+<script src="profiles.js"></script>
+<script src="follow.js"></script>
+<script src="bookmarks.js"></script>
+<script src="messaging.js"></script>
+<script src="notifications.js"></script>
+<script src="engagement.js"></script>
+<script src="search.js"></script>
+<script src="imageupload.js"></script>
+<script src="leaderboards.js"></script>
+<script src="events.js"></script>
+<script src="analytics.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

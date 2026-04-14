@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <meta http-equiv="X-Frame-Options" content="DENY"/>
+  <meta name="description" content="Nepal Portal - User Profile. View and edit your profile, badges, posts, and activity."/>
+  <meta name="theme-color" content="#0066cc"/>
+  <title>My Profile - Nepal Portal</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="styles-enhanced.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .profile-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    .profile-header {
+      background: linear-gradient(135deg, var(--primary), #004999);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 30px;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      color: white;
+    }
+
+    .profile-avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      border: 4px solid white;
+      flex-shrink: 0;
+    }
+
+    .profile-info {
+      flex: 1;
+    }
+
+    .profile-info h1 {
+      margin: 0 0 10px 0;
+      font-size: 2rem;
+    }
+
+    .profile-stats {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      background: rgba(255,255,255,0.1);
+      padding: 15px 25px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .stat-box .number {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .stat-box .label {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .profile-tabs {
+      display: flex;
+      gap: 10px;
+      border-bottom: 2px solid var(--border-color);
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 15px 25px;
+      background: none;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      border-bottom: 3px solid transparent;
+      transition: 0.3s;
+      font-weight: 500;
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 20px;
+    }
+
+    .badge-item {
+      background: var(--glass-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .badge-icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .followers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .user-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .user-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #004999);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      font-size: 2rem;
+      color: white;
+    }
+
+    .edit-profile-form {
+      max-width: 600px;
+      background: var(--glass-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--input-bg);
+      color: var(--text-color);
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .follow-btn {
+      padding: 10px 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.3s;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .follow-btn:hover {
+      background: #004999;
+    }
+
+    @media (max-width: 768px) {
+      .profile-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .profile-info h1 {
+        font-size: 1.5rem;
+      }
+
+      .profile-stats {
+        justify-content: center;
+      }
+
+      .posts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">                                       
+      <span class="flag">🇳🇵</span>                 
+      <span class="logo-text">Nepal Portal</span>
+    </div>     
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="#">My Profile</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-btn" id="darkModeToggle" onclick="toggleDarkMode()" title="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button class="nav-btn" id="notificationBtn" onclick="toggleNotifications()" title="Notifications">
+        <i class="fas fa-bell"></i>
+        <span id="notifBadge" style="position: absolute; top: -5px; right: -5px; background: #ff6b6b; color: #fff; width: 18px; height: 18px; border-radius: 50%; font-size: 0.7rem; display: none; align-items: center; justify-content: center;">0</span>
+      </button>
+      <div class="nav-profile" id="navProfile" style="display:none;position:relative;">
+        <button class="profile-icon-btn" id="profileIconBtn" onclick="toggleProfileDropdown()" title="My Profile">
+          <span id="navAvatarInitial" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#004999);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.95rem;color:#fff;"></span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown" style="display:none;">
+          <a href="#" class="profile-dropdown-item" onclick="logoutUser(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+      <button class="btn-login" id="navLoginBtn" onclick="openModal('loginModal')">Login</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== PROFILE SECTION ========== -->
+<div class="profile-container">
+  <div id="profileContent">
+    <!-- Will be populated by JavaScript -->
+  </div>
+</div>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>🇳🇵 Nepal Portal</h3>
+        <p>Your gateway to government services, civic engagement, and community voice.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="community.html">Community</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Follow Us</h4>
+        <div class="social-links">
+          <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+          <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Nepal Portal. All rights reserved. | <a href="#privacy">Privacy Policy</a> | <a href="#terms">Terms of Service</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="utils.js"></script>
+<script src="roles.js"></script>
+<script src="profiles.js"></script>
+<script src="follow.js"></script>
+<script src="bookmarks.js"></script>
+<script src="messaging.js"></script>
+<script src="notifications.js"></script>
+<script src="engagement.js"></script>
+<script src="leaderboards.js"></script>
+<script src="analytics.js"></script>
+<script src="script.js"></script>
+<script>
+// Profile page specific functionality
+function renderProfilePage() {
+  const userEmail = Database.get('np_session')?.user;
+  if (!userEmail) {
+    document.getElementById('profileContent').innerHTML = `
+      <div style="text-align: center; padding: 60px 20px;">
+        <h2>Please log in to view your profile</h2>
+        <button class="btn-login" onclick="openModal('loginModal')" style="margin-top: 20px; padding: 12px 30px; font-size: 1rem;">Login</button>
+      </div>
+    `;
+    return;
+  }
+
+  const profile = Profiles.getUserProfile(userEmail);
+  const dashboard = Analytics.getUserDashboard(userEmail);
+  
+  const initial = profile.name[0].toUpperCase();
+
+  let html = `
+    <div class="profile-header">
+      <div class="profile-avatar">${initial}</div>
+      <div class="profile-info">
+        <h1>${profile.name}</h1>
+        <p style="margin: 5px 0 0 0; opacity: 0.9;">${profile.city}, ${profile.district}</p>
+        <p style="margin: 5px 0; opacity: 0.85; font-size: 0.95rem;">${profile.bio}</p>
+        <div class="profile-stats">
+          <div class="stat-box">
+            <div class="number">${dashboard.stats.posts}</div>
+            <div class="label">Posts</div>
+          </div>
+          <div class="stat-box">
+            <div class="number">${dashboard.stats.followers}</div>
+            <div class="label">Followers</div>
+          </div>
+          <div class="stat-box">
+            <div class="number">${dashboard.stats.following}</div>
+            <div class="label">Following</div>
+          </div>
+          <div class="stat-box">
+            <div class="number">${dashboard.stats.reputation}</div>
+            <div class="label">Reputation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-tabs">
+      <button class="tab-btn active" onclick="switchTab('posts')">Posts</button>
+      <button class="tab-btn" onclick="switchTab('followers')">Followers</button>
+      <button class="tab-btn" onclick="switchTab('following')">Following</button>
+      <button class="tab-btn" onclick="switchTab('badges')">Badges</button>
+      <button class="tab-btn" onclick="switchTab('edit')">Edit Profile</button>
+    </div>
+
+    <div id="posts-tab" class="tab-content active">
+      <h2>Your Posts</h2>
+      <div id="postsList"></div>
+    </div>
+
+    <div id="followers-tab" class="tab-content">
+      <h2>Your Followers</h2>
+      <div id="followersList" class="followers-grid"></div>
+    </div>
+
+    <div id="following-tab" class="tab-content">
+      <h2>Following</h2>
+      <div id="followingList" class="followers-grid"></div>
+    </div>
+
+    <div id="badges-tab" class="tab-content">
+      <h2>Your Badges</h2>
+      <div id="badgesList" class="badge-grid"></div>
+    </div>
+
+    <div id="edit-tab" class="tab-content">
+      <h2>Edit Your Profile</h2>
+      <div class="edit-profile-form">
+        <form onsubmit="updateProfileData(event)">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="editName" value="${profile.name}" required/>
+          </div>
+          <div class="form-group">
+            <label>Bio</label>
+            <textarea id="editBio">${profile.bio}</textarea>
+          </div>
+          <div class="form-group">
+            <label>City</label>
+            <input type="text" id="editCity" value="${profile.city}" />
+          </div>
+          <div class="form-group">
+            <label>District</label>
+            <input type="text" id="editDistrict" value="${profile.district}" />
+          </div>
+          <button type="submit" class="btn-login" style="width: 100%; padding: 12px; cursor: pointer;">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('profileContent').innerHTML = html;
+  renderUserPosts(userEmail);
+  renderFollowers(userEmail);
+  renderFollowing(userEmail);
+  renderBadges(userEmail);
+}
+
+function switchTab(tabName) {
+  // Hide all tabs
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+  // Show selected tab
+  document.getElementById(tabName + '-tab').classList.add('active');
+  event.target.classList.add('active');
+}
+
+function renderUserPosts(userEmail) {
+  const posts = (Database.get('np_db_posts') || []).filter(p => p.author === userEmail || p.authorId === userEmail);
+  const container = document.getElementById('postsList');
+
+  if (posts.length === 0) {
+    container.innerHTML = '<p style="text-align: center; color: var(--text-muted);">No posts yet. Start sharing!</p>';
+    return;
+  }
+
+  container.innerHTML = posts.map(p => `
+    <div style="background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 15px;">
+      <p style="margin: 0 0 10px 0;">${p.text}</p>
+      <div style="display: flex; gap: 20px; font-size: 0.9rem; color: var(--text-muted);">
+        <span><i class="fas fa-heart"></i> ${(p.reactions || []).length}</span>
+        <span><i class="fas fa-star"></i> ${p.points || 0}</span>
+        <span><i class="fas fa-calendar"></i> ${new Date(p.timestamp).toLocaleDateString()}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderFollowers(userEmail) {
+  const followers = FollowSystem.getFollowers(userEmail);
+  const container = document.getElementById('followersList');
+
+  if (followers.length === 0) {
+    container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">No followers yet</p>';
+    return;
+  }
+
+  container.innerHTML = followers.map(f => `
+    <div class="user-card">
+      <div class="user-avatar">${f.name[0].toUpperCase()}</div>
+      <h4 style="margin: 10px 0;">${f.name}</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin: 5px 0;">${f.city}</p>
+    </div>
+  `).join('');
+}
+
+function renderFollowing(userEmail) {
+  const following = FollowSystem.getFollowing(userEmail);
+  const container = document.getElementById('followingList');
+
+  if (following.length === 0) {
+    container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Not following anyone yet</p>';
+    return;
+  }
+
+  container.innerHTML = following.map(f => `
+    <div class="user-card">
+      <div class="user-avatar">${f.name[0].toUpperCase()}</div>
+      <h4 style="margin: 10px 0;">${f.name}</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin: 5px 0;">${f.city}</p>
+      <button class="btn-login" onclick="unfollowUserFunc('${f.email}')" style="font-size: 0.9rem; padding: 8px;">Unfollow</button>
+    </div>
+  `).join('');
+}
+
+function renderBadges(userEmail) {
+  const badges = Profiles.getAllUserBadges(userEmail);
+  const container = document.getElementById('badgesList');
+
+  if (badges.length === 0) {
+    container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Earn badges by contributing!</p>';
+    return;
+  }
+
+  container.innerHTML = badges.map(b => `
+    <div class="badge-item">
+      <div class="badge-icon">${b.icon}</div>
+      <h4 style="margin: 10px 0;">${b.name}</h4>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">${b.description}</p>
+    </div>
+  `).join('');
+}
+
+function updateProfileData(event) {
+  event.preventDefault();
+  const userEmail = Database.get('np_session')?.user;
+  
+  Profiles.updateProfile(userEmail, {
+    name: document.getElementById('editName').value,
+    bio: document.getElementById('editBio').value,
+    city: document.getElementById('editCity').value,
+    district: document.getElementById('editDistrict').value
+  });
+
+  alert('Profile updated successfully!');
+  renderProfilePage();
+}
+
+function unfollowUserFunc(userEmail) {
+  const currentUser = Database.get('np_session')?.user;
+  FollowSystem.unfollowUser(currentUser, userEmail);
+  renderFollowing(currentUser);
+}
+
+// Load profile on page load
+document.addEventListener('DOMContentLoaded', renderProfilePage);
+</script>
+</body>
+</html>

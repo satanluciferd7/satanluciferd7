@@ -1,0 +1,91 @@
+{
+  "name": "Nepal Portal - Government Services & Community",
+  "short_name": "Nepal Portal",
+  "description": "Your gateway to Government Services, Tourism & Cybersecurity Awareness. Access civic services, report problems, read news, and explore Nepal.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#0066cc",
+  "background_color": "#0d1117",
+  "categories": ["government", "productivity", "news", "social"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%230066cc' width='192' height='192'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='120' font-weight='bold' fill='white' font-family='Arial'>🇳🇵</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%230066cc' width='512' height='512'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='320' font-weight='bold' fill='white' font-family='Arial'>🇳🇵</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%230d1117' width='540' height='720'/><text x='270' y='360' text-anchor='middle' font-size='48' fill='%233399ff' font-family='Arial'>Nepal Portal</text></svg>",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "News Feed",
+      "short_name": "News",
+      "description": "Read latest community news",
+      "url": "/news.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='64' fill='%233399ff' font-family='Arial'>📰</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Report Problem",
+      "short_name": "Problem",
+      "description": "Report community problems",
+      "url": "/problems.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='64' fill='%23ff6b6b' font-family='Arial'>⚠️</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Government Services",
+      "short_name": "Services",
+      "description": "Explore government services",
+      "url": "/services.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='64' fill='%23f4a300' font-family='Arial'>🏛️</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "media",
+          "accept": ["image/*", "video/*"]
+        }
+      ]
+    }
+  }
+}

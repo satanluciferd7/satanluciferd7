@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nepal Portal Implementation Guide</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 24px;
+      background: #f4f7fb;
+      color: #1e293b;
+    }
+    h1, h2 { color: #0f4c81; }
+    .section {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(15,23,42,0.08);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .file-list ul { margin: 0; padding-left: 20px; }
+    code { background: #eef2ff; padding: 2px 6px; border-radius: 4px; }
+    .note {
+      background: #e0f2fe;
+      border-left: 4px solid #3b82f6;
+      padding: 12px 16px;
+      margin-top: 14px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🇳🇵 Nepal Portal Implementation Guide</h1>
+  <p>This page summarizes the main implemented features and the associated files.</p>
+
+  <div class="section">
+    <h2>1. Core Services</h2>
+    <p>Key application structure and primary user-facing pages.</p>
+    <div class="file-list">
+      <ul>
+        <li><code>index.html</code> - Main site landing page</li>
+        <li><code>news.html</code> - Community news and updates</li>
+        <li><code>problems.html</code> - Report and track public problems</li>
+        <li><code>services.html</code> - Government service guides</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>2. Admin & RBAC</h2>
+    <p>Admin tools, access control, and hidden utilities for secure setup.</p>
+    <div class="file-list">
+      <ul>
+        <li><code>admin.html</code> - Admin dashboard and moderation</li>
+        <li><code>users.html</code> - User management and role assignment</li>
+        <li><code>roles.js</code> - Role-based access control logic</li>
+        <li><code>rbac-debug.html</code> - Hidden debug tool for developers</li>
+        <li><code>reset-owners.html</code> - Hidden owner reset utility</li>
+      </ul>
+    </div>
+    <div class="note">
+      <strong>Note:</strong> The hidden pages <code>rbac-debug.html</code> and <code>reset-owners.html</code> are not linked publicly. Keep them out of the published navigation for production.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>3. Feature Modules</h2>
+    <p>JavaScript modules that power interactive features.</p>
+    <div class="file-list">
+      <ul>
+        <li><code>utils.js</code> - Core utilities, data helpers, and storage wrappers</li>
+        <li><code>features.js</code> - Feature-specific logic and UI helpers</li>
+        <li><code>service-wizard.js</code> - Interactive government service wizard flows</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>4. Production Security</h2>
+    <p>Security hardening steps for publishing.</p>
+    <ul>
+      <li>Remove public links to hidden admin utilities</li>
+      <li>Separate RBAC logic from public code when ready</li>
+      <li>Use a backend authentication service in production</li>
+      <li>Keep <code>roles.js</code> as a protected layer and migrate the source of truth to a server-side database</li>
+    </ul>
+  </div>
+</body>
+</html>
